@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Plus, X, Layers3, Target, ArrowRight, BookOpen, Trash2 } from 'lucide-react'
+import { Plus, X, Layers3, Target, ArrowRight, BookOpen, Trash2, Zap } from 'lucide-react'
 import { AppShell } from '../components/layout/AppShell'
 import { PageHeader } from '../components/ui/PageHeader'
 import { SkillCard } from '../components/learning/SkillCard'
@@ -39,7 +39,7 @@ const SlideOver = ({ title, isOpen, onClose, onSubmit, children, actions }) => {
 
 // ─── Skills Page ─────────────────────────────────────────────────────────────
 const Skills = () => {
-  const { categories, skills, createCategory, updateCategory, deleteCategory, createSkill, updateSkill, deleteSkill } = useSkills()
+  const { categories, skills, loading, createCategory, updateCategory, deleteCategory, createSkill, updateSkill, deleteSkill } = useSkills()
   
   const [showCategoryForm, setShowCategoryForm] = useState(false)
   const [showSkillForm, setShowSkillForm]       = useState(false)
@@ -135,7 +135,11 @@ const Skills = () => {
           }
         />
       
-      {categories.length === 0 ? (
+      {loading ? (
+        <div className="flex items-center justify-center py-16">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-black" />
+        </div>
+      ) : categories.length === 0 ? (
         <div className="empty-state py-16">
           <div className="empty-state-icon bg-gray-100 text-gray-600">
             <Zap className="w-6 h-6" />
