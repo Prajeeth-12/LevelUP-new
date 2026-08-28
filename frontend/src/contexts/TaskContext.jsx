@@ -52,15 +52,38 @@ export const TaskProvider = ({ children }) => {
     return true
   }, [userId])
 
+  const moveToStatus = useCallback(async (id, status) => {
+    const existing = tasks.find(t => t.id === id)
+    if (!existing) return null
+    return editTask(id, { ...existing, status })
+  }, [editTask, tasks])
+
+  const setTaskPriority = useCallback(async (id, priority) => {
+    const existing = tasks.find(t => t.id === id)
+    if (!existing) return null
+    return editTask(id, { ...existing, priority })
+  }, [editTask, tasks])
+
+  const assignSkill = useCallback(async (id, skillId) => {
+    const existing = tasks.find(t => t.id === id)
+    if (!existing) return null
+    return editTask(id, { ...existing, skillId: skillId || '' })
+  }, [editTask, tasks])
+
   const stats = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10)
     const todayTasks = tasks.filter((task) => (task.deadline || '').slice(0, 10) === today)
     const completedTasks = tasks.filter((task) => task.status === 'COMPLETED')
     const pendingTasks = tasks.filter((task) => task.status !== 'COMPLETED')
+    const inProgressTasks = tasks.filter((task) => task.status === 'IN_PROGRESS')
+    const toDoTasks = tasks.filter((task) => task.status === 'NOT_STARTED')
+
     return {
       todayTasks,
       completedTasks,
       pendingTasks,
+      inProgressTasks,
+      toDoTasks,
       completionRate: tasks.length ? Math.round((completedTasks.length / tasks.length) * 100) : 0,
       total: tasks.length,
     }
@@ -75,6 +98,9 @@ export const TaskProvider = ({ children }) => {
     createTask: createNewTask,
     updateTask: editTask,
     deleteTask: removeTask,
+    moveToStatus,
+    setTaskPriority,
+    assignSkill,
   }
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>
