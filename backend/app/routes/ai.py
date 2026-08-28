@@ -13,7 +13,7 @@ from app.services.ai_service import (
     weekly_report,
 )
 from app.services.chat_agent import process_chat_message
-from app.utils.auth import verify_firebase_token
+from app.utils.auth import get_optional_firebase_token
 
 router = APIRouter(prefix='/ai', tags=['AI'])
 
@@ -58,60 +58,60 @@ class WeeklyReportRequest(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    messages: List[Dict[str, str]] = Field(default_factory=list)
+    messages: List[Dict[str, Any]] = Field(default_factory=list)
     context: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
 
 @router.post('/generate-subskills')
-async def route_generate_subskills(body: GenerateSubskillsRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_generate_subskills(body: GenerateSubskillsRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await generate_subskills(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/progress-insights')
-async def route_progress_insights(body: ProgressInsightsRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_progress_insights(body: ProgressInsightsRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await progress_insights(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/priority-suggestions')
-async def route_priority_suggestions(body: PrioritySuggestionsRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_priority_suggestions(body: PrioritySuggestionsRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await priority_suggestions(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/task-plan')
-async def route_task_plan(body: TaskPlanRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_task_plan(body: TaskPlanRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await task_plan(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/skill-gap')
-async def route_skill_gap(body: SkillGapRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_skill_gap(body: SkillGapRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await skill_gap(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/path-optimize')
-async def route_path_optimize(body: PathOptimizeRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_path_optimize(body: PathOptimizeRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await path_optimize(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/time-estimate')
-async def route_time_estimate(body: TimeEstimateRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_time_estimate(body: TimeEstimateRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await time_estimate(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/weekly-report')
-async def route_weekly_report(body: WeeklyReportRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_weekly_report(body: WeeklyReportRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await weekly_report(body.dict())
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 
 
 @router.post('/chat')
-async def route_chat(body: ChatRequest, user_id: str = Depends(verify_firebase_token)):
+async def route_chat(body: ChatRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await process_chat_message(body.messages, body.context)
-    return {**result, 'userId': user_id}
+    return {**result, 'userId': user_id or 'guest_user'}
 

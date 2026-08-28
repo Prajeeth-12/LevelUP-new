@@ -8,12 +8,19 @@ const client = axios.create({
 })
 
 const withAuth = async () => {
-  const token = await auth.currentUser?.getIdToken()
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  try {
+    const token = await auth.currentUser?.getIdToken()
+    if (token) {
+      return {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    }
+  } catch (e) {
+    console.warn('Could not fetch token:', e)
   }
+  return { headers: {} }
 }
 
 const post = async (path, payload) => {
