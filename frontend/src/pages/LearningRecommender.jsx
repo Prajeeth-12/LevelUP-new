@@ -31,10 +31,10 @@ import { AIProjectGeneratorModal } from '../components/learning/AIProjectGenerat
 import { AICodeReviewModal } from '../components/learning/AICodeReviewModal'
 
 const GOAL_PRESETS = [
-  { label: '?? AI Agent & LLM Engineer', text: 'Master AI Agents, LangChain, RAG architectures, and FastAPI backend microservices' },
-  { label: '?? Senior React & Next.js Architect', text: 'Build scalable full-stack web applications with React, TypeScript, Tailwind, and GraphQL' },
-  { label: '?? Cloud DevOps & Kubernetes Pro', text: 'Deploy resilient cloud infrastructure with Docker, Kubernetes, CI/CD pipelines, and AWS' },
-  { label: '?? Data Scientist & ML Systems', text: 'Develop predictive models, PyTorch deep learning pipelines, and production MLOps' },
+  { label: '🤖 AI Agent & LLM Engineer', text: 'Master AI Agents, LangChain, RAG architectures, and FastAPI backend microservices' },
+  { label: '⚛️ Senior React & Next.js Architect', text: 'Build scalable full-stack web applications with React, TypeScript, Tailwind, and GraphQL' },
+  { label: '☁️ Cloud DevOps & Kubernetes Pro', text: 'Deploy resilient cloud infrastructure with Docker, Kubernetes, CI/CD pipelines, and AWS' },
+  { label: '📊 Data Scientist & ML Systems', text: 'Develop predictive models, PyTorch deep learning pipelines, and production MLOps' },
 ]
 
 export const LearningRecommender = () => {
