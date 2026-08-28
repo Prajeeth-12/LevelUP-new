@@ -1,29 +1,67 @@
 import os
 import json
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional
 
 try:
-  from openai import AsyncAzureOpenAI
+  from openai import AsyncAzureOpenAI, AsyncOpenAI
 except Exception:  # pragma: no cover - optional dependency path
   AsyncAzureOpenAI = None
+  AsyncOpenAI = None
 
 
 def _client():
-  if AsyncAzureOpenAI is None:
+  # 1. MiniMax / OpenAI-compatible configuration
+  openai_api_key = os.getenv('OPENAI_API_KEY') or os.getenv('MINIMAX_API_KEY')
+  base_url = os.getenv('OPENAI_BASE_URL') or os.getenv('MINIMAX_BASE_URL') or 'https://api.gmi-serving.com/v1'
+  model = os.getenv('OPENAI_MODEL') or os.getenv('MINIMAX_MODEL') or 'MiniMaxAI/MiniMax-M3'
+
+  if openai_api_key and AsyncOpenAI is not None:
+    return {
+      'client': AsyncOpenAI(api_key=openai_api_key, base_url=base_url),
+      'model': model,
+    }
+
+  # 2. Azure OpenAI fallback
+  if AsyncAzureOpenAI is not None:
+    api_key = os.getenv("AZURE_OPENAI_API_KEY")
+    endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+    api_version = os.getenv("AZURE_OPENAI_API_VERSION")
+
+    if api_key and endpoint and api_version:
+      return {
+        'client': AsyncAzureOpenAI(
+          api_key=api_key,
+          azure_endpoint=endpoint,
+          api_version=api_version,
+        ),
+        'model': os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o-mini"),
+      }
+
+  return None
+
+
+def _parse_llm_json(content: str) -> Optional[Dict[str, Any]]:
+  if not content:
     return None
-
-  api_key = os.getenv("AZURE_OPENAI_API_KEY")
-  endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-  api_version = os.getenv("AZURE_OPENAI_API_VERSION")
-
-  if not api_key or not endpoint or not api_version:
-    return None
-
-  return AsyncAzureOpenAI(
-    api_key=api_key,
-    azure_endpoint=endpoint,
-    api_version=api_version,
-  )
+  try:
+    return json.loads(content)
+  except Exception:
+    pass
+  match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", content, re.DOTALL)
+  if match:
+    try:
+      return json.loads(match.group(1))
+    except Exception:
+      pass
+  start = content.find('{')
+  end = content.rfind('}')
+  if start != -1 and end != -1 and end > start:
+    try:
+      return json.loads(content[start:end+1])
+    except Exception:
+      pass
+  return None
 
 
 def _fallback_roadmap(profile: Dict[str, Any]) -> Dict[str, Any]:
@@ -141,13 +179,13 @@ Return ONLY valid JSON in this exact format:
 """
 
 async def generate_roadmap(profile: dict) -> dict:
-  client = _client()
-  if client is None:
+  client_info = _client()
+  if client_info is None:
     return _fallback_roadmap(profile)
 
   try:
-    response = await client.chat.completions.create(
-        model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o-mini"),
+    response = await client_info['client'].chat.completions.create(
+        model=client_info['model'],
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps(profile)}
@@ -155,12 +193,11 @@ async def generate_roadmap(profile: dict) -> dict:
         temperature=0.3
     )
 
-    content = response.choices[0].message.content
-
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError:
-        return _fallback_roadmap(profile)
+    content = response.choices[0].message.content or ""
+    parsed = _parse_llm_json(content)
+    if isinstance(parsed, dict) and "career_decision" in parsed:
+      return parsed
+    return _fallback_roadmap(profile)
   except Exception:
     return _fallback_roadmap(profile)
 
@@ -195,8 +232,8 @@ Return ONLY valid JSON for the new "learning_roadmap" part:
 """
 
 async def adapt_roadmap(current_data: dict) -> dict:
-  client = _client()
-  if client is None:
+  client_info = _client()
+  if client_info is None:
     return current_data.get("learning_roadmap")
 
   input_data = {
@@ -205,8 +242,8 @@ async def adapt_roadmap(current_data: dict) -> dict:
   }
 
   try:
-    response = await client.chat.completions.create(
-        model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o-mini"),
+    response = await client_info['client'].chat.completions.create(
+        model=client_info['model'],
         messages=[
             {"role": "system", "content": ADAPT_SYSTEM_PROMPT},
             {"role": "user", "content": json.dumps(input_data)}
@@ -214,11 +251,10 @@ async def adapt_roadmap(current_data: dict) -> dict:
         temperature=0.3
     )
 
-    content = response.choices[0].message.content
-
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError:
-        return current_data.get("learning_roadmap")
+    content = response.choices[0].message.content or ""
+    parsed = _parse_llm_json(content)
+    if isinstance(parsed, dict):
+      return parsed
+    return current_data.get("learning_roadmap")
   except Exception:
     return current_data.get("learning_roadmap")

@@ -1,6 +1,7 @@
 import json
 import os
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional
 
 try:
     from openai import AsyncAzureOpenAI, AsyncOpenAI
@@ -10,30 +11,55 @@ except Exception:  # pragma: no cover - optional dependency path
 
 
 def _client():
-    if AsyncAzureOpenAI is None or AsyncOpenAI is None:
+    # 1. MiniMax / OpenAI-compatible configuration
+    openai_api_key = os.getenv('OPENAI_API_KEY') or os.getenv('MINIMAX_API_KEY')
+    base_url = os.getenv('OPENAI_BASE_URL') or os.getenv('MINIMAX_BASE_URL') or 'https://api.gmi-serving.com/v1'
+    model = os.getenv('OPENAI_MODEL') or os.getenv('MINIMAX_MODEL') or 'MiniMaxAI/MiniMax-M3'
+
+    if openai_api_key and AsyncOpenAI is not None:
+        return {
+            'client': AsyncOpenAI(api_key=openai_api_key, base_url=base_url),
+            'model': model,
+        }
+
+    # 2. Azure OpenAI fallback
+    if AsyncAzureOpenAI is not None:
+        azure_api_key = os.getenv('AZURE_OPENAI_API_KEY')
+        endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
+        api_version = os.getenv('AZURE_OPENAI_API_VERSION')
+        if azure_api_key and endpoint and api_version:
+            return {
+                'client': AsyncAzureOpenAI(
+                    api_key=azure_api_key,
+                    azure_endpoint=endpoint,
+                    api_version=api_version,
+                ),
+                'model': os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME', 'gpt-4o-mini'),
+            }
+
+    return None
+
+
+def _parse_llm_json(content: str) -> Optional[Dict[str, Any]]:
+    if not content:
         return None
-
-    azure_api_key = os.getenv('AZURE_OPENAI_API_KEY')
-    endpoint = os.getenv('AZURE_OPENAI_ENDPOINT')
-    api_version = os.getenv('AZURE_OPENAI_API_VERSION')
-
-    if azure_api_key and endpoint and api_version:
-        return {
-            'client': AsyncAzureOpenAI(
-                api_key=azure_api_key,
-                azure_endpoint=endpoint,
-                api_version=api_version,
-            ),
-            'model': os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME', 'gpt-4o-mini'),
-        }
-
-    openai_api_key = os.getenv('OPENAI_API_KEY')
-    if openai_api_key:
-        return {
-            'client': AsyncOpenAI(api_key=openai_api_key),
-            'model': os.getenv('OPENAI_MODEL', 'gpt-4o-mini'),
-        }
-
+    try:
+        return json.loads(content)
+    except Exception:
+        pass
+    match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", content, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(1))
+        except Exception:
+            pass
+    start = content.find('{')
+    end = content.rfind('}')
+    if start != -1 and end != -1 and end > start:
+        try:
+            return json.loads(content[start:end+1])
+        except Exception:
+            pass
     return None
 
 
@@ -52,7 +78,7 @@ async def _ask_ai(system_prompt: str, payload: Dict[str, Any], fallback: Dict[st
             ],
         )
         content = response.choices[0].message.content or ''
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict):
             return parsed
     except Exception:

@@ -2,6 +2,7 @@ import os
 import json
 import uuid
 import math
+import re
 from typing import Any, Dict, List, Optional
 
 try:
@@ -12,19 +13,50 @@ except Exception:
 
 
 def _get_ai_client():
+    # 1. MiniMax / OpenAI-compatible endpoint
+    key = os.getenv("OPENAI_API_KEY") or os.getenv("MINIMAX_API_KEY")
+    base_url = os.getenv("OPENAI_BASE_URL") or os.getenv("MINIMAX_BASE_URL") or "https://api.gmi-serving.com/v1"
+    model = os.getenv("OPENAI_MODEL") or os.getenv("MINIMAX_MODEL") or "MiniMaxAI/MiniMax-M3"
+
+    if key and AsyncOpenAI is not None:
+        return {
+            "client": AsyncOpenAI(api_key=key, base_url=base_url),
+            "model": model
+        }
+
+    # 2. Azure OpenAI fallback
     if AsyncAzureOpenAI is not None:
-        key = os.getenv("AZURE_OPENAI_API_KEY")
+        azure_key = os.getenv("AZURE_OPENAI_API_KEY")
         ep = os.getenv("AZURE_OPENAI_ENDPOINT")
         ver = os.getenv("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
-        if key and ep:
+        if azure_key and ep:
             return {
-                "client": AsyncAzureOpenAI(api_key=key, azure_endpoint=ep, api_version=ver),
+                "client": AsyncAzureOpenAI(api_key=azure_key, azure_endpoint=ep, api_version=ver),
                 "model": os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o-mini")
             }
-    if AsyncOpenAI is not None:
-        key = os.getenv("OPENAI_API_KEY")
-        if key:
-            return {"client": AsyncOpenAI(api_key=key), "model": os.getenv("OPENAI_MODEL", "gpt-4o-mini")}
+    return None
+
+
+def _parse_llm_json(content: str) -> Optional[Dict[str, Any]]:
+    if not content:
+        return None
+    try:
+        return json.loads(content)
+    except Exception:
+        pass
+    match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", content, re.DOTALL)
+    if match:
+        try:
+            return json.loads(match.group(1))
+        except Exception:
+            pass
+    start = content.find('{')
+    end = content.rfind('}')
+    if start != -1 and end != -1 and end > start:
+        try:
+            return json.loads(content[start:end+1])
+        except Exception:
+            pass
     return None
 
 
@@ -220,7 +252,7 @@ async def generate_conversational_learning_plan(goal: str, profile: Dict[str, An
             response_format={"type": "json_object"} if "gpt" in ai["model"] else None
         )
         content = response.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict) and "phases" in parsed:
             if not parsed.get("id"):
                 parsed["id"] = f"plan-{uuid.uuid4().hex[:8]}"
@@ -255,7 +287,7 @@ async def explain_recommendation_item(item_type: str, item_title: str, goal: str
             ]
         )
         content = response.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict):
             return {**fallback, **parsed}
     except Exception:
@@ -295,7 +327,7 @@ async def adapt_learning_roadmap(current_roadmap: Dict[str, Any], feedback_type:
             ]
         )
         content = res.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict) and "phases" in parsed:
             summary = parsed.pop("change_summary", "Roadmap recalibrated successfully.")
             return {"roadmap": parsed, "change_summary": summary}
@@ -319,7 +351,7 @@ async def milestone_ai_chat(milestone_context: Dict[str, Any], chat_history: Lis
     try:
         res = await ai["client"].chat.completions.create(model=ai["model"], temperature=0.4, messages=msgs)
         content = res.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict) and "reply" in parsed:
             return parsed
     except Exception:
@@ -363,7 +395,7 @@ async def generate_diagnostic_quiz(skill_name: str, difficulty: str = "intermedi
     try:
         res = await ai["client"].chat.completions.create(model=ai["model"], temperature=0.2, messages=[{"role": "system", "content": "You are a technical interviewer. Output JSON only."}, {"role": "user", "content": prompt}])
         content = res.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict) and "questions" in parsed:
             return parsed
     except Exception:
@@ -397,7 +429,7 @@ async def generate_project_spec(domain: str, milestone_title: str, skills: List[
     try:
         res = await ai["client"].chat.completions.create(model=ai["model"], temperature=0.4, messages=[{"role": "system", "content": "You are a software architect. Output JSON only."}, {"role": "user", "content": prompt}])
         content = res.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict) and "project_title" in parsed:
             return parsed
     except Exception:
@@ -426,7 +458,7 @@ Return JSON: {{"passed": true, "score": 90, "grade": "Proficient", "feedback": "
     try:
         res = await ai["client"].chat.completions.create(model=ai["model"], temperature=0.2, messages=[{"role": "system", "content": "You are an encouraging code reviewer. Output JSON only."}, {"role": "user", "content": prompt}])
         content = res.choices[0].message.content or ""
-        parsed = json.loads(content)
+        parsed = _parse_llm_json(content)
         if isinstance(parsed, dict) and "score" in parsed:
             return parsed
     except Exception:
