@@ -221,7 +221,7 @@ const Portfolio = () => {
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
               filterCategory === 'all'
                 ? 'bg-black text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-secondary text-foreground/90 hover:bg-gray-200'
             }`}
           >
             All Skills
@@ -233,7 +233,7 @@ const Portfolio = () => {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 filterCategory === cat.id
                   ? 'bg-black text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-secondary text-foreground/90 hover:bg-gray-200'
               }`}
             >
               {cat.name}
@@ -245,11 +245,11 @@ const Portfolio = () => {
         <div className="space-y-8">
           {filteredData.length === 0 ? (
             <div className="empty-state py-16">
-              <div className="empty-state-icon bg-gray-100 text-gray-400">
+              <div className="empty-state-icon bg-secondary text-muted-foreground">
                 <Award className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mt-4">No skills yet</h3>
-              <p className="text-sm text-gray-500 mt-2 max-w-sm mb-6">
+              <h3 className="text-lg font-bold text-foreground mt-4">No skills yet</h3>
+              <p className="text-sm text-muted-foreground mt-2 max-w-sm mb-6">
                 Start building your portfolio by adding skills in the Skills tab or through the AI Skill Gap Analyzer.
               </p>
             </div>
@@ -264,7 +264,7 @@ const Portfolio = () => {
                 <div className="mb-6">
                   <h2 className="text-lg font-bold text-black mb-2">{group.category.name}</h2>
                   {group.category.description && (
-                    <p className="text-sm text-gray-600 mb-4">{group.category.description}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{group.category.description}</p>
                   )}
 
                   {/* Skills in this category */}
@@ -272,7 +272,7 @@ const Portfolio = () => {
                     {group.skills.map((skill, skillIdx) => (
                       <motion.div
                         key={skill.id}
-                        className="bg-white border border-gray-200 rounded-[16px] p-4 hover:shadow-md transition-shadow"
+                        className="bg-white border border-border rounded-[16px] p-4 hover:shadow-md transition-shadow"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: skillIdx * 0.05 }}
@@ -280,7 +280,7 @@ const Portfolio = () => {
                         <div className="flex items-start justify-between mb-3">
                           <div>
                             <h3 className="font-bold text-black text-sm">{skill.name}</h3>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {skill.status.replace('_', ' ')}
                             </p>
                           </div>
@@ -296,7 +296,7 @@ const Portfolio = () => {
                         </div>
 
                         {skill.description && (
-                          <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
                             {skill.description}
                           </p>
                         )}
@@ -304,7 +304,7 @@ const Portfolio = () => {
                         {/* Progress bar */}
                         <div className="mb-3">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-600">Progress</span>
+                            <span className="text-xs font-medium text-muted-foreground">Progress</span>
                             <span className="text-xs font-bold text-black">{skill.progress || 0}%</span>
                           </div>
                           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -317,7 +317,7 @@ const Portfolio = () => {
 
                         {/* Subskills count */}
                         {skill.subskills && skill.subskills.length > 0 && (
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-muted-foreground">
                             {skill.subskills.filter(s => s.done).length} / {skill.subskills.length} subskills completed
                           </div>
                         )}

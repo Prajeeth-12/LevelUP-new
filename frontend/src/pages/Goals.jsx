@@ -114,10 +114,10 @@ const Goals = () => {
           <div className="relative overflow-hidden rounded-xl p-6 bg-zinc-950 border border-zinc-800">
             <div className="relative z-10">
               <div className="flex items-center gap-2 mb-2 text-white">
-                <Zap className="w-5 h-5 text-violet-400" />
+                <Zap className="w-5 h-5 text-orange-400" />
                 <h3 className="font-bold">Deep Resume Analysis</h3>
               </div>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 Upload your resume and a specific Job Description for a highly tailored skill gap report.
               </p>
               <button 

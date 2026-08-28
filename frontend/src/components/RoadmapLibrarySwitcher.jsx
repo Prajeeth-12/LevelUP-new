@@ -28,23 +28,23 @@ export const RoadmapLibrarySwitcher = ({
   if (!roadmaps || roadmaps.length === 0) return null
 
   return (
-    <div className="bg-white dark:bg-card rounded-2xl border border-gray-200 dark:border-border p-4 sm:p-5 shadow-sm space-y-4">
+    <div className="bg-white dark:bg-card rounded-2xl border border-border dark:border-border p-4 sm:p-5 shadow-sm space-y-4">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-violet-600 dark:text-violet-400">
+          <div className="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400">
             <Compass className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-foreground">
+              <h3 className="text-sm sm:text-base font-bold text-foreground dark:text-foreground">
                 My Learning Roadmaps
               </h3>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300 border border-violet-200/60 dark:border-violet-800/40">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-500/10 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300 border border-orange-500/20/60 dark:border-violet-800/40">
                 {roadmaps.length} {roadmaps.length === 1 ? 'Path' : 'Paths'}
               </span>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground">
               Select any saved learning path to focus your dashboard progress.
             </p>
           </div>
@@ -54,7 +54,7 @@ export const RoadmapLibrarySwitcher = ({
         <div className="relative">
           <button
             onClick={() => setShowAddMenu(!showAddMenu)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-gray-900 dark:bg-white text-white dark:text-foreground rounded-lg hover:bg-gray-800 dark:hover:bg-secondary transition-all shadow-sm"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Roadmap</span>
@@ -73,19 +73,19 @@ export const RoadmapLibrarySwitcher = ({
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.95 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-gray-200 dark:border-border p-1.5 z-30 space-y-1"
+                  className="absolute right-0 mt-2 w-56 bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-border dark:border-border p-1.5 z-30 space-y-1"
                 >
                   <button
                     onClick={() => {
                       setShowAddMenu(false)
                       navigate('/recommend')
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-foreground/90 dark:text-gray-200 hover:bg-secondary dark:hover:bg-zinc-800 rounded-lg transition-colors text-left"
                   >
-                    <Sparkles className="w-4 h-4 text-violet-500" />
+                    <Sparkles className="w-4 h-4 text-orange-500" />
                     <div>
-                      <div className="font-semibold text-gray-900 dark:text-white">AI Path Recommender</div>
-                      <div className="text-[10px] text-gray-500">Conversational AI goal mapping</div>
+                      <div className="font-semibold text-foreground dark:text-white">AI Path Recommender</div>
+                      <div className="text-[10px] text-muted-foreground">Conversational AI goal mapping</div>
                     </div>
                   </button>
 
@@ -94,12 +94,12 @@ export const RoadmapLibrarySwitcher = ({
                       setShowAddMenu(false)
                       navigate('/skill-gap')
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors text-left"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-foreground/90 dark:text-gray-200 hover:bg-secondary dark:hover:bg-zinc-800 rounded-lg transition-colors text-left"
                   >
                     <Zap className="w-4 h-4 text-amber-500" />
                     <div>
-                      <div className="font-semibold text-gray-900 dark:text-white">Skill Gap Analyzer</div>
-                      <div className="text-[10px] text-gray-500">Resume & JD benchmark roadmap</div>
+                      <div className="font-semibold text-foreground dark:text-white">Skill Gap Analyzer</div>
+                      <div className="text-[10px] text-muted-foreground">Resume & JD benchmark roadmap</div>
                     </div>
                   </button>
                 </motion.div>
@@ -127,8 +127,8 @@ export const RoadmapLibrarySwitcher = ({
               layout
               className={`relative group rounded-xl p-3.5 border transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-gray-900 dark:border-white shadow-md'
-                  : 'bg-gray-50 dark:bg-accent/40 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-border hover:border-gray-300 dark:hover:border-zinc-600 hover:bg-gray-100/70'
+                  ? 'bg-gray-900 dark:bg-white text-white dark:text-foreground border-gray-900 dark:border-white shadow-md'
+                  : 'bg-secondary/40 dark:bg-accent/40 text-foreground dark:text-gray-200 border-border dark:border-border hover:border-border dark:hover:border-zinc-600 hover:bg-secondary/70'
               }`}
               onClick={() => {
                 if (!isActive && onSwitchRoadmap) {
@@ -145,7 +145,7 @@ export const RoadmapLibrarySwitcher = ({
                         Active Focus
                       </span>
                     ) : (
-                      <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400">
+                      <span className="text-[10px] font-semibold text-muted-foreground dark:text-muted-foreground">
                         Saved Roadmap
                       </span>
                     )}
@@ -197,8 +197,8 @@ export const RoadmapLibrarySwitcher = ({
                         confirmDeleteId === rmId
                           ? 'bg-rose-600 text-white'
                           : isActive
-                          ? 'text-gray-400 hover:text-rose-400 hover:bg-white/10'
-                          : 'text-gray-400 hover:text-rose-600 hover:bg-gray-200 dark:hover:bg-zinc-800'
+                          ? 'text-muted-foreground hover:text-rose-400 hover:bg-white/10'
+                          : 'text-muted-foreground hover:text-rose-600 hover:bg-gray-200 dark:hover:bg-zinc-800'
                       }`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />

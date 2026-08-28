@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import { Eye, EyeOff, Zap, ArrowRight, CheckCircle2 } from 'lucide-react'
+import React, { useState } from 'react'
+import { Eye, EyeOff, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react'
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../../firebase'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
-// ─── Google Icon ──────────────────────────────────────────────────────────────
+// Google Icon
 const GoogleIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 48 48">
     <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
@@ -15,26 +14,15 @@ const GoogleIcon = () => (
   </svg>
 )
 
-// ─── Feature chip ─────────────────────────────────────────────────────────────
-const FeatureChip = ({ children }) => (
-  <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-xl px-3 py-2 text-sm text-white/90">
-    <CheckCircle2 className="w-4 h-4 text-violet-300 shrink-0" />
-    {children}
-  </div>
-)
-
-// ─── SignIn ───────────────────────────────────────────────────────────────────
 export const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail]               = useState('')
-  const [password, setPassword]         = useState('')
-  const [error, setError]               = useState('')
-  const [loading, setLoading]           = useState(false)
-  const [resetSent, setResetSent]       = useState(false)
-  const [resetMode, setResetMode]       = useState(false)
-  const navigate                        = useNavigate()
-
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
+  const [resetMode, setResetMode] = useState(false)
+  const navigate = useNavigate()
 
   const handleSignIn = async (e) => {
     e.preventDefault()
@@ -44,9 +32,11 @@ export const SignIn = () => {
       await signInWithEmailAndPassword(auth, email, password)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.code === 'auth/invalid-credential'
-        ? 'Incorrect email or password. Please try again.'
-        : err.message || 'Failed to sign in.')
+      setError(
+        err.code === 'auth/invalid-credential'
+          ? 'Incorrect email or password. Please try again.'
+          : err.message || 'Failed to sign in.'
+      )
     } finally {
       setLoading(false)
     }
@@ -81,194 +71,201 @@ export const SignIn = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-white dark:bg-background">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-8 relative overflow-hidden selection:bg-orange-500/20">
+      {/* Subtle Warm Background Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      {/* ── Left Hero Panel ─────────────────────────────────────────────── */}
-      <div className="auth-hero w-[45%] relative overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute top-0 left-0 w-80 h-80 rounded-full opacity-30 -translate-x-1/2 -translate-y-1/2"
-          style={{ background: 'radial-gradient(circle, #a78bfa, transparent)' }} />
-        <div className="absolute bottom-0 right-0 w-64 h-64 rounded-full opacity-20 translate-x-1/3 translate-y-1/3"
-          style={{ background: 'radial-gradient(circle, #818cf8, transparent)' }} />
-
-        <div className="relative z-10 flex flex-col h-full">
-          {/* Brand */}
-          <div className="flex items-center gap-3 mb-auto">
-            <img src="/logo-white.png" alt="LevelUP" className="h-8 w-auto object-contain" />
-          </div>
-
-          {/* Hero copy */}
-          <div className="mb-auto">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4 font-serif italic">
-              Level up your<br />
-              <span className="text-orange-400">skills</span> one day<br />
-              at a time.
-            </h1>
-            <p className="text-white/70 text-base mb-8 leading-relaxed">
-              Your personal learning OS — track skills, get AI-powered gap analysis, and stay on your learning path.
-            </p>
-            <div className="space-y-2.5">
-              <FeatureChip>AI Skill Gap Analyzer</FeatureChip>
-              <FeatureChip>Personalized Learning Roadmaps</FeatureChip>
-              <FeatureChip>Progress tracking & analytics</FeatureChip>
-              <FeatureChip>Kanban-style skill board</FeatureChip>
-            </div>
-          </div>
-
-          <p className="text-white/40 text-xs">
-            © {new Date().getFullYear()} LevelUP. All rights reserved.
-          </p>
+      {/* Brand Header */}
+      <div className="mb-6 flex flex-col items-center text-center animate-fade-in relative z-10">
+        <div
+          onClick={() => navigate('/')}
+          className="cursor-pointer hover:opacity-90 transition-opacity mb-4 flex items-center justify-center"
+        >
+          <img src="/logo.png" alt="LevelUP" className="h-9 w-auto object-contain dark:hidden" />
+          <img src="/logo-white.png" alt="LevelUP" className="h-9 w-auto object-contain hidden dark:block" />
+        </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 mb-2">
+          <Sparkles className="w-3 h-3" />
+          <span>Your Personal Learning OS</span>
         </div>
       </div>
 
-      {/* ── Right Form Panel ─────────────────────────────────────────────── */}
-      <div className="auth-form-panel flex-1">
-        <div className="w-full max-w-sm mx-auto">
-          {!resetMode ? (
-            <>
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-1">Welcome back</h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Sign in to continue your learning journey</p>
+      {/* Main Card */}
+      <div className="w-full max-w-md bg-card border border-border rounded-3xl p-6 sm:p-8 shadow-xl relative z-10">
+        {!resetMode ? (
+          <>
+            <div className="mb-6 text-center">
+              <h1 className="text-2xl sm:text-3xl font-normal text-foreground font-serif italic mb-1.5">
+                Welcome <span className="text-orange-600 dark:text-orange-400">back</span>.
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                Sign in to continue your career acceleration and study tasks.
+              </p>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="flex items-start gap-2 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 rounded-2xl px-4 py-3 text-xs mb-5 font-medium">
+                <span className="mt-0.5">⚠️</span>
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Google Sign In */}
+            <button
+              type="button"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              className="w-full py-2.5 px-4 rounded-2xl bg-secondary hover:bg-secondary/80 text-foreground border border-border font-semibold text-xs transition-all flex items-center justify-center gap-2.5 shadow-2xs mb-4"
+            >
+              <GoogleIcon />
+              <span>Continue with Google</span>
+            </button>
+
+            {/* Divider */}
+            <div className="relative flex items-center gap-3 my-4">
+              <div className="flex-1 h-px bg-border" />
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">or email</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+
+            {/* Credentials Form */}
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-foreground mb-1.5">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  className="w-full input-base py-2.5 px-3.5 text-xs rounded-2xl"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  autoComplete="email"
+                />
               </div>
 
-              {/* Error */}
-              {error && (
-                <div className="flex items-start gap-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-600 dark:text-red-400 rounded-xl px-4 py-3 text-sm mb-5">
-                  <span className="mt-0.5">⚠️</span>
-                  <span>{error}</span>
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-foreground">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setResetMode(true)}
+                    className="text-[11px] font-bold text-orange-600 dark:text-orange-400 hover:underline"
+                  >
+                    Forgot password?
+                  </button>
                 </div>
-              )}
-
-              {/* Google */}
-              <button
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className="w-full btn-outline flex items-center justify-center gap-2.5 py-3 mb-4"
-              >
-                <GoogleIcon />
-                Continue with Google
-              </button>
-
-              {/* Divider */}
-              <div className="relative flex items-center gap-3 mb-4">
-                <div className="flex-1 h-px bg-gray-200 dark:bg-accent" />
-                <span className="text-xs font-semibold text-gray-400 dark:text-muted-foreground uppercase tracking-wider">or</span>
-                <div className="flex-1 h-px bg-gray-200 dark:bg-accent" />
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    className="w-full input-base py-2.5 px-3.5 pr-10 text-xs rounded-2xl"
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((p) => !p)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleSignIn} className="space-y-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 px-4 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-xs transition-all flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    <span>Signing in…</span>
+                  </span>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="text-center text-xs text-muted-foreground mt-6 pt-4 border-t border-border/60">
+              Don't have an account?{' '}
+              <button
+                onClick={() => navigate('/signup')}
+                className="font-bold text-orange-600 dark:text-orange-400 hover:underline"
+              >
+                Sign up free
+              </button>
+            </div>
+          </>
+        ) : (
+          /* Forgot Password View */
+          <>
+            <button
+              onClick={() => { setResetMode(false); setResetSent(false); setError('') }}
+              className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors mb-4 flex items-center gap-1"
+            >
+              ← Back to sign in
+            </button>
+            <div className="mb-6">
+              <h2 className="text-2xl font-normal text-foreground font-serif italic mb-1">
+                Reset <span className="text-orange-600 dark:text-orange-400">password</span>.
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                Enter your email address and we'll send a password recovery link.
+              </p>
+            </div>
+
+            {resetSent ? (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded-2xl p-4 text-xs font-medium space-y-2">
+                <div className="flex items-center gap-2 font-bold">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>Reset link sent!</span>
+                </div>
+                <p>Check your email inbox to reset your password.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleForgotPassword} className="space-y-4">
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 rounded-2xl p-3 text-xs">
+                    {error}
+                  </div>
+                )}
                 <div>
-                  <label className="label-base">Email</label>
+                  <label className="block text-xs font-bold text-foreground mb-1.5">
+                    Email Address
+                  </label>
                   <input
                     type="email"
-                    className="input-base"
+                    className="w-full input-base py-2.5 px-3.5 text-xs rounded-2xl"
                     placeholder="you@example.com"
                     value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
-                    autoComplete="email"
                   />
-                </div>
-                <div>
-                  <div className="flex justify-between mb-1.5">
-                    <label className="label-base mb-0">Password</label>
-                    <button
-                      type="button"
-                      onClick={() => setResetMode(true)}
-                      className="text-xs font-semibold text-orange-600 dark:text-orange-400 hover:underline"
-                    >
-                      Forgot password?
-                    </button>
-                  </div>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      className="input-base pr-10 rounded-2xl"
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      required
-                      autoComplete="current-password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(p => !p)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
                 </div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 mt-1"
+                  className="w-full py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-xs transition-all"
                 >
-                  {loading ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                      Signing in…
-                    </span>
-                  ) : (
-                    <>Sign In <ArrowRight className="w-4 h-4" /></>
-                  )}
+                  {loading ? 'Sending…' : 'Send Reset Link'}
                 </button>
               </form>
-
-              <p className="text-center text-xs sm:text-sm text-muted-foreground mt-6">
-                Don't have an account?{' '}
-                <button
-                  onClick={() => navigate('/signup')}
-                  className="font-bold text-orange-600 dark:text-orange-400 hover:underline"
-                >
-                  Sign up free
-                </button>
-              </p>
-            </>
-          ) : (
-            /* ── Forgot Password mode ── */
-            <>
-              <button
-                onClick={() => { setResetMode(false); setResetSent(false); setError('') }}
-                className="btn-ghost mb-6 text-sm gap-1 -ml-2"
-              >
-                ← Back to sign in
-              </button>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-1">Reset password</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                We'll send a password reset link to your email.
-              </p>
-              {resetSent ? (
-                <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-700 dark:text-emerald-400 rounded-xl px-4 py-4 text-sm">
-                  ✅ Reset email sent! Check your inbox.
-                </div>
-              ) : (
-                <form onSubmit={handleForgotPassword} className="space-y-4">
-                  {error && (
-                    <div className="bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-400 rounded-xl px-4 py-3 text-sm">
-                      {error}
-                    </div>
-                  )}
-                  <div>
-                    <label className="label-base">Email address</label>
-                    <input
-                      type="email"
-                      className="input-base"
-                      placeholder="you@example.com"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <button type="submit" disabled={loading} className="w-full btn-primary py-3">
-                    {loading ? 'Sending…' : 'Send Reset Link'}
-                  </button>
-                </form>
-              )}
-            </>
-          )}
-        </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   )

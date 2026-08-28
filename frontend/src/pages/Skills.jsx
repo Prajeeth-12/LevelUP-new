@@ -21,14 +21,14 @@ const SlideOver = ({ title, isOpen, onClose, onSubmit, children, actions }) => {
     <>
       <div className="slideover-backdrop" onClick={onClose} />
       <div className="slideover-panel" role="dialog" aria-modal="true" aria-labelledby="skills-slideover-title">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">
-          <h2 id="skills-slideover-title" className="text-base font-bold text-gray-900">{title}</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+          <h2 id="skills-slideover-title" className="text-base font-bold text-foreground">{title}</h2>
           <button onClick={onClose} className="btn-icon" aria-label="Close panel"><X className="w-4 h-4" /></button>
         </div>
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
           {children}
         </div>
-        <div className="px-6 py-4 border-t border-gray-200 flex gap-3 shrink-0">
+        <div className="px-6 py-4 border-t border-border flex gap-3 shrink-0">
           <button onClick={onClose} className="btn-outline flex-1">Cancel</button>
           {actions}
         </div>
@@ -177,11 +177,11 @@ const Skills = () => {
 
               {/* Grid of skills */}
               {cat.items.length === 0 ? (
-                <div className="rounded-xl border-2 border-dashed border-gray-200 p-8 text-center bg-gray-50">
-                  <p className="text-sm text-gray-500">No skills in this category yet.</p>
+                <div className="rounded-xl border-2 border-dashed border-border p-8 text-center bg-secondary/40">
+                  <p className="text-sm text-muted-foreground">No skills in this category yet.</p>
                   <button 
                     onClick={() => { setEditingSkillId(null); setSkillForm({ ...emptySkill, categoryId: cat.id }); setSubskillText(''); setShowSkillForm(true) }}
-                    className="mt-3 text-sm font-semibold text-black hover:text-gray-700"
+                    className="mt-3 text-sm font-semibold text-black hover:text-foreground/90"
                   >
                     + Add a skill
                   </button>
@@ -296,7 +296,7 @@ const Skills = () => {
           <div>
             <label className="label-base">Key Topics / Modules</label>
             <textarea className="input-base resize-none" rows={3} value={subskillText} onChange={e => setSubskillText(e.target.value)} placeholder="Hooks&#10;Context API&#10;Redux" />
-            <p className="text-[10px] text-gray-500 mt-1">One item per line</p>
+            <p className="text-[10px] text-muted-foreground mt-1">One item per line</p>
           </div>
         </SlideOver>
       </AnimatePresence>
