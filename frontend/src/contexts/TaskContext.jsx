@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../firebase'
-import { createTask, deleteTask, listTasks, updateTask } from '../services/api'
+import { createTask, deleteTask, listTasks, updateTask, subscribeToTasks } from '../services/api'
 
 const TaskContext = createContext(null)
 
@@ -10,13 +10,57 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const loadTasks = useCallback(async (uid) => {
-    if (!uid) {
-      setTasks([])
-      setLoading(false)
-      return
-    }
+  // Real-time Firestore sync & LocalStorage fallback
+  useEffect(() => {
+    let unsubscribeSnapshot = null
 
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      const uid = user?.uid || localStorage.getItem('levelup_guest_user_id') || 'guest_user'
+      setUserId(uid)
+
+      // 1. Immediately hydrate from cache so tasks appear instantaneously
+      try {
+        const cached = localStorage.getItem(`levelup_cached_tasks_${uid}`)
+        if (cached) {
+          const parsed = JSON.parse(cached)
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setTasks(parsed)
+            setLoading(false)
+          }
+        }
+      } catch (e) {}
+
+      // 2. Clean up previous snapshot listener if any
+      if (unsubscribeSnapshot) {
+        unsubscribeSnapshot()
+      }
+
+      // 3. Connect real-time Firestore listener
+      setLoading(true)
+      unsubscribeSnapshot = subscribeToTasks(
+        uid,
+        (syncedTasks) => {
+          setTasks(syncedTasks)
+          setLoading(false)
+        },
+        (err) => {
+          console.warn('Realtime tasks listener failed, falling back to one-time list:', err)
+          listTasks(uid).then((fallbackTasks) => {
+            setTasks(fallbackTasks)
+            setLoading(false)
+          })
+        }
+      )
+    })
+
+    return () => {
+      if (unsubscribeAuth) unsubscribeAuth()
+      if (unsubscribeSnapshot) unsubscribeSnapshot()
+    }
+  }, [])
+
+  const refreshTasks = useCallback(async () => {
+    const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id') || 'guest_user'
     setLoading(true)
     try {
       const nextTasks = await listTasks(uid)
@@ -24,31 +68,56 @@ export const TaskProvider = ({ children }) => {
     } finally {
       setLoading(false)
     }
-  }, [])
-
-  useEffect(() => onAuthStateChanged(auth, (user) => {
-    const uid = user?.uid || null
-    setUserId(uid)
-    loadTasks(uid)
-  }), [loadTasks])
-
-  const refreshTasks = useCallback(() => loadTasks(userId), [loadTasks, userId])
+  }, [userId])
 
   const createNewTask = useCallback(async (data) => {
-    const item = await createTask(data, userId)
-    setTasks((prev) => [...prev, item])
+    const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id') || 'guest_user'
+    const item = await createTask(data, uid)
+    setTasks((prev) => {
+      const exists = prev.some((t) => t.id === item.id)
+      const next = exists ? prev.map((t) => (t.id === item.id ? item : t)) : [...prev, item]
+      try {
+        localStorage.setItem(`levelup_cached_tasks_${uid}`, JSON.stringify(next))
+      } catch (e) {}
+      return next
+    })
     return item
   }, [userId])
 
   const editTask = useCallback(async (id, data) => {
-    const item = await updateTask(id, data, userId)
-    setTasks((prev) => prev.map((task) => (task.id === id ? { ...task, ...item } : task)))
+    const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id') || 'guest_user'
+    // Optimistic UI update immediately
+    setTasks((prev) => {
+      const next = prev.map((task) => (task.id === id ? { ...task, ...data, updatedAt: new Date().toISOString() } : task))
+      try {
+        localStorage.setItem(`levelup_cached_tasks_${uid}`, JSON.stringify(next))
+      } catch (e) {}
+      return next
+    })
+
+    const item = await updateTask(id, data, uid)
+    setTasks((prev) => {
+      const next = prev.map((task) => (task.id === id ? { ...task, ...item } : task))
+      try {
+        localStorage.setItem(`levelup_cached_tasks_${uid}`, JSON.stringify(next))
+      } catch (e) {}
+      return next
+    })
     return item
   }, [userId])
 
   const removeTask = useCallback(async (id) => {
-    await deleteTask(id, userId)
-    setTasks((prev) => prev.filter((task) => task.id !== id))
+    const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id') || 'guest_user'
+    // Optimistic removal
+    setTasks((prev) => {
+      const next = prev.filter((task) => task.id !== id)
+      try {
+        localStorage.setItem(`levelup_cached_tasks_${uid}`, JSON.stringify(next))
+      } catch (e) {}
+      return next
+    })
+
+    await deleteTask(id, uid)
     return true
   }, [userId])
 

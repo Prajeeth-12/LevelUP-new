@@ -7,6 +7,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   updateDoc,
@@ -227,10 +228,44 @@ export const listTasks = async (userId) => {
   const uid = ensureUserId(userId)
   try {
     const snapshot = await getDocs(getUserCollection(uid, 'tasks'))
-    return mapDocs(snapshot).map(normalizeTaskDoc)
+    const tasks = mapDocs(snapshot).map(normalizeTaskDoc)
+    try {
+      localStorage.setItem(`levelup_cached_tasks_${uid}`, JSON.stringify(tasks))
+    } catch (e) {}
+    return tasks
   } catch (err) {
     console.warn('Error listing tasks from Firestore:', err)
+    // Fallback to local cache if offline or error
+    try {
+      const cached = localStorage.getItem(`levelup_cached_tasks_${uid}`)
+      if (cached) return JSON.parse(cached)
+    } catch (e) {}
     return []
+  }
+}
+
+export const subscribeToTasks = (userId, onNext, onError) => {
+  const uid = ensureUserId(userId)
+  try {
+    const q = getUserCollection(uid, 'tasks')
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const tasks = mapDocs(snapshot).map(normalizeTaskDoc)
+        try {
+          localStorage.setItem(`levelup_cached_tasks_${uid}`, JSON.stringify(tasks))
+        } catch (e) {}
+        if (onNext) onNext(tasks)
+      },
+      (err) => {
+        console.warn('Firestore onSnapshot listener error for tasks:', err)
+        if (onError) onError(err)
+      }
+    )
+    return unsubscribe
+  } catch (err) {
+    console.warn('Could not initialize tasks listener:', err)
+    return () => {}
   }
 }
 
