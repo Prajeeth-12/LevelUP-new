@@ -241,6 +241,16 @@ export const AppShell = ({ children }) => {
 
           {/* Right controls */}
           <div className="flex items-center gap-2">
+            {/* Ask AI Assistant quick button */}
+            <button
+              onClick={() => setChatOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-sm transition-all border border-violet-400/30"
+              title="Open AI Assistant (Ctrl + /)"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Ask AI</span>
+            </button>
+
             {/* AI Learning Path quick button */}
             <button
               onClick={() => navigate('/learning-path')}
