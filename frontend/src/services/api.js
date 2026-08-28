@@ -1,11 +1,14 @@
+import axios from 'axios'
 import { auth, db } from '../firebase'
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
   writeBatch,
@@ -350,18 +353,50 @@ export const saveSkillSubskills = async (skillId, subskills, userId) => {
 }
 
 export const getActiveRoadmap = async (userId) => {
-  const uid = ensureUserId(userId)
-  const snapshot = await getDocs(getUserCollection(uid, 'active_roadmap'))
-  const roadmapDoc = snapshot.docs.find(d => d.id === 'current')
-  return roadmapDoc ? { id: roadmapDoc.id, ...roadmapDoc.data() } : null
+  const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
+  if (!uid) return null
+
+  // 1. Direct Firestore document fetch
+  try {
+    const docRef = doc(db, 'users', uid, 'active_roadmap', 'current')
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() }
+    }
+  } catch (err) {
+    console.warn('Firestore direct getDoc failed, attempting backend fallback:', err)
+  }
+
+  // 2. Fallback to Backend Admin API
+  try {
+    const token = await auth.currentUser?.getIdToken?.()
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const res = await axios.get(`${API_URL}/api/career/roadmap?uid=${uid}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    if (res.data && !res.data.message && (res.data.learning_roadmap || res.data.career_decision)) {
+      return res.data
+    }
+  } catch (err) {
+    console.warn('Backend active roadmap fallback error:', err)
+  }
+
+  return null
 }
 
 export const updateActiveRoadmap = async (data, userId) => {
-  const uid = ensureUserId(userId)
-  const ref = doc(db, 'users', uid, 'active_roadmap', 'current')
-  await updateDoc(ref, {
-    ...data,
-    updatedAt: nowIso(),
-  })
-  return true
+  const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
+  if (!uid) return false
+
+  try {
+    const ref = doc(db, 'users', uid, 'active_roadmap', 'current')
+    await setDoc(ref, {
+      ...data,
+      updatedAt: nowIso(),
+    }, { merge: true })
+    return true
+  } catch (err) {
+    console.error('Error updating active roadmap:', err)
+    return false
+  }
 }

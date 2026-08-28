@@ -310,8 +310,8 @@ const PresetCard = ({ item, selected, onSelect }) => {
 // ── main page ────────────────────────────────────────────────────────────────
 const SkillGapAnalyzer = () => {
   const navigate = useNavigate()
-  const { categories, createCategory, createSkill } = useSkills()
-  const { createTask } = useTasks()
+  const { categories, createCategory, createSkill, refreshSkills } = useSkills()
+  const { createTask, refreshTasks } = useTasks()
   const { refreshRoadmap } = useRoadmap()
   const [file, setFile] = useState(null)
   const [jdMode, setJdMode] = useState('custom')   // 'custom' | 'role' | 'tool'
@@ -517,32 +517,45 @@ const SkillGapAnalyzer = () => {
 
       // ─── STEP 3: Create tasks for the first phase milestones ───────────────
       try {
-        const firstPhase = result.learning_roadmap?.roadmap?.[0]
-        if (firstPhase && firstPhase.milestones) {
+        const firstPhase = result.learning_velocity?.roadmap?.[0] || result.learning_roadmap?.roadmap?.[0]
+        if (firstPhase) {
+          const items = firstPhase.skill_details || firstPhase.milestones || []
           console.log(`📋 Creating tasks for Phase 1: ${firstPhase.phase}...`)
-          for (const ms of firstPhase.milestones) {
-            await createTask({
-              title: ms.name,
-              notes: ms.description || `Phase 1 Milestone: ${ms.name}`,
-              priority: 'HIGH',
-              status: 'NOT_STARTED',
-              deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 1 week from now
-            })
-            console.log(`✅ Created task: ${ms.name}`)
+          for (const item of items.slice(0, 4)) {
+            const taskTitle = item.name || item.title || item.description
+            if (taskTitle) {
+              await createTask({
+                title: `Master: ${taskTitle}`,
+                notes: item.description || `Phase 1 Objective: ${taskTitle}`,
+                priority: 'HIGH',
+                status: 'NOT_STARTED',
+                deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+              })
+              console.log(`✅ Created task: ${taskTitle}`)
+            }
           }
         }
       } catch (taskErr) {
         console.error('❌ Failed to create tasks:', taskErr)
       }
 
+      // Synchronize all contexts with Firestore
+      try {
+        if (refreshRoadmap) await refreshRoadmap()
+        if (refreshSkills) await refreshSkills()
+        if (refreshTasks) await refreshTasks()
+      } catch (syncErr) {
+        console.warn('Context sync error:', syncErr)
+      }
+
       setAdoptDone(true)
 
-      // Show success for 2 seconds before allowing navigation
-      setTimeout(() => {
-        console.log('🎯 Ready to navigate to dashboard')
-        refreshRoadmap()
+      // Show success before navigating to dashboard
+      setTimeout(async () => {
+        console.log('🎯 Navigating to dashboard')
+        if (refreshRoadmap) await refreshRoadmap()
         navigate('/dashboard')
-      }, 2000)
+      }, 1200)
 
     } catch (err) {
       console.error('❌ Adoption failed:', err)

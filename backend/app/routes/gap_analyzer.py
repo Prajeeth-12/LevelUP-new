@@ -25,7 +25,7 @@ from app.services.analyzer.parser import extract_text_from_file
 from app.services.analyzer.extractor import SkillExtractor
 from app.services.analyzer.matcher import calculate_semantic_match, build_learning_velocity
 from app.services.analyzer.storage import save_gap_analysis
-from app.services.storage_service import save_active_roadmap
+from app.services.storage_service import save_active_roadmap, save_student_profile
 from app.config import ENV
 
 router = APIRouter(prefix="/api/v1", tags=["Skill Gap Analyzer"])
@@ -192,9 +192,7 @@ async def adopt_gap_roadmap(
     """
     print(f"DEBUG: Received adopt-roadmap request for user: {body.user_id}")
     try:
-        user_id = auth_user_id
-        if not user_id and ENV.lower() != "production":
-            user_id = body.user_id
+        user_id = auth_user_id or body.user_id
 
         if not user_id:
             raise HTTPException(status_code=401, detail="Please sign in to adopt roadmap")
@@ -219,7 +217,7 @@ async def adopt_gap_roadmap(
             "confidence":          int(ga.get("job_readiness_score", 0)),
             "skill_match_percentage": int(ga.get("match_percentage", 0)),
             "market_readiness":    int(ga.get("job_readiness_score", 0)),
-            "industry_demand":     "stable",
+            "industry_demand":     "trending" if int(ga.get("match_percentage", 0)) > 60 else "stable",
             "key_strengths":       ga.get("matched_skills", [])[:5],
             "skill_gaps":          ga.get("missing_skills", [])[:5],
             "time_to_job_ready":   f"~{lv.get('weeks_to_readiness', 0):.0f} weeks",
@@ -231,6 +229,7 @@ async def adopt_gap_roadmap(
         # Convert gap phases into the roadmap phase shape Dashboard uses
         converted_phases = []
         total_hours = 0
+        all_skills = []
         
         for phase_idx, p in enumerate(phases):
             skill_details = p.get("skill_details", [])
@@ -241,14 +240,21 @@ async def adopt_gap_roadmap(
                 hours = sd.get("hours", 0)
                 phase_hours += hours
                 total_hours += hours
+                s_name = sd.get("name", "")
+                if s_name and s_name not in all_skills:
+                    all_skills.append(s_name)
                 
                 milestones.append({
-                    "name":            sd.get("name", ""),
-                    "description":     f"Learn {sd.get('name','')} ({sd.get('category','')}) – ~{hours}h",
+                    "name":            s_name,
+                    "description":     f"Learn {s_name} ({sd.get('category','')}) – ~{hours}h",
                     "estimated_hours": hours,
                     "resources":       sd.get("resources", []),
                     "status":          "pending",
                 })
+
+            for s in p.get("skills", []):
+                if s not in all_skills:
+                    all_skills.append(s)
 
             converted_phases.append({
                 "phase":        p["phase"],
@@ -278,6 +284,16 @@ async def adopt_gap_roadmap(
             roadmap_obj,
             preserve_progress=False
         )
+
+        # Update student profile in Firestore
+        profile_data = {
+            "name": "LevelUP Learner",
+            "goals": body.roadmap_title,
+            "skills": ", ".join(all_skills[:12]) if all_skills else "Fullstack Engineering",
+            "interests": body.roadmap_title,
+            "experience": f"Skill Gap Readiness: {ga.get('job_readiness_score', 70):.0f}%"
+        }
+        await run_in_threadpool(save_student_profile, user_id, profile_data)
 
         return {
             "status": "ok",

@@ -4,7 +4,8 @@ from app.models.student import StudentProfile
 from app.services.roadmap_agent import generate_roadmap
 from app.services.storage_service import save_career_analysis, get_active_roadmap
 from app.services.matching_service import generate_career_insights
-from app.utils.auth import verify_firebase_token
+from typing import Optional
+from app.utils.auth import verify_firebase_token, get_optional_firebase_token
 
 router = APIRouter(
     prefix="/api/career",
@@ -12,8 +13,14 @@ router = APIRouter(
 )
 
 @router.get("/roadmap")
-def get_current_roadmap(user_id: str = Depends(verify_firebase_token)):
-    roadmap = get_active_roadmap(user_id)
+def get_current_roadmap(
+    user_id: Optional[str] = Depends(get_optional_firebase_token),
+    uid: Optional[str] = None
+):
+    target_uid = user_id or uid
+    if not target_uid:
+        return {"message": "No user ID provided"}
+    roadmap = get_active_roadmap(target_uid)
     if not roadmap:
         return {"message": "No active roadmap found"}
     return roadmap
