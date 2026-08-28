@@ -145,25 +145,19 @@ export const AppShell = ({ children }) => {
           {!collapsed && (
             <button
               onClick={() => navigate('/dashboard')}
-              className="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
-              <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-xs font-bold text-sm">
-                <Zap className="w-4 h-4 text-white fill-white" />
-              </div>
-              <div className="text-left">
-                <span className="font-extrabold text-base tracking-tight text-foreground">
-                  LevelUP <span className="text-orange-600 dark:text-orange-400 font-serif italic font-normal text-xs">OS</span>
-                </span>
-              </div>
+              <img src="/logo.png" alt="LevelUP" className="h-7 w-auto object-contain rounded-md" />
             </button>
           )}
 
           {collapsed && (
             <div
-              className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center cursor-pointer shadow-xs font-bold text-sm"
+              className="h-8 w-8 rounded-xl bg-black flex items-center justify-center cursor-pointer shadow-xs p-1"
               onClick={() => navigate('/dashboard')}
+              title="LevelUP"
             >
-              <Zap className="w-4 h-4 text-white fill-white" />
+              <img src="/favicon.png" alt="LevelUP" className="h-full w-full object-contain" />
             </div>
           )}
 
