@@ -3,7 +3,7 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Layers3, ListTodo, Lightbulb,
   BarChart3, Settings, Zap, LogOut,
-  ChevronLeft, Menu, User, Award, SunMoon,
+  ChevronLeft, Menu, User, Award, SunMoon, Compass, Sparkles,
 } from 'lucide-react'
 import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase'
@@ -12,12 +12,13 @@ import { getAuth } from 'firebase/auth'
 
 // ─── Navigation config ──────────────────────────────────────────────────────
 const NAV_MAIN = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/skills',    label: 'Skills',    icon: Layers3 },
-  { to: '/portfolio', label: 'Portfolio', icon: Award },
-  { to: '/tasks',     label: 'Tasks',     icon: ListTodo },
-  { to: '/goals',     label: 'Goals',     icon: Lightbulb },
-  { to: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { to: '/dashboard',     label: 'Dashboard',        icon: LayoutDashboard },
+  { to: '/learning-path', label: 'AI Learning Path', icon: Compass },
+  { to: '/skills',        label: 'Skills',           icon: Layers3 },
+  { to: '/portfolio',     label: 'Portfolio',        icon: Award },
+  { to: '/tasks',         label: 'Tasks',            icon: ListTodo },
+  { to: '/goals',         label: 'Goals',            icon: Lightbulb },
+  { to: '/analytics',     label: 'Analytics',        icon: BarChart3 },
 ]
 
 const NAV_BOTTOM = [
@@ -91,7 +92,8 @@ export const AppShell = ({ children }) => {
       '/analytics': 'Analytics',
       '/settings':  'Settings',
       '/profile':   'Profile',
-      '/skill-gap': 'Skill Gap Analyzer',
+      '/skill-gap':     'Skill Gap Analyzer',
+      '/learning-path': 'AI Learning Path Recommender',
     }
     return map[location.pathname] || 'LevelUP'
   })()
@@ -224,6 +226,16 @@ export const AppShell = ({ children }) => {
 
           {/* Right controls */}
           <div className="flex items-center gap-2">
+            {/* AI Learning Path quick button */}
+            <button
+              onClick={() => navigate('/learning-path')}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[16px]
+                text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 transition-colors"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>AI Learning Path</span>
+            </button>
+
             {/* Skill Gap quick button */}
             <button
               onClick={() => navigate('/skill-gap')}

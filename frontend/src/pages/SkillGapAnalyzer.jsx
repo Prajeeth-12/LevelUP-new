@@ -10,7 +10,7 @@ import {
   XCircle, Target, TrendingUp, BookOpen, ChevronDown, ChevronUp,
   AlertCircle, Loader2, ExternalLink, Play, BookMarked, Code2 as CodeIcon,
   Box, Layers, Cloud, Brain, Cpu, Gamepad2, Monitor, Server,
-  BarChart2, Smartphone, GitBranch, Map, ArrowRight
+  BarChart2, Smartphone, GitBranch, Map, ArrowRight, Compass, Sparkles
 } from 'lucide-react'
 import { useRoadmap } from '../contexts/RoadmapContext'
 import { useTasks } from '../contexts/TaskContext'
@@ -963,17 +963,33 @@ const SkillGapAnalyzer = () => {
                       Go to Dashboard <ArrowRight className="w-4 h-4" />
                     </motion.button>
                   ) : (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleAdoptRoadmap}
-                      disabled={adoptLoading}
-                      className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg"
-                    >
-                      {adoptLoading
-                        ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
-                        : <><Map className="w-4 h-4" /> Set as My Roadmap</>}
-                    </motion.button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate('/learning-path', {
+                          state: {
+                            resumeSkills: result.matched_skills,
+                            missingSkills: result.missing_skills,
+                            targetRole: selectedRole?.title || 'Target Role',
+                          }
+                        })}
+                        className="shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm transition-all shadow-lg"
+                      >
+                        <Compass className="w-4 h-4" /> Personalize in AI Recommender
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleAdoptRoadmap}
+                        disabled={adoptLoading}
+                        className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg"
+                      >
+                        {adoptLoading
+                          ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>
+                          : <><Map className="w-4 h-4" /> Set as My Roadmap</>}
+                      </motion.button>
+                    </div>
                   )}
 
                   {!adoptDone && error && (

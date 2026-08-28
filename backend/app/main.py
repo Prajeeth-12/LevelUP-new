@@ -7,6 +7,7 @@ from app.routes.students import router as students_router
 from app.routes.progress import router as progress_router
 from app.routes.gap_analyzer import router as gap_analyzer_router
 from app.routes.ai import router as ai_router
+from app.routes.recommender import router as recommender_router
 
 from app.utils.firebase import init_firebase_app
 
@@ -39,6 +40,7 @@ app.include_router(students_router)
 app.include_router(progress_router)
 app.include_router(gap_analyzer_router)
 app.include_router(ai_router)
+app.include_router(recommender_router)
 
 @app.get("/")
 def root():

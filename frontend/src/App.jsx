@@ -16,6 +16,7 @@ const Tasks = lazy(() => import('./pages/Tasks'))
 const Goals = lazy(() => import('./pages/Goals'))
 const Analytics = lazy(() => import('./pages/Analytics'))
 const Settings = lazy(() => import('./pages/Settings'))
+const LearningRecommender = lazy(() => import('./pages/LearningRecommender'))
 
 function App() {
   const [user, setUser] = useState(null)
@@ -101,6 +102,10 @@ function App() {
         <Route
           path="/skill-gap"
           element={user ? <SkillGapAnalyzer /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/learning-path"
+          element={user ? <LearningRecommender /> : <Navigate to="/login" />}
         />
         <Route
           path="/"

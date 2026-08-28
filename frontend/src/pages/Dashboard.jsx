@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   Layers3, ListTodo, BarChart3, Zap, TrendingUp,
   CheckCircle2, ArrowRight, Plus, Calendar,
-  Flame, Target, AlertCircle, ChevronRight
+  Flame, Target, AlertCircle, ChevronRight, Compass, Sparkles,
 } from 'lucide-react'
 import { AppShell } from '../components/layout/AppShell'
 import { useSkills } from '../contexts/SkillContext'
@@ -209,6 +209,14 @@ const Dashboard = () => {
                   {overdueTasks.length} overdue
                 </button>
               )}
+              <button
+                onClick={() => navigate('/learning-path')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[18px] text-xs font-semibold
+                  bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 transition-colors shadow-sm"
+              >
+                <Compass className="w-3.5 h-3.5" />
+                AI Learning Path
+              </button>
               <button onClick={() => navigate('/skill-gap')} className="btn-primary gap-1.5">
                 <Zap className="w-4 h-4" />
                 Analyze Skill Gap
