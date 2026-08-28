@@ -51,6 +51,8 @@ const PRIORITY_WEIGHTS = {
 export const TaskColumnBoard = ({
   tasks = [],
   skills = [],
+  searchQuery = '',
+  onClearSearch,
   getSkillById,
   onToggleTask,
   onEditTask,
@@ -211,14 +213,26 @@ export const TaskColumnBoard = ({
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="py-12 px-4 text-center rounded-2xl border border-dashed border-gray-200 dark:border-zinc-800 bg-white/40 dark:bg-card/20 space-y-2"
+                    className="py-10 px-4 text-center rounded-2xl border border-dashed border-gray-200 dark:border-zinc-800 bg-white/40 dark:bg-card/20 space-y-2"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mx-auto text-gray-400">
-                      <Inbox className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mx-auto text-gray-400">
+                      <Inbox className="w-4 h-4" />
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                      {col.emptyText}
+                      {searchQuery ? (
+                        <span>No tasks in {col.title} matching "{searchQuery}"</span>
+                      ) : (
+                        col.emptyText
+                      )}
                     </p>
+                    {searchQuery && onClearSearch && (
+                      <button
+                        onClick={onClearSearch}
+                        className="text-[11px] font-semibold text-violet-600 dark:text-violet-400 hover:underline"
+                      >
+                        Clear search
+                      </button>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

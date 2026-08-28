@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ListTodo, Plus, CheckCircle2, Circle, Pencil, Trash2,
@@ -278,6 +279,7 @@ const TaskSlideOver = ({
 
 // ─── Main Tasks Component ─────────────────────────────────────────────────────
 export const Tasks = () => {
+  const location = useLocation()
   const { skills = [], getSkillById } = useSkills()
   const {
     tasks = [],
@@ -298,6 +300,13 @@ export const Tasks = () => {
   const [editingId, setEditingId] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Auto-open modal if requested via navigation state
+  useEffect(() => {
+    if (location.state?.openNewTask) {
+      handleOpenNewTask(location.state.column || 'NOT_STARTED')
+    }
+  }, [location.state])
 
   // ── Form Handlers ────────────────────────────────────────────────────────
   const handleChange = (key, val) => setForm((prev) => ({ ...prev, [key]: val }))
@@ -412,12 +421,14 @@ export const Tasks = () => {
                 placeholder="Search tasks by title, notes, or linked skill..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9.5 pr-4 py-2 text-xs font-medium bg-gray-50 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700 rounded-xl text-gray-900 dark:text-foreground focus:outline-none focus:ring-1 focus:ring-violet-500"
+                className="w-full pl-10 pr-9 py-2 text-xs font-medium bg-gray-50 dark:bg-zinc-800/80 border border-gray-200 dark:border-zinc-700 rounded-xl text-gray-900 dark:text-foreground focus:outline-none focus:ring-1 focus:ring-violet-500"
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery('')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  aria-label="Clear search"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -510,6 +521,8 @@ export const Tasks = () => {
           <TaskColumnBoard
             tasks={filteredTasks}
             skills={skills}
+            searchQuery={searchQuery}
+            onClearSearch={() => setSearchQuery('')}
             getSkillById={getSkillById}
             onToggleTask={handleToggleTask}
             onEditTask={handleEdit}
