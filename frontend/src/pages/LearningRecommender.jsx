@@ -40,9 +40,9 @@ const GOAL_PRESETS = [
 export const LearningRecommender = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { createCategory, createSkill } = useSkills()
-  const { createTask } = useTasks()
-  const { setActiveRoadmap } = useRoadmap()
+  const { createCategory, createSkill, refreshSkills } = useSkills()
+  const { createTask, refreshTasks } = useTasks()
+  const { refreshRoadmap } = useRoadmap()
   const { showToast } = useToast()
 
   const [goal, setGoal] = useState('')
@@ -145,7 +145,6 @@ export const LearningRecommender = () => {
     setAdopting(true)
     try {
       await adoptRecommendedRoadmap(plan)
-      if (setActiveRoadmap) setActiveRoadmap(plan)
 
       const categoryName = plan.target_career || 'AI Learning Path'
       try {
@@ -193,6 +192,15 @@ export const LearningRecommender = () => {
         }
       } catch (e) {
         console.warn('Workspace sync partial:', e)
+      }
+
+      // Synchronize contexts so Dashboard and Profile reflect all changes immediately
+      try {
+        if (refreshRoadmap) await refreshRoadmap()
+        if (refreshSkills) await refreshSkills()
+        if (refreshTasks) await refreshTasks()
+      } catch (err) {
+        console.warn('Context refresh error:', err)
       }
 
       showToast('Adopted! Roadmaps, Skills & Tasks created in your workspace.', 'success')
