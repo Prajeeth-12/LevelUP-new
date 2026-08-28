@@ -122,9 +122,10 @@ const SkillProgressCard = ({ skill, onClick }) => {
 const Dashboard = () => {
   const navigate     = useNavigate()
   const firebaseAuth = getAuth()
-  const { skills, loading: skillsLoading } = useSkills()
+  const { skills = [], loading: skillsLoading } = useSkills()
+  const { tasks = [], updateTask, createTask, loading: tasksLoading } = useTasks()
   const {
-    roadmaps,
+    roadmaps = [],
     roadmap,
     activeRoadmapId,
     loading: roadmapLoading,
