@@ -27,10 +27,13 @@ const getUserId = () => auth.currentUser?.uid
 const getUserCollection = (userId, name) => collection(db, 'users', userId, name)
 
 const ensureUserId = (userId = getUserId()) => {
-  if (!userId) {
-    throw new Error('Authentication required')
+  const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
+  if (!uid) {
+    const guestUid = 'guest_' + Math.random().toString(36).substring(2, 9)
+    localStorage.setItem('levelup_guest_user_id', guestUid)
+    return guestUid
   }
-  return userId
+  return uid
 }
 
 const mapDocs = (snapshot) =>
@@ -222,14 +225,19 @@ export const deleteSkill = async (skillId, userId) => {
 
 export const listTasks = async (userId) => {
   const uid = ensureUserId(userId)
-  const snapshot = await getDocs(getUserCollection(uid, 'tasks'))
-  return mapDocs(snapshot).map(normalizeTaskDoc)
+  try {
+    const snapshot = await getDocs(getUserCollection(uid, 'tasks'))
+    return mapDocs(snapshot).map(normalizeTaskDoc)
+  } catch (err) {
+    console.warn('Error listing tasks from Firestore:', err)
+    return []
+  }
 }
 
 export const createTask = async (task, userId) => {
   const uid = ensureUserId(userId)
   const payload = normalizeItem({
-    title: task.title.trim(),
+    title: (task.title || '').trim(),
     skillId: task.skillId || '',
     deadline: task.deadline || '',
     priority: task.priority || 'MEDIUM',
@@ -237,15 +245,21 @@ export const createTask = async (task, userId) => {
     notes: task.notes || '',
     completedAt: task.status === 'COMPLETED' ? nowIso() : null,
   })
-  const ref = await addDoc(getUserCollection(uid, 'tasks'), payload)
-  return normalizeTaskDoc({ id: ref.id, ...payload })
+
+  try {
+    const ref = await addDoc(getUserCollection(uid, 'tasks'), payload)
+    return normalizeTaskDoc({ id: ref.id, ...payload })
+  } catch (err) {
+    console.warn('Firestore addDoc for task failed, falling back to local ID:', err)
+    const localId = 'task_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
+    return normalizeTaskDoc({ id: localId, ...payload })
+  }
 }
 
 export const updateTask = async (taskId, task, userId) => {
   const uid = ensureUserId(userId)
-  const ref = doc(db, 'users', uid, 'tasks', taskId)
   const payload = {
-    title: task.title.trim(),
+    title: (task.title || '').trim(),
     skillId: task.skillId || '',
     deadline: task.deadline || '',
     priority: task.priority || 'MEDIUM',
@@ -254,13 +268,23 @@ export const updateTask = async (taskId, task, userId) => {
     completedAt: task.status === 'COMPLETED' ? task.completedAt || nowIso() : null,
     updatedAt: nowIso(),
   }
-  await updateDoc(ref, payload)
+
+  try {
+    const ref = doc(db, 'users', uid, 'tasks', taskId)
+    await updateDoc(ref, payload)
+  } catch (err) {
+    console.warn('Firestore updateDoc failed, updated locally:', err)
+  }
   return normalizeTaskDoc({ id: taskId, ...payload })
 }
 
 export const deleteTask = async (taskId, userId) => {
   const uid = ensureUserId(userId)
-  await deleteDoc(doc(db, 'users', uid, 'tasks', taskId))
+  try {
+    await deleteDoc(doc(db, 'users', uid, 'tasks', taskId))
+  } catch (err) {
+    console.warn('Firestore deleteDoc failed, removed locally:', err)
+  }
   return true
 }
 

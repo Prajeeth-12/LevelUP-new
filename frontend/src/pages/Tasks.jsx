@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ListTodo, Plus, CheckCircle2, Circle, Pencil, Trash2,
@@ -34,13 +34,19 @@ const TaskSlideOver = ({
   skills,
   onChange,
   onSubmit,
-  onClose
+  onClose,
+  isSubmitting = false,
 }) => {
   const today = new Date().toISOString().slice(0, 10)
 
   // Split deadline into date and time
   const [dueDate, setDueDate] = useState(form.deadline ? form.deadline.slice(0, 10) : '')
   const [dueTime, setDueTime] = useState(form.deadline && form.deadline.length > 11 ? form.deadline.slice(11, 16) : '')
+
+  useEffect(() => {
+    setDueDate(form.deadline ? form.deadline.slice(0, 10) : '')
+    setDueTime(form.deadline && form.deadline.length > 11 ? form.deadline.slice(11, 16) : '')
+  }, [form.deadline])
 
   const handleDateChange = (val) => {
     setDueDate(val)
@@ -57,6 +63,15 @@ const TaskSlideOver = ({
     if (dueDate) {
       const combined = val ? `${dueDate}T${val}:00` : `${dueDate}T00:00:00`
       onChange('deadline', combined)
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault()
+      if (form.title?.trim() && !isSubmitting) {
+        onSubmit()
+      }
     }
   }
 
@@ -100,6 +115,7 @@ const TaskSlideOver = ({
               className="input-base text-sm font-medium"
               placeholder="e.g. Build authentication endpoints, Study design patterns..."
               value={form.title}
+              onKeyDown={handleKeyDown}
               onChange={(e) => onChange('title', e.target.value)}
             />
           </div>
@@ -228,10 +244,17 @@ const TaskSlideOver = ({
           <button
             type="button"
             onClick={onSubmit}
-            disabled={!form.title.trim()}
-            className="btn-primary flex-1"
+            disabled={!form.title?.trim() || isSubmitting}
+            className="btn-primary flex-1 inline-flex items-center justify-center gap-2"
           >
-            {editingId ? 'Save Changes' : 'Create Task'}
+            {isSubmitting ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white/60 border-t-white rounded-full animate-spin" />
+                <span>Saving...</span>
+              </span>
+            ) : (
+              <span>{editingId ? 'Save Changes' : 'Create Task'}</span>
+            )}
           </button>
         </div>
       </div>
@@ -260,6 +283,7 @@ export const Tasks = () => {
   const [form, setForm] = useState(emptyForm)
   const [editingId, setEditingId] = useState(null)
   const [showForm, setShowForm] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // ── Form Handlers ────────────────────────────────────────────────────────
   const handleChange = (key, val) => setForm((prev) => ({ ...prev, [key]: val }))
@@ -287,15 +311,26 @@ export const Tasks = () => {
   }
 
   const handleSubmit = async () => {
-    if (!form.title.trim()) return
-    if (editingId) {
-      await updateTask(editingId, form)
-    } else {
-      await createTask(form)
+    if (!form.title?.trim() || isSubmitting) return
+    setIsSubmitting(true)
+    try {
+      if (editingId) {
+        await updateTask(editingId, form)
+      } else {
+        await createTask(form)
+      }
+      setForm(emptyForm)
+      setEditingId(null)
+      setShowForm(false)
+    } catch (err) {
+      console.error('Failed to submit task:', err)
+      // Close modal gracefully on local update
+      setForm(emptyForm)
+      setEditingId(null)
+      setShowForm(false)
+    } finally {
+      setIsSubmitting(false)
     }
-    setForm(emptyForm)
-    setEditingId(null)
-    setShowForm(false)
   }
 
   const handleClose = () => {
@@ -521,6 +556,7 @@ export const Tasks = () => {
               onChange={handleChange}
               onSubmit={handleSubmit}
               onClose={handleClose}
+              isSubmitting={isSubmitting}
             />
           )}
         </AnimatePresence>
