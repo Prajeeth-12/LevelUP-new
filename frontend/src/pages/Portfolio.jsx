@@ -145,109 +145,73 @@ const Portfolio = () => {
 
   return (
     <AppShell>
-      <div className="page-container animate-fade-slide-in">
-        <div className="flex items-center justify-between mb-8">
+      <div className="page-container space-y-8 animate-fade-slide-in">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <PageHeader
-              title="Portfolio"
-              subtitle="Showcase your skills, track certifications, and monitor your professional growth."
+              title="Career Portfolio"
+              subtitle="Showcase your verified skills, track certifications, and monitor your engineering readiness."
             />
           </div>
           <div className="flex gap-2">
             <div className="relative group">
-              <button className="btn-primary text-xs flex items-center gap-2">
+              <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-xs">
                 <Download className="w-4 h-4" />
-                Export
+                <span>Export Portfolio</span>
               </button>
-              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
+              <div className="absolute right-0 mt-2 w-44 bg-card border border-border rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 p-1.5 space-y-1">
                 <button
                   onClick={handleExportJSON}
-                  className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-200"
+                  className="w-full text-left px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary rounded-xl flex items-center gap-2"
                 >
-                  <FileJson className="w-4 h-4" />
+                  <FileJson className="w-4 h-4 text-orange-500" />
                   Export as JSON
                 </button>
                 <button
                   onClick={handleExportPDF}
-                  className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary rounded-xl flex items-center gap-2"
                 >
-                  <FileText className="w-4 h-4" />
-                  Export as PDF
+                  <FileText className="w-4 h-4 text-amber-500" />
+                  Export as HTML/PDF
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Portfolio Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">Total Skills</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.totalSkills}</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Zap className="w-6 h-6 text-gray-600" />
-              </div>
+        {/* Portfolio Stats Bar (.pk-cycle) */}
+        <div className="pk-cycle">
+          <div className="pk-stat pr-4 sm:pr-6 sm:border-r border-border">
+            <span className="pk-stat-label">TOTAL SKILLS</span>
+            <div className="pk-stat-val">
+              <span>{stats.totalSkills}</span>
+              <span className="pk-stat-unit">tracked</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">Completed</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.completedSkills}</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Award className="w-6 h-6 text-gray-600" />
-              </div>
+          <div className="pk-stat">
+            <span className="pk-stat-label">COMPLETED</span>
+            <div className="pk-stat-val text-emerald-600 dark:text-emerald-400">
+              <span>{stats.completedSkills}</span>
+              <span className="pk-stat-unit">mastered</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">In Progress</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.inProgressSkills}</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-gray-600" />
-              </div>
+          <div className="pk-stat">
+            <span className="pk-stat-label">IN PROGRESS</span>
+            <div className="pk-stat-val text-blue-600 dark:text-blue-400">
+              <span>{stats.inProgressSkills}</span>
+              <span className="pk-stat-unit">active</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">Avg Progress</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.avgProgress}%</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-gray-600" />
-              </div>
+          <div className="pk-stat">
+            <span className="pk-stat-label">AVERAGE MASTERY</span>
+            <div className="pk-stat-val text-orange-600 dark:text-orange-400">
+              <span>{stats.avgProgress}%</span>
+              <span className="pk-stat-unit">score</span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Category Filter */}

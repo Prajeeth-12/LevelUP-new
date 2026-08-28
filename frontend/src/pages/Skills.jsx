@@ -121,13 +121,13 @@ const Skills = () => {
             <>
               <button 
                 onClick={() => { setEditingCategoryId(null); setCategoryForm(emptyCategory); setShowCategoryForm(true) }}
-                className="btn-outline text-xs"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-semibold bg-secondary hover:bg-secondary/80 text-foreground border border-border transition-all"
               >
-                <Layers3 className="w-4 h-4" /> New Category
+                + New Category
               </button>
               <button 
                 onClick={() => { setEditingSkillId(null); setSkillForm(emptySkill); setSubskillText(''); setShowSkillForm(true) }}
-                className="btn-primary text-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-bold bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-xs"
               >
                 <Plus className="w-4 h-4" /> Add Skill
               </button>
@@ -137,18 +137,18 @@ const Skills = () => {
       
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-black" />
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-border border-t-orange-600" />
         </div>
       ) : categories.length === 0 ? (
         <div className="empty-state py-16">
-          <div className="empty-state-icon bg-gray-100 text-gray-600">
-            <Zap className="w-6 h-6" />
+          <div className="empty-state-icon bg-secondary text-foreground">
+            <Zap className="w-6 h-6 text-orange-500" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900 mt-4">Start your learning map</h3>
-          <p className="text-sm text-gray-600 mt-2 max-w-sm mb-6">
-            Create categories like "Frontend", "Backend", or "Soft Skills" to organize what you want to learn.
+          <h3 className="text-lg font-bold text-foreground mt-4">Start your learning map</h3>
+          <p className="text-sm text-muted-foreground mt-2 max-w-sm mb-6">
+            Create categories like "Frontend", "Backend", or "System Design" to organize what you want to master.
           </p>
-          <button onClick={() => setShowCategoryForm(true)} className="btn-primary">
+          <button onClick={() => setShowCategoryForm(true)} className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-bold bg-orange-600 hover:bg-orange-700 text-white transition-all">
             Create First Category
           </button>
         </div>
@@ -159,13 +159,13 @@ const Skills = () => {
               {/* Category Header */}
               <div className="flex items-center justify-between mb-5 group">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                     {cat.name}
-                    <span className="text-xs font-semibold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-semibold bg-secondary border border-border text-foreground px-2.5 py-0.5 rounded-full">
                       {cat.items.length}
                     </span>
                   </h2>
-                  {cat.description && <p className="text-sm text-gray-600 mt-1">{cat.description}</p>}
+                  {cat.description && <p className="text-sm text-muted-foreground mt-1">{cat.description}</p>}
                 </div>
                 <button 
                   onClick={() => handleEditCategory(cat)}

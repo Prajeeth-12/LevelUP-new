@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,73 +6,81 @@
 
 @layer base {
   :root {
-    --sidebar-w: 15rem;
+    --sidebar-w: 15.5rem;
     --sidebar-collapsed-w: 4.5rem;
-    --topbar-h: 4.25rem;
+    --topbar-h: 3.75rem;
 
-    --background: 0 0% 98%;
-    --foreground: 240 10% 6%;
+    /* Layrs Cream Minimalist Light Palette (#fbf7f4) */
+    --background: 30 29% 97%;
+    --foreground: 240 10% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 6%;
+    --card-foreground: 240 10% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 6%;
-    --primary: 250 84% 60%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 10% 6%;
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 5% 50%;
-    --accent: 250 84% 96%;
-    --accent-foreground: 250 84% 40%;
+    --popover-foreground: 240 10% 10%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 18% 92%;
+    --secondary-foreground: 240 10% 10%;
+    --muted: 30 16% 93%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 30 18% 91%;
+    --accent-foreground: 240 10% 10%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 250 84% 60%;
+    --border: 30 14% 88%;
+    --input: 30 14% 88%;
+    --ring: 24 95% 53%;
 
-    --brand-50: 250 84% 97%;
-    --brand-100: 250 84% 93%;
-    --brand-200: 250 84% 85%;
-    --brand-300: 250 84% 75%;
-    --brand-400: 250 84% 67%;
-    --brand-500: 250 84% 60%;
-    --brand-600: 250 84% 54%;
-    --brand-700: 250 84% 46%;
-    --brand-800: 250 84% 38%;
-    --brand-900: 250 84% 28%;
+    --cyan: #06b6d4;
+    --violet: #8b5cf6;
+    --blue: #3b82f6;
+    --ok: #10b981;
+    --warn: #f59e0b;
+
+    --brand-50: 24 100% 97%;
+    --brand-100: 24 100% 93%;
+    --brand-200: 24 100% 85%;
+    --brand-300: 24 100% 75%;
+    --brand-400: 24 100% 65%;
+    --brand-500: 24 95% 53%;
+    --brand-600: 24 95% 47%;
+    --brand-700: 24 95% 40%;
+    --brand-800: 24 95% 32%;
+    --brand-900: 24 95% 24%;
   }
 
   .dark {
-    --background: 215 100% 98%;
-    --foreground: 222 47% 11%;
-    --card: 215 100% 100%;
-    --card-foreground: 222 47% 11%;
-    --popover: 215 100% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 215 90% 50%;
-    --primary-foreground: 215 100% 98%;
-    --secondary: 215 100% 94%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 215 100% 94%;
-    --muted-foreground: 215 20% 50%;
-    --accent: 215 100% 94%;
-    --accent-foreground: 215 100% 40%;
+    /* Layrs Deep Obsidian Space Dark Palette (#0b0c11) */
+    --background: 231 21% 5%;
+    --foreground: 240 5% 96%;
+    --card: 228 20% 8.5%;
+    --card-foreground: 240 5% 96%;
+    --popover: 228 20% 8.5%;
+    --popover-foreground: 240 5% 96%;
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 228 18% 13%;
+    --secondary-foreground: 240 5% 96%;
+    --muted: 228 18% 13%;
+    --muted-foreground: 220 9% 60%;
+    --accent: 228 18% 15%;
+    --accent-foreground: 240 5% 96%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 215 100% 98%;
-    --border: 215 40% 90%;
-    --input: 215 40% 90%;
-    --ring: 215 90% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 228 20% 16%;
+    --input: 228 20% 16%;
+    --ring: 24 95% 53%;
 
-    --brand-50: 215 100% 97%;
-    --brand-100: 215 100% 93%;
-    --brand-200: 215 100% 85%;
-    --brand-300: 215 100% 75%;
-    --brand-400: 215 100% 67%;
-    --brand-500: 215 90% 60%;
-    --brand-600: 215 90% 54%;
-    --brand-700: 215 90% 46%;
-    --brand-800: 215 90% 38%;
-    --brand-900: 215 90% 28%;
+    --brand-50: 24 100% 97%;
+    --brand-100: 24 100% 93%;
+    --brand-200: 24 100% 85%;
+    --brand-300: 24 100% 75%;
+    --brand-400: 24 100% 65%;
+    --brand-500: 24 95% 53%;
+    --brand-600: 24 95% 47%;
+    --brand-700: 24 95% 40%;
+    --brand-800: 24 95% 32%;
+    --brand-900: 24 95% 24%;
   }
 
   *, *::before, *::after {
@@ -82,11 +90,11 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, sans-serif;
-    @apply bg-background text-foreground antialiased;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    @apply bg-background text-foreground antialiased selection:bg-orange-500/20 selection:text-orange-900 dark:selection:text-orange-200;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.012em;
   }
 
   #root {
@@ -162,11 +170,71 @@
     @apply text-foreground font-medium;
   }
 
+  .layrs-editorial {
+    font-family: 'Newsreader', 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .layrs-hero-title {
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold tracking-[-0.03em] text-foreground leading-[1.15];
+  }
+  .layrs-hero-title em {
+    font-family: 'Newsreader', 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    @apply text-orange-600 dark:text-orange-400 not-italic sm:italic;
+  }
+
+  .layrs-hero-eyebrow {
+    @apply text-[11px] font-bold tracking-[0.25em] uppercase text-muted-foreground mb-2 flex items-center gap-2;
+  }
+
+  /* ── Layrs Command Prompt Query Box (.pcx) ── */
+  .pcx-card {
+    @apply w-full rounded-3xl bg-card border border-border p-3 sm:p-4 shadow-sm focus-within:border-orange-500/50 focus-within:ring-4 focus-within:ring-orange-500/10 transition-all;
+  }
+  .pcx-textarea {
+    @apply w-full bg-transparent border-0 resize-none text-sm sm:text-base text-foreground placeholder:text-muted-foreground/70 focus:outline-none min-h-[50px] sm:min-h-[60px] font-normal leading-relaxed;
+  }
+  .pcx-pill {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all;
+    @apply bg-secondary/60 text-muted-foreground border-border hover:text-foreground hover:bg-secondary;
+  }
+  .pcx-pill.active {
+    @apply bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/30;
+  }
+
+  /* ── Layrs Suggestion Chips (.home-chip) ── */
+  .home-chip {
+    @apply inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-medium bg-card border border-border text-foreground hover:border-orange-500/40 hover:bg-accent/40 hover:shadow-2xs transition-all text-left;
+  }
+  .home-chip .dot {
+    @apply w-2 h-2 rounded-full shrink-0;
+  }
+
+  /* ── Layrs Cycle Stats Bar (.pk-cycle) ── */
+  .pk-cycle {
+    @apply flex flex-wrap items-center gap-4 sm:gap-6 p-4 sm:p-5 rounded-3xl bg-card border border-border shadow-xs;
+  }
+  .pk-stat {
+    @apply flex flex-col justify-center;
+  }
+  .pk-stat-label {
+    @apply text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground;
+  }
+  .pk-stat-val {
+    @apply text-xl sm:text-2xl font-bold text-foreground font-mono tracking-tight flex items-baseline gap-1;
+  }
+  .pk-stat-unit {
+    @apply text-[11px] font-sans font-medium text-muted-foreground lowercase;
+  }
+
   .card-surface {
-    @apply bg-card rounded-[20px] border border-border shadow-sm backdrop-blur-sm transition-all duration-300;
+    @apply bg-card rounded-3xl border border-border shadow-xs backdrop-blur-sm transition-all duration-200;
   }
   .stat-card {
-    @apply card-surface p-5 sm:p-6 flex flex-col transition-all hover:border-accent hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/10;
+    @apply card-surface p-5 sm:p-6 flex flex-col transition-all hover:border-orange-500/30 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/10;
   }
   .stat-value {
     @apply text-3xl sm:text-4xl font-bold text-foreground mb-2 tracking-[-0.02em];

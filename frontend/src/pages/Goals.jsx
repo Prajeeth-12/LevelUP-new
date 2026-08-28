@@ -47,12 +47,12 @@ const Goals = () => {
         {/* Left Panel: Inputs */}
         <div className="space-y-6">
           <div className="card-surface p-6">
-            <div className="w-12 h-12 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center mb-5">
-              <Target className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center mb-5 border border-orange-500/20">
+              <Target className="w-6 h-6 text-orange-600 dark:text-orange-400" />
             </div>
             
-            <h2 className="text-xl font-bold text-gray-900 dark:text-foreground mb-2">Target Role</h2>
-            <p className="text-sm text-gray-500 dark:text-muted-foreground mb-6 leading-relaxed">
+            <h2 className="text-xl font-bold text-foreground mb-2 font-serif italic">Target Role</h2>
+            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
               What role are you aiming for? We'll compare your current {skills.length} tracked skills against the industry standard for this role.
             </p>
 
@@ -60,10 +60,10 @@ const Goals = () => {
               <div>
                 <label className="label-base">Role Title</label>
                 <div className="relative">
-                  <Briefcase className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Briefcase className="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    className="input-base pl-10"
+                    className="input-base pl-10 rounded-2xl"
                     placeholder="e.g. Senior Frontend Engineer"
                     value={targetRole}
                     onChange={(e) => setTargetRole(e.target.value)}
@@ -74,10 +74,10 @@ const Goals = () => {
               <button 
                 onClick={runSkillGap} 
                 disabled={!targetRole.trim() || loadingType !== null}
-                className="w-full btn-primary py-3"
+                className="w-full py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm transition-all shadow-xs disabled:opacity-40"
               >
                 {loadingType === 'gap' ? (
-                  <span className="flex items-center gap-2">
+                  <span className="flex items-center justify-center gap-2">
                     <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                     Analyzing gap...
                   </span>
@@ -87,21 +87,26 @@ const Goals = () => {
           </div>
 
           <div className="card-surface p-6">
-            <div className="w-12 h-12 rounded-lg bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center mb-5">
-              <Map className="w-6 h-6 text-violet-600 dark:text-violet-400" />
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-5 border border-amber-500/20">
+              <Map className="w-6 h-6 text-amber-600 dark:text-amber-400" />
             </div>
             
-            <h2 className="text-xl font-bold text-gray-900 dark:text-foreground mb-2">Optimize Path</h2>
-            <p className="text-sm text-gray-500 dark:text-muted-foreground mb-6 leading-relaxed">
+            <h2 className="text-xl font-bold text-foreground mb-2 font-serif italic">Optimize Path</h2>
+            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
               Already know what you need to learn? Let AI analyze your {skills.filter(s => s.status !== 'COMPLETED').length} active skills and suggest the most efficient order to tackle them.
             </p>
 
             <button 
               onClick={runPathOptimize} 
-              disabled={loadingType !== null || skills.length === 0}
-              className="w-full btn-outline py-3 text-violet-700 dark:text-violet-400 border-violet-200 dark:border-violet-900/50 hover:bg-violet-50 dark:hover:bg-violet-900/20"
+              disabled={skills.length === 0 || loadingType !== null}
+              className="w-full py-3 rounded-2xl bg-secondary hover:bg-secondary/80 text-foreground font-bold text-sm border border-border transition-all"
             >
-              {loadingType === 'optimize' ? 'Optimizing...' : 'Optimize Learning Path'}
+              {loadingType === 'optimize' ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-4 h-4 rounded-full border-2 border-border border-t-orange-600 animate-spin" />
+                  Generating optimized schedule...
+                </span>
+              ) : 'Optimize Learning Path'}
             </button>
           </div>
 

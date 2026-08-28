@@ -24,9 +24,9 @@ const COLUMNS = [
     title: 'To Do',
     subtitle: 'Backlog & Planned',
     icon: ListTodo,
-    colorCls: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800/40',
-    headerBadge: 'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300',
-    columnBorder: 'border-blue-500/20 dark:border-blue-500/10',
+    colorCls: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    headerBadge: 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20',
+    columnBorder: 'border-border',
     emptyText: 'No planned tasks. Add your next goal!',
     actionText: 'Add to To Do',
   },
@@ -35,9 +35,9 @@ const COLUMNS = [
     title: 'Current',
     subtitle: 'Active Focus & Today',
     icon: Zap,
-    colorCls: 'bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-200 dark:border-violet-800/40',
-    headerBadge: 'bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300',
-    columnBorder: 'border-violet-500/20 dark:border-violet-500/10',
+    colorCls: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20',
+    headerBadge: 'bg-orange-500/10 text-orange-700 dark:text-orange-300 border border-orange-500/20',
+    columnBorder: 'border-border',
     emptyText: 'Nothing in progress. Promote a task from To Do!',
     actionText: 'Add to Current',
   },
@@ -46,9 +46,9 @@ const COLUMNS = [
     title: 'Past',
     subtitle: 'Completed & History',
     icon: CheckCircle2,
-    colorCls: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/40',
-    headerBadge: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300',
-    columnBorder: 'border-emerald-500/20 dark:border-emerald-500/10',
+    colorCls: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    headerBadge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20',
+    columnBorder: 'border-border',
     emptyText: 'No completed tasks yet. Finish a task to see history!',
     actionText: 'Record Past Task',
   },
@@ -97,10 +97,10 @@ const DroppableColumn = ({
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col rounded-3xl p-4 sm:p-5 shadow-sm min-h-[520px] transition-all duration-200 ${
+      className={`flex flex-col rounded-3xl p-4 sm:p-5 shadow-2xs min-h-[520px] transition-all duration-200 ${
         isHighlighted
-          ? 'bg-violet-50/60 dark:bg-violet-950/40 border-violet-500 ring-2 ring-violet-500/40 scale-[1.008] shadow-md'
-          : `bg-gray-50/80 dark:bg-card/60 border ${col.columnBorder}`
+          ? 'bg-orange-500/10 dark:bg-orange-950/20 border-orange-500 ring-2 ring-orange-500/30 scale-[1.008] shadow-sm'
+          : `bg-secondary/40 border ${col.columnBorder}`
       }`}
     >
       {/* Column Header */}

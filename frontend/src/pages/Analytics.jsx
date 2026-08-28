@@ -134,19 +134,45 @@ const Analytics = () => {
 
   return (
     <AppShell>
-      <div className="page-container animate-fade-slide-in">
+      <div className="page-container space-y-8 animate-fade-slide-in">
         <PageHeader 
-          title="Analytics" 
-          subtitle="Track your learning velocity and find patterns in your progress." 
+          title="Engineering Analytics" 
+          subtitle="Track your learning velocity, task completion efficiency, and competency breakdowns." 
         />
-      <div className="space-y-6">
 
-        {/* ── Stat row ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatWidget icon={CalendarDays}  label="Total Tasks"      value={tasks.length}              color="indigo"  />
-          <StatWidget icon={CheckCircle2}  label="Completed Tasks"  value={metrics.completedTasks}    color="emerald" />
-          <StatWidget icon={BarChart3}     label="Skills Progressed" value={metrics.inProgressSkills} color="violet"  />
-          <StatWidget icon={TrendingUp}    label="Task Efficiency"  value={`${metrics.efficiency}%`}  color="amber"   />
+        {/* ── Layrs Stats Bar (.pk-cycle) ─────────────────────────────────── */}
+        <div className="pk-cycle">
+          <div className="pk-stat pr-4 sm:pr-6 sm:border-r border-border">
+            <span className="pk-stat-label">TOTAL TASKS</span>
+            <div className="pk-stat-val">
+              <span>{tasks.length}</span>
+              <span className="pk-stat-unit">logged</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">COMPLETED</span>
+            <div className="pk-stat-val text-emerald-600 dark:text-emerald-400">
+              <span>{metrics.completedTasks}</span>
+              <span className="pk-stat-unit">tasks</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">IN PROGRESS</span>
+            <div className="pk-stat-val text-blue-600 dark:text-blue-400">
+              <span>{metrics.inProgressSkills}</span>
+              <span className="pk-stat-unit">skills</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">TASK EFFICIENCY</span>
+            <div className="pk-stat-val text-orange-600 dark:text-orange-400">
+              <span>{metrics.efficiency}%</span>
+              <span className="pk-stat-unit">rate</span>
+            </div>
+          </div>
         </div>
 
         {/* ── Charts row ───────────────────────────────────────────────── */}
@@ -302,8 +328,6 @@ const Analytics = () => {
             </p>
           )}
         </div>
-
-      </div>
       </div>
     </AppShell>
   )

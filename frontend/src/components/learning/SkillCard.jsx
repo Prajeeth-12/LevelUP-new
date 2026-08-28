@@ -20,12 +20,12 @@ export const SkillCard = ({ skill, onEdit }) => {
   const pct  = Math.round(skill.progress || 0)
 
   return (
-    <div className="card-surface p-5 flex flex-col group relative transition-all duration-200 hover:-translate-y-1 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-900/50">
+    <div className="card-surface p-5 flex flex-col group relative transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-orange-500/40">
       
       {/* Top row */}
       <div className="flex items-start justify-between mb-3">
         <Link to={`/skills/${skill.id}`} className="block flex-1 pr-4">
-          <h3 className="font-bold text-gray-900 dark:text-foreground group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h3 className="font-bold text-foreground group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
             {skill.name}
           </h3>
         </Link>
@@ -37,19 +37,19 @@ export const SkillCard = ({ skill, onEdit }) => {
         </button>
       </div>
 
-      <p className="text-sm text-gray-500 dark:text-muted-foreground line-clamp-2 mb-6 flex-1 min-h-[40px]">
+      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-6 flex-1 min-h-[40px]">
         {skill.description || 'No description provided.'}
       </p>
 
       {/* Progress */}
       <div className="space-y-2 mb-4">
-        <div className="flex items-center justify-between text-xs font-semibold">
-          <span className="text-gray-900 dark:text-foreground">{pct}%</span>
+        <div className="flex items-center justify-between text-xs font-bold font-mono">
+          <span className="text-foreground">{pct}%</span>
           <span className={sCfg.cls}>{sCfg.label}</span>
         </div>
-        <div className="progress-track h-1.5">
+        <div className="progress-track h-1.5 bg-secondary">
           <div 
-            className={`h-full rounded-full transition-all duration-700 ${pct === 100 ? 'bg-emerald-500' : 'bg-indigo-500'}`}
+            className={`h-full rounded-full transition-all duration-700 ${pct === 100 ? 'bg-emerald-500' : 'bg-orange-500'}`}
             style={{ width: `${pct}%` }} 
           />
         </div>
