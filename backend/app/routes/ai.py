@@ -12,6 +12,7 @@ from app.services.ai_service import (
     time_estimate,
     weekly_report,
 )
+from app.services.chat_agent import process_chat_message
 from app.utils.auth import verify_firebase_token
 
 router = APIRouter(prefix='/ai', tags=['AI'])
@@ -54,6 +55,11 @@ class TimeEstimateRequest(BaseModel):
 class WeeklyReportRequest(BaseModel):
     skills: List[Dict[str, Any]] = Field(default_factory=list)
     tasks: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class ChatRequest(BaseModel):
+    messages: List[Dict[str, str]] = Field(default_factory=list)
+    context: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
 
 @router.post('/generate-subskills')
@@ -102,3 +108,10 @@ async def route_time_estimate(body: TimeEstimateRequest, user_id: str = Depends(
 async def route_weekly_report(body: WeeklyReportRequest, user_id: str = Depends(verify_firebase_token)):
     result = await weekly_report(body.dict())
     return {**result, 'userId': user_id}
+
+
+@router.post('/chat')
+async def route_chat(body: ChatRequest, user_id: str = Depends(verify_firebase_token)):
+    result = await process_chat_message(body.messages, body.context)
+    return {**result, 'userId': user_id}
+

@@ -9,6 +9,8 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../../firebase'
 import { useTheme } from '../../contexts/ThemeContext'
 import { getAuth } from 'firebase/auth'
+import { AIChatButton } from '../chat/AIChatButton'
+import { AIChatDrawer } from '../chat/AIChatDrawer'
 
 // ─── Navigation config ──────────────────────────────────────────────────────
 const NAV_MAIN = [
@@ -62,6 +64,19 @@ export const AppShell = ({ children }) => {
   const [collapsed, setCollapsed]       = useState(false)
   const [mobileOpen, setMobileOpen]     = useState(false)
   const [scrolled, setScrolled]         = useState(false)
+  const [chatOpen, setChatOpen]         = useState(false)
+
+  // Global Ctrl + / or Cmd + / shortcut to toggle AI Chatbot
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === '/' || e.key === '?')) {
+        e.preventDefault()
+        setChatOpen((prev) => !prev)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   const userEmail = firebaseAuth.currentUser?.email || ''
   const userName  = firebaseAuth.currentUser?.displayName || userEmail.split('@')[0] || 'User'
@@ -293,6 +308,10 @@ export const AppShell = ({ children }) => {
           )
         })}
       </nav>
+
+      {/* ── Floating AI Assistant Launcher & Drawer ───────────────────────── */}
+      <AIChatButton onClick={() => setChatOpen(true)} isOpen={chatOpen} />
+      <AIChatDrawer isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   )
 }
