@@ -147,17 +147,18 @@ export const AppShell = ({ children }) => {
               onClick={() => navigate('/dashboard')}
               className="flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
-              <img src="/logo.png" alt="LevelUP" className="h-7 w-auto object-contain rounded-md" />
+              <img src="/logo.png" alt="LevelUP" className="h-6 w-auto object-contain dark:hidden" />
+              <img src="/logo-white.png" alt="LevelUP" className="h-6 w-auto object-contain hidden dark:block" />
             </button>
           )}
 
           {collapsed && (
             <div
-              className="h-8 w-8 rounded-xl bg-black flex items-center justify-center cursor-pointer shadow-xs p-1"
+              className="h-8 w-8 rounded-xl flex items-center justify-center cursor-pointer shadow-xs p-1 hover:bg-secondary transition-colors"
               onClick={() => navigate('/dashboard')}
               title="LevelUP"
             >
-              <img src="/favicon.png" alt="LevelUP" className="h-full w-full object-contain" />
+              <img src="/favicon.svg" alt="LevelUP" className="h-full w-full object-contain" />
             </div>
           )}
 

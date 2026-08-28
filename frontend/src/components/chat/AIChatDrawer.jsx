@@ -9,6 +9,7 @@ import { useTasks } from '../../contexts/TaskContext'
 import { useSkills } from '../../contexts/SkillContext'
 import { useRoadmap } from '../../contexts/RoadmapContext'
 import { sendChatMessage } from '../../services/aiService'
+import { ChatMessageRenderer } from './ChatMessageRenderer'
 
 const STARTER_PROMPTS = [
   { label: '🚀 What should I learn next?', prompt: 'Based on my active skills and roadmaps, what should I learn next to level up my career?' },
@@ -158,14 +159,48 @@ export const AIChatDrawer = ({ isOpen, onClose }) => {
         context
       })
 
+      // Safely extract reply, actions, and follow-ups
+      let replyText = response?.reply || response?.content || ''
+      let actions = response?.actions || []
+      let followUps = response?.suggestedFollowUps || []
+
+      if (typeof response === 'string') {
+        try {
+          const p = JSON.parse(response)
+          if (p.reply) {
+            replyText = p.reply
+            actions = p.actions || actions
+            followUps = p.suggestedFollowUps || followUps
+          } else {
+            replyText = response
+          }
+        } catch {
+          replyText = response
+        }
+      }
+
+      // If replyText itself is a raw JSON string with {"reply": "..."}
+      if (typeof replyText === 'string' && replyText.trim().startsWith('{')) {
+        try {
+          const p = JSON.parse(replyText.trim())
+          if (p.reply) {
+            replyText = p.reply
+            if (Array.isArray(p.actions) && p.actions.length > 0) actions = p.actions
+            if (Array.isArray(p.suggestedFollowUps) && p.suggestedFollowUps.length > 0) followUps = p.suggestedFollowUps
+          }
+        } catch {
+          // not json
+        }
+      }
+
       // Execute any returned actionable changes
-      const executed = await executeActions(response.actions || [])
+      const executed = await executeActions(actions)
 
       const aiMessage = {
         id: 'ai_' + Date.now(),
         role: 'assistant',
-        content: response.reply || 'Here is what I found for you!',
-        suggestedFollowUps: response.suggestedFollowUps || [],
+        content: replyText || 'Here is what I found for you!',
+        suggestedFollowUps: followUps,
         actionsExecuted: executed
       }
 
@@ -289,9 +324,13 @@ export const AIChatDrawer = ({ isOpen, onClose }) => {
                         : 'bg-card border border-border text-foreground shadow-2xs rounded-tl-xs'
                     }`}
                   >
-                    <div className="whitespace-pre-wrap font-sans">
-                      {msg.content}
-                    </div>
+                    {isUser ? (
+                      <div className="whitespace-pre-wrap font-sans">
+                        {msg.content}
+                      </div>
+                    ) : (
+                      <ChatMessageRenderer content={msg.content} />
+                    )}
                   </div>
 
                   {/* Actions Executed Banner */}

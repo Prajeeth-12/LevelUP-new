@@ -94,7 +94,7 @@ export const SignIn = () => {
         <div className="relative z-10 flex flex-col h-full">
           {/* Brand */}
           <div className="flex items-center gap-3 mb-auto">
-            <img src="/logo.png" alt="LevelUP" className="h-10 w-auto object-contain rounded-lg" />
+            <img src="/logo-white.png" alt="LevelUP" className="h-8 w-auto object-contain" />
           </div>
 
           {/* Hero copy */}

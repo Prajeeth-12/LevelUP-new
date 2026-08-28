@@ -82,7 +82,7 @@ export const SignUp = () => {
     <div className="min-h-screen flex flex-col items-center justify-center font-sans w-full bg-white p-4 sm:p-6 lg:p-8">
       <div className="mb-8 text-center animate-fade-in">
         <div className="flex items-center justify-center gap-3 mb-3">
-          <img src="/logo.png" alt="LevelUP" className="h-10 w-auto object-contain rounded-lg" />
+          <img src="/logo.png" alt="LevelUP" className="h-8 w-auto object-contain" />
         </div>
         <p className="text-gray-600 text-xs sm:text-sm font-medium">Your personalized learning journey</p>
       </div>
