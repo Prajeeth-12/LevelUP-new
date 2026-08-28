@@ -384,6 +384,98 @@ export const getActiveRoadmap = async (userId) => {
   return null
 }
 
+export const listRoadmaps = async (userId) => {
+  const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
+  if (!uid) return []
+
+  // 1. Direct Firestore collection fetch
+  try {
+    const colRef = collection(db, 'users', uid, 'roadmaps')
+    const snapshot = await getDocs(colRef)
+    if (!snapshot.empty) {
+      const items = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
+      items.sort((a, b) => new Date(b.updatedAt || b.updated_at || 0) - new Date(a.updatedAt || a.updated_at || 0))
+      return items
+    }
+  } catch (err) {
+    console.warn('Firestore roadmaps list failed, attempting backend fallback:', err)
+  }
+
+  // 2. Fallback to Backend API
+  try {
+    const token = await auth.currentUser?.getIdToken?.()
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const res = await axios.get(`${API_URL}/api/career/roadmaps?uid=${uid}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    if (Array.isArray(res.data) && res.data.length > 0) {
+      return res.data
+    }
+  } catch (err) {
+    console.warn('Backend roadmaps list error:', err)
+  }
+
+  // 3. Fallback to single active roadmap doc
+  const current = await getActiveRoadmap(uid)
+  return current ? [current] : []
+}
+
+export const switchActiveRoadmap = async (roadmapId, userId) => {
+  const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
+  if (!uid || !roadmapId) return null
+
+  try {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const token = await auth.currentUser?.getIdToken?.()
+    const res = await axios.post(`${API_URL}/api/career/roadmaps/switch/${roadmapId}?uid=${uid}`, {}, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    if (res.data?.active_roadmap) {
+      return res.data.active_roadmap
+    }
+  } catch (err) {
+    console.warn('Backend switch roadmap error, falling back to local Firestore:', err)
+  }
+
+  // Local fallback: update Firestore doc
+  try {
+    const docRef = doc(db, 'users', uid, 'roadmaps', roadmapId)
+    const snap = await getDoc(docRef)
+    if (snap.exists()) {
+      const data = { id: snap.id, ...snap.data(), is_active: true, updatedAt: nowIso() }
+      await setDoc(doc(db, 'users', uid, 'active_roadmap', 'current'), data, { merge: true })
+      return data
+    }
+  } catch (err) {
+    console.error('Local switch roadmap error:', err)
+  }
+
+  return null
+}
+
+export const deleteRoadmap = async (roadmapId, userId) => {
+  const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
+  if (!uid || !roadmapId) return false
+
+  try {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const token = await auth.currentUser?.getIdToken?.()
+    await axios.delete(`${API_URL}/api/career/roadmaps/${roadmapId}?uid=${uid}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+    return true
+  } catch (err) {
+    console.warn('Backend delete roadmap error, attempting local Firestore delete:', err)
+    try {
+      await deleteDoc(doc(db, 'users', uid, 'roadmaps', roadmapId))
+      return true
+    } catch (e) {
+      console.error('Failed to delete roadmap:', e)
+      return false
+    }
+  }
+}
+
 export const updateActiveRoadmap = async (data, userId) => {
   const uid = userId || auth.currentUser?.uid || localStorage.getItem('levelup_guest_user_id')
   if (!uid) return false

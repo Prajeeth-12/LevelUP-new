@@ -13,6 +13,7 @@ import { getAuth } from 'firebase/auth'
 import { useRoadmap } from '../contexts/RoadmapContext'
 import CareerMatchCard from '../components/CareerMatchCard'
 import RoadmapView from '../components/RoadmapView'
+import RoadmapLibrarySwitcher from '../components/RoadmapLibrarySwitcher'
 import { Loader2 } from 'lucide-react'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -122,8 +123,15 @@ const Dashboard = () => {
   const navigate     = useNavigate()
   const firebaseAuth = getAuth()
   const { skills, loading: skillsLoading } = useSkills()
-  const { tasks,  updateTask, createTask, loading: tasksLoading } = useTasks()
-  const { roadmap, loading: roadmapLoading, refreshRoadmap } = useRoadmap()
+  const {
+    roadmaps,
+    roadmap,
+    activeRoadmapId,
+    loading: roadmapLoading,
+    refreshRoadmap,
+    switchRoadmap,
+    deleteRoadmap
+  } = useRoadmap()
 
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [addingTask, setAddingTask]     = useState(false)
@@ -271,15 +279,29 @@ const Dashboard = () => {
               <div className="flex items-center justify-center py-20 bg-white dark:bg-card rounded-2xl border border-gray-200 dark:border-border">
                 <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
               </div>
-            ) : roadmap ? (
+            ) : roadmap || (roadmaps && roadmaps.length > 0) ? (
               <div className="space-y-6 animate-fade-slide-in">
-                <CareerMatchCard 
-                  careerDecision={roadmap.career_decision} 
+                {/* Multi-Roadmap Library Switcher */}
+                <RoadmapLibrarySwitcher
+                  roadmaps={roadmaps}
+                  activeRoadmapId={activeRoadmapId}
+                  onSwitchRoadmap={switchRoadmap}
+                  onDeleteRoadmap={deleteRoadmap}
+                  loading={roadmapLoading}
                 />
-                <RoadmapView 
-                  roadmap={roadmap} 
-                  onRefresh={refreshRoadmap}
-                />
+
+                {roadmap?.career_decision && (
+                  <CareerMatchCard 
+                    careerDecision={roadmap.career_decision} 
+                  />
+                )}
+
+                {roadmap && (
+                  <RoadmapView 
+                    roadmap={roadmap} 
+                    onRefresh={refreshRoadmap}
+                  />
+                )}
               </div>
             ) : (
               <div className="empty-state py-16 card-surface">
@@ -288,14 +310,22 @@ const Dashboard = () => {
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mt-4">No active roadmap</h3>
                 <p className="text-sm text-gray-500 mt-2 max-w-sm mb-6">
-                  Ready to level up? Run a skill gap analysis to generate your personalized career path.
+                  Ready to level up? Run a skill gap analysis or AI path recommender to build your personalized career roadmap.
                 </p>
-                <button 
-                  onClick={() => navigate('/skill-gap')}
-                  className="btn-primary"
-                >
-                  <Zap className="w-4 h-4" /> Start Analysis
-                </button>
+                <div className="flex items-center justify-center gap-3">
+                  <button 
+                    onClick={() => navigate('/recommend')}
+                    className="btn-primary"
+                  >
+                    <Sparkles className="w-4 h-4" /> AI Path Recommender
+                  </button>
+                  <button 
+                    onClick={() => navigate('/skill-gap')}
+                    className="btn-secondary"
+                  >
+                    <Zap className="w-4 h-4" /> Skill Gap Analyzer
+                  </button>
+                </div>
               </div>
             )}
           </div>

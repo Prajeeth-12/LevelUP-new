@@ -2,7 +2,13 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.concurrency import run_in_threadpool
 from app.models.student import StudentProfile
 from app.services.roadmap_agent import generate_roadmap
-from app.services.storage_service import save_career_analysis, get_active_roadmap
+from app.services.storage_service import (
+    save_career_analysis,
+    get_active_roadmap,
+    list_user_roadmaps,
+    switch_active_roadmap,
+    delete_roadmap_from_library
+)
 from app.services.matching_service import generate_career_insights
 from typing import Optional
 from app.utils.auth import verify_firebase_token, get_optional_firebase_token
@@ -24,6 +30,49 @@ def get_current_roadmap(
     if not roadmap:
         return {"message": "No active roadmap found"}
     return roadmap
+
+
+@router.get("/roadmaps")
+def get_all_roadmaps(
+    user_id: Optional[str] = Depends(get_optional_firebase_token),
+    uid: Optional[str] = None
+):
+    target_uid = user_id or uid
+    if not target_uid:
+        return []
+    return list_user_roadmaps(target_uid)
+
+
+@router.post("/roadmaps/switch/{roadmap_id}")
+def switch_roadmap(
+    roadmap_id: str,
+    user_id: Optional[str] = Depends(get_optional_firebase_token),
+    uid: Optional[str] = None
+):
+    target_uid = user_id or uid
+    if not target_uid:
+        raise HTTPException(status_code=401, detail="User ID required")
+    try:
+        updated = switch_active_roadmap(target_uid, roadmap_id)
+        return {"status": "success", "active_roadmap": updated}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.delete("/roadmaps/{roadmap_id}")
+def delete_roadmap(
+    roadmap_id: str,
+    user_id: Optional[str] = Depends(get_optional_firebase_token),
+    uid: Optional[str] = None
+):
+    target_uid = user_id or uid
+    if not target_uid:
+        raise HTTPException(status_code=401, detail="User ID required")
+    try:
+        deleted = delete_roadmap_from_library(target_uid, roadmap_id)
+        return {"status": "success", "deleted": deleted}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/roadmap")
