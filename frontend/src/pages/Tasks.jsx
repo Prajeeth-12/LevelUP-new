@@ -12,6 +12,7 @@ import { useSkills } from '../contexts/SkillContext'
 import { useTasks } from '../contexts/TaskContext'
 import TaskColumnBoard from '../components/tasks/TaskColumnBoard'
 import TaskCard, { PRIORITY_CONFIG, formatDeadline } from '../components/tasks/TaskCard'
+import { AutoScheduleModal } from '../components/tasks/AutoScheduleModal'
 
 const STATUS_CONFIG = {
   NOT_STARTED: { label: 'To Do', cls: 'badge-not-started' },
@@ -300,6 +301,16 @@ export const Tasks = () => {
   const [editingId, setEditingId] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showAutoSchedule, setShowAutoSchedule] = useState(false)
+
+  const handleApplySchedule = async (approvedMoves) => {
+    for (const m of approvedMoves) {
+      if (m.taskId) {
+        if (m.targetStatus) await moveToStatus(m.taskId, m.targetStatus)
+        if (m.priority) await setTaskPriority(m.taskId, m.priority)
+      }
+    }
+  }
 
   // Auto-open modal if requested via navigation state
   useEffect(() => {
@@ -442,13 +453,23 @@ export const Tasks = () => {
             </div>
           </div>
 
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => setShowAutoSchedule(true)}
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl font-bold text-xs bg-secondary hover:bg-secondary/80 text-foreground border border-border transition-all shadow-2xs"
+              title="Auto-organize your board into a balanced sprint"
+            >
+              <Sparkles className="w-4 h-4 text-orange-500" />
+              <span className="hidden sm:inline">AI Auto-Schedule</span>
+              <span className="sm:hidden">Auto-Schedule</span>
+            </button>
+
             <button
               onClick={() => handleOpenNewTask('NOT_STARTED')}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-xs"
             >
               <Plus className="w-4 h-4" />
-              <span>New Task / Plan</span>
+              <span>New Task</span>
             </button>
           </div>
         </div>
@@ -627,6 +648,18 @@ export const Tasks = () => {
               onSubmit={handleSubmit}
               onClose={handleClose}
               isSubmitting={isSubmitting}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* AI Auto-Schedule Modal with Human Approval */}
+        <AnimatePresence>
+          {showAutoSchedule && (
+            <AutoScheduleModal
+              isOpen={showAutoSchedule}
+              onClose={() => setShowAutoSchedule(false)}
+              tasks={tasks}
+              onApplySchedule={handleApplySchedule}
             />
           )}
         </AnimatePresence>

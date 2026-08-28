@@ -12,7 +12,7 @@ from app.services.ai_service import (
     time_estimate,
     weekly_report,
 )
-from app.services.chat_agent import process_chat_message
+from app.services.chat_agent import process_chat_message, auto_organize_tasks
 from app.utils.auth import get_optional_firebase_token
 
 router = APIRouter(prefix='/ai', tags=['AI'])
@@ -59,6 +59,12 @@ class WeeklyReportRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     messages: List[Dict[str, Any]] = Field(default_factory=list)
+    context: Optional[Dict[str, Any]] = Field(default_factory=dict)
+
+
+class AutoOrganizeTasksRequest(BaseModel):
+    tasks: List[Dict[str, Any]] = Field(default_factory=list)
+    hoursBudget: Optional[int] = 12
     context: Optional[Dict[str, Any]] = Field(default_factory=dict)
 
 
@@ -113,5 +119,11 @@ async def route_weekly_report(body: WeeklyReportRequest, user_id: Optional[str] 
 @router.post('/chat')
 async def route_chat(body: ChatRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
     result = await process_chat_message(body.messages, body.context)
+    return {**result, 'userId': user_id or 'guest_user'}
+
+
+@router.post('/auto-organize-tasks')
+async def route_auto_organize_tasks(body: AutoOrganizeTasksRequest, user_id: Optional[str] = Depends(get_optional_firebase_token)):
+    result = await auto_organize_tasks(body.tasks, body.hoursBudget, body.context)
     return {**result, 'userId': user_id or 'guest_user'}
 
