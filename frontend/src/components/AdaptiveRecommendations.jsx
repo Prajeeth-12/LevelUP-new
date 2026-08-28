@@ -87,14 +87,14 @@ const AdaptiveRecommendations = ({ progress, roadmap }) => {
                 icon: 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400',
             },
             purple: {
-                bg: 'bg-purple-50 dark:bg-purple-500/10',
-                border: 'border-purple-200 dark:border-purple-600',
-                icon: 'bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400',
+                bg: 'bg-orange-500/10',
+                border: 'border-orange-500/30',
+                icon: 'bg-orange-500/20 text-orange-600 dark:text-orange-400',
             },
             indigo: {
-                bg: 'bg-indigo-50 dark:bg-indigo-500/10',
-                border: 'border-indigo-200 dark:border-indigo-600',
-                icon: 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400',
+                bg: 'bg-amber-500/10',
+                border: 'border-amber-500/30',
+                icon: 'bg-amber-500/20 text-amber-600 dark:text-amber-400',
             },
         };
         return colors[color] || colors.blue;

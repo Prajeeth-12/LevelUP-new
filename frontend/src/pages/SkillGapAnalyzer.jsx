@@ -580,37 +580,39 @@ const SkillGapAnalyzer = () => {
         {/* ── Page header ── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-3 mb-1">
-            <div className="w-9 h-9 rounded-xl bg-violet-100 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-violet-600" />
+            <div className="w-9 h-9 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+              <Zap className="w-5 h-5 text-orange-600 dark:text-orange-400" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">Skill Gap Analyzer</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-serif italic">
+              Skill Gap Analyzer
+            </h1>
           </div>
-          <p className="text-sm text-gray-600 ml-12">
-            Upload your resume and compare against a JD, a role, or a specific tool stack.
+          <p className="text-xs sm:text-sm text-muted-foreground ml-12">
+            Upload your resume and compare against a custom Job Description, target role, or engineering stack.
           </p>
         </motion.div>
 
         {/* ── Input card ── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-          <div className="bg-white rounded-xl border border-gray-200 p-6 md:p-8 space-y-6 shadow-sm">
+          <div className="card-surface p-6 md:p-8 space-y-6">
 
             {/* Resume upload */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-bold text-gray-800 mb-3">
-                <FileText className="w-4 h-4 text-violet-600" /> Resume
-                <span className="text-xs font-normal text-gray-500">(Required)</span>
+              <label className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+                <FileText className="w-4 h-4 text-orange-600 dark:text-orange-400" /> Resume
+                <span className="text-xs font-normal text-muted-foreground">(Required)</span>
               </label>
               <div
                 onDragOver={e => { e.preventDefault(); setDragOver(true) }}
                 onDragLeave={() => setDragOver(false)}
                 onDrop={handleDrop}
                 onClick={() => document.getElementById('resume-input').click()}
-                className={`relative cursor-pointer rounded-xl border-2 border-dashed px-6 py-10 md:py-12 text-center transition-all
+                className={`relative cursor-pointer rounded-2xl border-2 border-dashed px-6 py-10 md:py-12 text-center transition-all
                   ${dragOver
-                    ? 'border-violet-400 bg-violet-50 scale-[1.01]'
+                    ? 'border-orange-500 bg-orange-500/10 scale-[1.01]'
                     : file
-                      ? 'border-emerald-300 bg-emerald-50'
-                      : 'border-gray-300 hover:border-violet-400 hover:bg-gray-50'
+                      ? 'border-emerald-500/40 bg-emerald-500/5'
+                      : 'border-border hover:border-orange-500/40 hover:bg-secondary/40'
                   }`}
               >
                 <input id="resume-input" type="file" accept=".pdf,.docx,.txt" className="hidden"
@@ -623,9 +625,9 @@ const SkillGapAnalyzer = () => {
                   >
                     <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                     <div className="flex items-center gap-2 flex-wrap justify-center">
-                      <span className="text-sm font-semibold text-emerald-800 truncate">{file.name}</span>
+                      <span className="text-sm font-semibold text-foreground truncate">{file.name}</span>
                       <button onClick={e => { e.stopPropagation(); setFile(null) }}
-                        className="text-gray-400 hover:text-red-500 transition-colors hover:scale-110">
+                        className="text-muted-foreground hover:text-red-500 transition-colors hover:scale-110">
                         <XCircle className="w-4 h-4" />
                       </button>
                     </div>
@@ -636,12 +638,12 @@ const SkillGapAnalyzer = () => {
                       animate={{ y: [0, -4, 0] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
-                      <Upload className="w-10 h-10 text-violet-400 mx-auto mb-3" />
+                      <Upload className="w-10 h-10 text-orange-500 mx-auto mb-3" />
                     </motion.div>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-bold text-violet-600">Click to upload</span> or drag & drop
+                    <p className="text-sm text-foreground">
+                      <span className="font-bold text-orange-600 dark:text-orange-400">Click to upload</span> or drag & drop
                     </p>
-                    <p className="text-xs text-gray-400 mt-2">PDF, DOCX or TXT • Max 10MB</p>
+                    <p className="text-xs text-muted-foreground mt-2">PDF, DOCX or TXT • Max 10MB</p>
                   </>
                 )}
               </div>
@@ -650,7 +652,7 @@ const SkillGapAnalyzer = () => {
             {/* ── JD / Role / Tool tabs ── */}
             <div>
               {/* Tab switcher */}
-              <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-1 mb-4 w-full overflow-x-auto">
+              <div className="flex items-center gap-2 bg-secondary/70 border border-border rounded-2xl p-1 mb-4 w-full overflow-x-auto">
                 {[
                   { key: 'custom', label: 'Custom JD',  Icon: FileText  },
                   { key: 'role',   label: 'By Role',    Icon: Briefcase },
@@ -659,10 +661,10 @@ const SkillGapAnalyzer = () => {
                   <button
                     key={key}
                     onClick={() => handleModeSwitch(key)}
-                    className={`flex-1 min-w-fit flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold transition-all whitespace-nowrap
+                    className={`flex-1 min-w-fit flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all whitespace-nowrap
                       ${jdMode === key
-                        ? 'bg-white text-violet-700 shadow-md'
-                        : 'text-gray-600 hover:text-gray-800'}`}
+                        ? 'bg-card text-foreground border border-border shadow-xs'
+                        : 'text-muted-foreground hover:text-foreground'}`}
                   >
                     <Icon className="w-4 h-4" />{label}
                   </button>
@@ -739,17 +741,17 @@ const SkillGapAnalyzer = () => {
             </div>
 
             {/* Hours per week */}
-            <div className="bg-gradient-to-r from-violet-50 to-blue-50 rounded-xl p-4 space-y-3">
-              <label className="flex items-center justify-between text-sm font-bold text-gray-800">
+            <div className="bg-secondary/40 border border-border rounded-2xl p-4 space-y-3">
+              <label className="flex items-center justify-between text-sm font-bold text-foreground">
                 <span className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-violet-600" /> Available study hours/week
+                  <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400" /> Available study hours/week
                 </span>
-                <span className="text-lg text-violet-600 font-black">{hoursPerWeek}h</span>
+                <span className="text-base text-orange-600 dark:text-orange-400 font-mono font-bold">{hoursPerWeek}h</span>
               </label>
               <input type="range" min={1} max={40} value={hoursPerWeek}
                 onChange={e => setHoursPerWeek(Number(e.target.value))}
-                className="w-full accent-violet-600 h-2 rounded-lg" />
-              <div className="flex justify-between text-xs text-gray-500"><span>1h (min)</span><span>40h (max)</span></div>
+                className="w-full accent-orange-600 h-2 rounded-lg" />
+              <div className="flex justify-between text-xs text-muted-foreground"><span>1h (min)</span><span>40h (max)</span></div>
             </div>
 
             {/* Error */}
@@ -757,7 +759,7 @@ const SkillGapAnalyzer = () => {
               <motion.div 
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-start gap-3 text-sm text-red-700 bg-red-50 rounded-lg px-4 py-3 border border-red-200"
+                className="flex items-start gap-3 text-sm text-red-700 bg-red-500/10 rounded-2xl px-4 py-3 border border-red-500/20"
               >
                 <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                 <span>{error}</span>
@@ -766,15 +768,15 @@ const SkillGapAnalyzer = () => {
 
             {/* Analyze button */}
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
               onClick={handleAnalyze}
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-violet-700 text-white font-bold text-sm hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+              className="w-full py-3.5 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
             >
               {loading
                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing your skills...</>
-                : <><Zap className="w-4 h-4 group-hover:scale-110 transition-transform" /> Analyze Skill Gap</>
+                : <><Zap className="w-4 h-4 group-hover:scale-110 transition-transform fill-white" /> Analyze Skill Gap</>
               }
             </motion.button>
           </div>
@@ -796,13 +798,13 @@ const SkillGapAnalyzer = () => {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-gradient-to-br from-violet-50 via-blue-50 to-indigo-50 rounded-2xl border border-violet-200 p-6 md:p-8 shadow-lg"
+                className="card-surface p-6 md:p-8"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center shadow-lg">
-                    <Target className="w-6 h-6 text-white" />
+                  <div className="w-10 h-10 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center">
+                    <Target className="w-6 h-6 text-orange-600 dark:text-orange-400" />
                   </div>
-                  <h2 className="text-lg md:text-xl font-black text-gray-900">Match Overview</h2>
+                  <h2 className="text-lg md:text-xl font-black text-foreground font-serif italic">Match Overview</h2>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
                   <ScoreRing value={Math.round(result.match_percentage)} label="Skill Match" color="text-violet-500" />
@@ -978,25 +980,25 @@ const SkillGapAnalyzer = () => {
                   ) : (
                     <div className="flex flex-wrap items-center gap-2">
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={() => navigate('/learning-path', {
                           state: {
                             resumeSkills: result.matched_skills,
                             missingSkills: result.missing_skills,
-                            targetRole: selectedRole?.title || 'Target Role',
+                            targetRole: selectedPreset || 'Target Role',
                           }
                         })}
-                        className="shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm transition-all shadow-lg"
+                        className="shrink-0 flex items-center gap-2 px-4 py-3 rounded-2xl bg-secondary hover:bg-secondary/80 text-foreground font-bold text-xs border border-border transition-all shadow-xs"
                       >
-                        <Compass className="w-4 h-4" /> Personalize in AI Recommender
+                        <Compass className="w-4 h-4 text-orange-500" /> Personalize in AI Recommender
                       </motion.button>
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                         onClick={handleAdoptRoadmap}
                         disabled={adoptLoading}
-                        className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm transition-all shadow-lg"
+                        className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-xs transition-all shadow-xs"
                       >
                         {adoptLoading
                           ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving...</>

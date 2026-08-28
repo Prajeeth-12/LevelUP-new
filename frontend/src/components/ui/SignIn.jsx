@@ -94,16 +94,16 @@ export const SignIn = () => {
         <div className="relative z-10 flex flex-col h-full">
           {/* Brand */}
           <div className="flex items-center gap-3 mb-auto">
-            <div className="w-12 h-12 rounded-2xl bg-white text-indigo-600 flex items-center justify-center shadow-2xl">
-              <Zap className="w-6 h-6 fill-indigo-600 stroke-indigo-600" />
+            <div className="w-12 h-12 rounded-2xl bg-orange-600 text-white flex items-center justify-center shadow-2xl">
+              <Zap className="w-6 h-6 fill-white stroke-white" />
             </div>
           </div>
 
           {/* Hero copy */}
           <div className="mb-auto">
-            <h1 className="text-4xl font-bold text-white leading-tight mb-4">
+            <h1 className="text-4xl font-bold text-white leading-tight mb-4 font-serif italic">
               Level up your<br />
-              <span className="text-violet-300">skills</span> one day<br />
+              <span className="text-orange-400">skills</span> one day<br />
               at a time.
             </h1>
             <p className="text-white/70 text-base mb-8 leading-relaxed">
@@ -178,7 +178,7 @@ export const SignIn = () => {
                     <button
                       type="button"
                       onClick={() => setResetMode(true)}
-                      className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
+                      className="text-xs font-semibold text-orange-600 dark:text-orange-400 hover:underline"
                     >
                       Forgot password?
                     </button>
@@ -186,7 +186,7 @@ export const SignIn = () => {
                   <div className="relative">
                     <input
                       type={showPassword ? 'text' : 'password'}
-                      className="input-base pr-10"
+                      className="input-base pr-10 rounded-2xl"
                       placeholder="••••••••"
                       value={password}
                       onChange={e => setPassword(e.target.value)}
@@ -196,7 +196,7 @@ export const SignIn = () => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(p => !p)}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -205,7 +205,7 @@ export const SignIn = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full btn-primary py-3 gap-2 mt-1"
+                  className="w-full py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 mt-1"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
@@ -218,11 +218,11 @@ export const SignIn = () => {
                 </button>
               </form>
 
-              <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+              <p className="text-center text-xs sm:text-sm text-muted-foreground mt-6">
                 Don't have an account?{' '}
                 <button
                   onClick={() => navigate('/signup')}
-                  className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                  className="font-bold text-orange-600 dark:text-orange-400 hover:underline"
                 >
                   Sign up free
                 </button>

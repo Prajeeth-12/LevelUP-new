@@ -13,8 +13,8 @@ export const AIChatButton = ({ onClick, isOpen }) => {
       whileTap={{ scale: 0.94 }}
       onClick={onClick}
       className="fixed bottom-20 md:bottom-8 right-6 z-50 flex items-center gap-3 px-4 sm:px-5 py-3.5 rounded-full bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 text-white font-bold text-xs sm:text-sm shadow-[0_10px_25px_-5px_rgba(249,115,22,0.5),0_8px_10px_-6px_rgba(249,115,22,0.3)] hover:shadow-[0_15px_30px_-5px_rgba(249,115,22,0.7)] transition-all border border-white/30 group cursor-pointer"
-      title="Layrs AI Tutor (Ctrl + /)"
-      aria-label="Open Layrs AI Assistant"
+      title="LevelUP AI Assistant (Ctrl + /)"
+      aria-label="Open LevelUP AI Assistant"
     >
       <div className="relative flex items-center justify-center">
         <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">

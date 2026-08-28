@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const PageHeader = ({ title, subtitle, eyebrow = 'LAYRS • PERSONAL LEARNING OS', actions }) => {
+export const PageHeader = ({ title, subtitle, eyebrow = 'LEVELUP • PERSONAL LEARNING OS', actions }) => {
   return (
     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-8">
       <div className="space-y-1.5 max-w-3xl">

@@ -14,13 +14,14 @@ import { AIChatDrawer } from '../chat/AIChatDrawer'
 
 // ─── Navigation config ──────────────────────────────────────────────────────
 const NAV_MAIN = [
-  { to: '/dashboard',     label: 'Home',             icon: LayoutDashboard },
-  { to: '/learning-path', label: 'AI Learning Path', icon: Compass },
-  { to: '/tasks',         label: 'Tasks',            icon: ListTodo },
-  { to: '/skills',        label: 'Skills',           icon: Layers3 },
-  { to: '/goals',         label: 'Goals',            icon: Lightbulb },
-  { to: '/portfolio',     label: 'Portfolio',        icon: Award },
-  { to: '/analytics',     label: 'Analytics',        icon: BarChart3 },
+  { to: '/dashboard',     label: 'Home',               icon: LayoutDashboard },
+  { to: '/skill-gap',     label: 'Skill Gap Analyzer', icon: Zap },
+  { to: '/learning-path', label: 'AI Learning Path',   icon: Compass },
+  { to: '/tasks',         label: 'Tasks',              icon: ListTodo },
+  { to: '/skills',        label: 'Skills',             icon: Layers3 },
+  { to: '/goals',         label: 'Goals',              icon: Lightbulb },
+  { to: '/portfolio',     label: 'Portfolio',          icon: Award },
+  { to: '/analytics',     label: 'Analytics',          icon: BarChart3 },
 ]
 
 const NAV_BOTTOM = [
@@ -31,10 +32,10 @@ const NAV_BOTTOM = [
 // ─── Mobile Bottom Bar (shown on <768px) ────────────────────────────────────
 const MOBILE_TABS = [
   { to: '/dashboard', label: 'Home',      icon: LayoutDashboard },
+  { to: '/skill-gap', label: 'Skill Gap', icon: Zap },
   { to: '/tasks',     label: 'Tasks',     icon: ListTodo },
   { to: '/skills',    label: 'Skills',    icon: Layers3 },
   { to: '/portfolio', label: 'Portfolio', icon: Award },
-  { to: '/goals',     label: 'Goals',     icon: Lightbulb },
 ]
 
 // ─── Sidebar NavItem ─────────────────────────────────────────────────────────
@@ -128,7 +129,7 @@ export const AppShell = ({ children }) => {
         />
       )}
 
-      {/* ── Layrs Rail Sidebar ──────────────────────────────────────────── */}
+      {/* ── LevelUP Rail Sidebar ────────────────────────────────────────── */}
       <aside
         className={`app-sidebar
           ${collapsed ? 'collapsed' : ''}
@@ -144,14 +145,14 @@ export const AppShell = ({ children }) => {
           {!collapsed && (
             <button
               onClick={() => navigate('/dashboard')}
-              className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2.5 hover:opacity-90 transition-opacity"
             >
               <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-xs font-bold text-sm">
-                L
+                <Zap className="w-4 h-4 text-white fill-white" />
               </div>
               <div className="text-left">
-                <span className="font-extrabold text-sm tracking-tight text-foreground">
-                  Layrs <span className="text-orange-600 dark:text-orange-400 font-serif italic font-normal text-xs">LevelUP</span>
+                <span className="font-extrabold text-base tracking-tight text-foreground">
+                  LevelUP <span className="text-orange-600 dark:text-orange-400 font-serif italic font-normal text-xs">OS</span>
                 </span>
               </div>
             </button>
@@ -162,7 +163,7 @@ export const AppShell = ({ children }) => {
               className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center cursor-pointer shadow-xs font-bold text-sm"
               onClick={() => navigate('/dashboard')}
             >
-              L
+              <Zap className="w-4 h-4 text-white fill-white" />
             </div>
           )}
 

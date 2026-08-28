@@ -122,7 +122,7 @@ const Goals = () => {
               </p>
               <button 
                 onClick={() => navigate('/skill-gap')}
-                className="text-sm font-semibold text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors"
+                className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:underline flex items-center gap-1 transition-colors"
               >
                 Go to Analyzer <ArrowRight className="w-4 h-4" />
               </button>
@@ -133,29 +133,29 @@ const Goals = () => {
         {/* Right Panel: Results */}
         <div className="h-full">
           {result ? (
-            <div className="card-surface p-6 h-full border-indigo-200 dark:border-indigo-900/50 shadow-lg shadow-indigo-500/5">
-              <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-100 dark:border-border">
+            <div className="card-surface p-6 h-full">
+              <div className="flex items-center gap-2 mb-6 pb-4 border-b border-border">
                 {result.type === 'gap' ? (
-                  <Target className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <Target className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                 ) : (
-                  <Map className="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                  <Map className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 )}
-                <h2 className="text-lg font-bold text-gray-900 dark:text-foreground">
+                <h2 className="text-lg font-bold text-foreground font-serif italic">
                   {result.type === 'gap' ? `Gap Analysis: ${targetRole}` : 'Optimized Learning Path'}
                 </h2>
               </div>
               
-              <div className="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
+              <div className="prose prose-sm dark:prose-invert max-w-none text-foreground whitespace-pre-wrap leading-relaxed">
                 {result.data}
               </div>
             </div>
           ) : (
-            <div className="card-surface h-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center bg-gray-50/50 dark:bg-card/50 border-dashed border-2">
-              <div className="w-16 h-16 rounded-xl bg-white dark:bg-accent shadow-sm flex items-center justify-center mb-4">
-                <Zap className="w-8 h-8 text-indigo-400" />
+            <div className="card-surface h-full min-h-[400px] flex flex-col items-center justify-center p-8 text-center border-dashed border-2">
+              <div className="w-16 h-16 rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-4">
+                <Zap className="w-8 h-8 text-orange-500 fill-orange-500/20" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-foreground mb-2">Awaiting Instructions</h3>
-              <p className="text-sm text-gray-500 dark:text-muted-foreground max-w-sm">
+              <h3 className="text-lg font-bold text-foreground mb-2 font-serif italic">Awaiting Instructions</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-sm">
                 Enter a target role on the left or click "Optimize Learning Path" to generate your AI-powered career roadmap.
               </p>
             </div>

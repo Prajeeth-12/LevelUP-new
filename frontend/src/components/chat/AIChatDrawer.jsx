@@ -236,7 +236,7 @@ export const AIChatDrawer = ({ isOpen, onClose }) => {
             <div>
               <div className="flex items-center gap-2">
                 <h2 id="ai-chat-title" className="text-sm font-bold text-foreground">
-                  Layrs AI Tutor
+                  LevelUP AI Assistant
                 </h2>
                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
                   Active
