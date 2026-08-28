@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ListTodo, Zap, CheckCircle2, Plus, ArrowUpDown,
@@ -16,7 +16,7 @@ const COLUMNS = [
     headerBadge: 'bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300',
     columnBorder: 'border-blue-500/20 dark:border-blue-500/10',
     emptyText: 'No planned tasks. Add your next goal!',
-    actionText: '+ Add to To Do',
+    actionText: 'Add to To Do',
   },
   {
     id: 'IN_PROGRESS',
@@ -27,7 +27,7 @@ const COLUMNS = [
     headerBadge: 'bg-violet-100 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300',
     columnBorder: 'border-violet-500/20 dark:border-violet-500/10',
     emptyText: 'Nothing in progress. Promote a task from To Do!',
-    actionText: '+ Add to Current',
+    actionText: 'Add to Current',
   },
   {
     id: 'COMPLETED',
@@ -38,7 +38,7 @@ const COLUMNS = [
     headerBadge: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300',
     columnBorder: 'border-emerald-500/20 dark:border-emerald-500/10',
     emptyText: 'No completed tasks yet. Finish a task to see history!',
-    actionText: '+ Record Past Task',
+    actionText: 'Record Past Task',
   },
 ]
 
