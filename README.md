@@ -1,5 +1,6 @@
-﻿<div align="center">
-  <img src="docs/figures/logo_background_removed.png" alt="LevelUP Logo" width="380" />
+<div align="center">
+  <img src="docs/figures/logo.png" alt="LevelUP Logo" width="380" />
+
   
   <h3>AI-Powered Career Operating System & Autonomous Learning Path Recommender</h3>
   <p><em>Turn career ambition into daily execution with MiniMax-M3 LLM, Voice-First Tutoring, Vision Inspector & 1-Click Kanban Auto-Scheduling.</em></p>
