@@ -2,12 +2,17 @@ import json
 import os
 import re
 from typing import Any, Dict, List, Optional
+from dotenv import load_dotenv
+
+# Ensure environment variables from .env are loaded and take precedence
+load_dotenv(override=True)
 
 try:
     from openai import AsyncAzureOpenAI, AsyncOpenAI
 except Exception:  # pragma: no cover - optional dependency path
     AsyncAzureOpenAI = None
     AsyncOpenAI = None
+
 
 
 def _client():

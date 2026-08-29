@@ -23,6 +23,15 @@ const slugify = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    return 'http://localhost:8000'
+  }
+  return 'https://levelup-new-backend.onrender.com'
+}
+
+
 const getUserId = () => auth.currentUser?.uid
 
 const getUserCollection = (userId, name) => collection(db, 'users', userId, name)
@@ -429,7 +438,7 @@ export const getActiveRoadmap = async (userId) => {
   // 2. Fallback to Backend Admin API
   try {
     const token = await auth.currentUser?.getIdToken?.()
-    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
+    const API_URL = getApiUrl()
     const res = await axios.get(`${API_URL}/api/career/roadmap?uid=${uid}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
@@ -463,7 +472,7 @@ export const listRoadmaps = async (userId) => {
   // 2. Fallback to Backend API
   try {
     const token = await auth.currentUser?.getIdToken?.()
-    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
+    const API_URL = getApiUrl()
     const res = await axios.get(`${API_URL}/api/career/roadmaps?uid=${uid}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
@@ -484,7 +493,7 @@ export const switchActiveRoadmap = async (roadmapId, userId) => {
   if (!uid || !roadmapId) return null
 
   try {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
+    const API_URL = getApiUrl()
     const token = await auth.currentUser?.getIdToken?.()
     const res = await axios.post(`${API_URL}/api/career/roadmaps/switch/${roadmapId}?uid=${uid}`, {}, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
@@ -517,7 +526,7 @@ export const deleteRoadmap = async (roadmapId, userId) => {
   if (!uid || !roadmapId) return false
 
   try {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
+    const API_URL = getApiUrl()
     const token = await auth.currentUser?.getIdToken?.()
     await axios.delete(`${API_URL}/api/career/roadmaps/${roadmapId}?uid=${uid}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
