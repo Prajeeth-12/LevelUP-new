@@ -134,9 +134,9 @@ export const AppShell = ({ children }) => {
         className={`app-sidebar
           ${collapsed ? 'collapsed' : ''}
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          transition-all duration-200 ease-in-out border-r border-border bg-card/95 backdrop-blur-xl
         `}
       >
+
         {/* Rail Header */}
         <div className={`flex items-center px-4 border-b border-border/80 shrink-0
           ${collapsed ? 'justify-center py-3' : 'justify-between py-3'}`}
@@ -224,9 +224,16 @@ export const AppShell = ({ children }) => {
       </aside>
 
       {/* ── Main Layout Column ───────────────────────────────────────────── */}
-      <div className={`flex flex-col flex-1 min-h-screen transition-all duration-200
-        ${collapsed ? 'md:ml-18' : 'md:ml-62'}`}
+      <div
+        className="flex flex-col flex-1 min-h-screen"
+        style={{
+          marginLeft: collapsed
+            ? 'var(--sidebar-collapsed-w)'
+            : 'var(--sidebar-w)',
+          transition: 'margin-left 0.2s ease',
+        }}
       >
+
         {/* Topbar with Layrs Breadcrumb */}
         <header className={`sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 h-[3.75rem] bg-background/90 backdrop-blur-md border-b border-border ${scrolled ? 'shadow-2xs' : ''}`}>
           {/* Mobile menu toggle */}
