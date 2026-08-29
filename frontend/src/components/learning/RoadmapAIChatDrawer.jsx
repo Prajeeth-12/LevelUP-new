@@ -79,9 +79,9 @@ export const RoadmapAIChatDrawer = ({ isOpen, onClose, milestone }) => {
           transition={{ type: 'spring', damping: 26, stiffness: 280 }}
           className="relative w-full max-w-md bg-card text-card-foreground border-l border-border h-full shadow-2xl flex flex-col"
         >
-          <div className="p-4 border-b border-border flex items-center justify-between bg-accent/20">
+          <div className="p-4 border-b border-border flex items-center justify-between bg-secondary/30">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center border border-purple-500/20">
+              <div className="w-9 h-9 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center border border-orange-500/20">
                 <Bot className="w-5 h-5" />
               </div>
               <div>
@@ -93,7 +93,7 @@ export const RoadmapAIChatDrawer = ({ isOpen, onClose, milestone }) => {
             </div>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+              className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -106,22 +106,22 @@ export const RoadmapAIChatDrawer = ({ isOpen, onClose, milestone }) => {
                 className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-orange-500/10 text-orange-600 flex items-center justify-center shrink-0 mt-0.5">
                     <Bot className="w-4 h-4" />
                   </div>
                 )}
                 <div
                   className={`p-3.5 rounded-2xl max-w-[85%] text-xs leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-foreground text-background font-medium rounded-tr-sm'
-                      : 'bg-accent/40 text-foreground border border-border/60 rounded-tl-sm'
+                      ? 'bg-orange-600 text-white font-medium rounded-tr-sm'
+                      : 'bg-card text-foreground border border-border rounded-tl-sm'
                   }`}
                   style={{ whiteSpace: 'pre-line' }}
                 >
                   {msg.content}
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-7 h-7 rounded-lg bg-accent text-foreground flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-7 h-7 rounded-lg bg-secondary text-foreground flex items-center justify-center shrink-0 mt-0.5">
                     <User className="w-4 h-4" />
                   </div>
                 )}
@@ -130,7 +130,7 @@ export const RoadmapAIChatDrawer = ({ isOpen, onClose, milestone }) => {
 
             {loading && (
               <div className="flex items-center gap-2 text-muted-foreground text-xs p-2">
-                <Loader2 className="w-4 h-4 animate-spin text-purple-500" />
+                <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
                 <span>AI Mentor is thinking...</span>
               </div>
             )}
@@ -138,14 +138,14 @@ export const RoadmapAIChatDrawer = ({ isOpen, onClose, milestone }) => {
           </div>
 
           {suggestions.length > 0 && !loading && (
-            <div className="p-2 px-4 border-t border-border/40 bg-accent/10 flex flex-wrap gap-1.5">
+            <div className="p-2 px-4 border-t border-border/40 bg-secondary/20 flex flex-wrap gap-1.5">
               {suggestions.slice(0, 2).map((sug, i) => (
                 <button
                   key={i}
                   onClick={() => handleSend(sug)}
-                  className="text-[11px] bg-card hover:bg-accent border border-border px-2.5 py-1 rounded-full text-foreground/80 hover:text-foreground text-left transition-colors flex items-center gap-1.5"
+                  className="text-[11px] bg-card hover:bg-secondary border border-border px-2.5 py-1 rounded-full text-foreground/80 hover:text-foreground text-left transition-colors flex items-center gap-1.5"
                 >
-                  <Sparkles className="w-3 h-3 text-purple-500 shrink-0" />
+                  <Sparkles className="w-3 h-3 text-orange-500 shrink-0" />
                   <span className="truncate max-w-[280px]">{sug}</span>
                 </button>
               ))}
@@ -165,12 +165,12 @@ export const RoadmapAIChatDrawer = ({ isOpen, onClose, milestone }) => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask about this milestone, code examples, concepts..."
-                className="flex-1 bg-accent/40 border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="flex-1 bg-secondary/40 border border-border rounded-xl px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-orange-500"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
-                className="p-2 bg-foreground text-background rounded-xl hover:opacity-90 disabled:opacity-40 transition-opacity"
+                className="p-2 bg-orange-600 text-white rounded-xl hover:bg-orange-700 disabled:opacity-40 transition-all"
               >
                 <Send className="w-4 h-4" />
               </button>

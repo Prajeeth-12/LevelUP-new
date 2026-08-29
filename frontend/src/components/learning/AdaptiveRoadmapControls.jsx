@@ -45,7 +45,7 @@ export const AdaptiveRoadmapControls = ({ milestone, onAdapt, isCompleted }) => 
         className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-card hover:bg-accent border border-border text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
         title="Accelerate timeline and jump straight to advanced capstones"
       >
-        <FastForward className="w-3 h-3 text-purple-500" />
+        <FastForward className="w-3 h-3 text-orange-500" />
         Accelerate
       </button>
     </div>

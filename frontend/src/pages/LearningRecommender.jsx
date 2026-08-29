@@ -226,10 +226,10 @@ export const LearningRecommender = () => {
           action={
             <button
               onClick={() => setShowProfileDrawer(!showProfileDrawer)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-accent transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold bg-secondary/80 hover:bg-secondary border border-border text-foreground transition-all shadow-xs"
             >
-              <Sliders className="w-4 h-4 text-purple-500" />
-              <span>Learner Profile & Preferences</span>
+              <Sliders className="w-4 h-4 text-orange-500" />
+              <span>Learner Profile & Calibration</span>
             </button>
           }
         />
@@ -242,17 +242,17 @@ export const LearningRecommender = () => {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-5 rounded-2xl bg-card border border-border shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-border/50 pb-3">
+              <div className="p-6 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-border/60 pb-3">
                   <div className="flex items-center gap-2">
-                    <Sliders className="w-4 h-4 text-purple-500" />
+                    <Sliders className="w-4 h-4 text-orange-500" />
                     <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
                       Active Learner Profile Calibration
                     </h3>
                   </div>
                   <button
                     onClick={() => setShowProfileDrawer(false)}
-                    className="text-xs text-muted-foreground hover:text-foreground"
+                    className="text-xs font-semibold text-muted-foreground hover:text-foreground"
                   >
                     Done
                   </button>
@@ -262,7 +262,7 @@ export const LearningRecommender = () => {
                   <div className="space-y-1.5">
                     <label className="font-semibold text-foreground flex items-center justify-between">
                       <span>Weekly Hour Budget</span>
-                      <span className="font-bold text-purple-600 dark:text-purple-400">{profile.weekly_hours} hrs/wk</span>
+                      <span className="font-bold text-orange-600 dark:text-orange-400 font-mono">{profile.weekly_hours} hrs/wk</span>
                     </label>
                     <input
                       type="range"
@@ -271,7 +271,7 @@ export const LearningRecommender = () => {
                       step={1}
                       value={profile.weekly_hours}
                       onChange={(e) => setProfile({ ...profile, weekly_hours: parseInt(e.target.value) })}
-                      className="w-full accent-purple-600"
+                      className="w-full accent-orange-600 h-2 rounded-lg"
                     />
                     <div className="flex justify-between text-[10px] text-muted-foreground">
                       <span>3h (Casual)</span>
@@ -285,7 +285,7 @@ export const LearningRecommender = () => {
                     <select
                       value={profile.experience_level}
                       onChange={(e) => setProfile({ ...profile, experience_level: e.target.value })}
-                      className="w-full bg-accent/40 border border-border rounded-xl px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-purple-500"
+                      className="w-full bg-secondary/50 border border-border rounded-xl px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-orange-500"
                     >
                       <option value="Beginner">Beginner (New to domain)</option>
                       <option value="Intermediate">Intermediate (Building apps)</option>
@@ -298,7 +298,7 @@ export const LearningRecommender = () => {
                     <select
                       value={profile.learning_style}
                       onChange={(e) => setProfile({ ...profile, learning_style: e.target.value })}
-                      className="w-full bg-accent/40 border border-border rounded-xl px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-purple-500"
+                      className="w-full bg-secondary/50 border border-border rounded-xl px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-orange-500"
                     >
                       <option value="Hands-on projects">Hands-on projects & Code repos</option>
                       <option value="Video masterclasses">Video masterclasses & Tutorials</option>
@@ -312,8 +312,8 @@ export const LearningRecommender = () => {
           )}
         </AnimatePresence>
 
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-purple-500/10 via-card to-background border border-purple-500/20 shadow-lg space-y-4">
-          <div className="flex items-center gap-2 text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
+        <div className="p-6 rounded-3xl bg-card border border-border shadow-xs space-y-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wider">
             <Sparkles className="w-4 h-4" />
             <span>Conversational Goal Intake</span>
           </div>
@@ -325,13 +325,13 @@ export const LearningRecommender = () => {
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
                 placeholder="Describe your learning objective in plain English (e.g., 'Become an AI Agent Engineer in 8 weeks')..."
-                className="w-full bg-card/80 backdrop-blur-sm border border-border/80 rounded-2xl px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/40 shadow-inner"
+                className="w-full bg-secondary/30 border border-border rounded-2xl px-4 py-3.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500/40"
               />
             </div>
             <button
               type="submit"
               disabled={!goal.trim() || loading}
-              className="px-6 py-3.5 rounded-2xl bg-foreground text-background font-bold text-xs hover:opacity-90 disabled:opacity-40 transition-all flex items-center justify-center gap-2 shadow-md shrink-0"
+              className="px-6 py-3.5 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs disabled:opacity-40 transition-all flex items-center justify-center gap-2 shadow-xs shrink-0"
             >
               {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Compass className="w-4 h-4" />}
               <span>{loading ? 'Synthesizing Path...' : 'Generate AI Roadmap'}</span>
@@ -358,7 +358,7 @@ export const LearningRecommender = () => {
 
         {!plan && !loading && (
           <div className="py-16 text-center space-y-4 rounded-3xl border border-dashed border-border bg-card/40 p-8">
-            <div className="w-16 h-16 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center mx-auto border border-purple-500/20">
+            <div className="w-16 h-16 rounded-2xl bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center mx-auto border border-orange-500/20">
               <Bot className="w-8 h-8" />
             </div>
             <div className="max-w-md mx-auto space-y-1.5">
@@ -372,7 +372,7 @@ export const LearningRecommender = () => {
 
         {loading && (
           <div className="py-20 text-center space-y-4">
-            <div className="animate-spin rounded-full h-10 w-10 border-2 border-purple-500 border-t-transparent mx-auto" />
+            <div className="animate-spin rounded-full h-10 w-10 border-2 border-orange-500 border-t-transparent mx-auto" />
             <div className="space-y-1">
               <h4 className="text-sm font-bold text-foreground">AI Architecting Personalized Roadmap...</h4>
               <p className="text-xs text-muted-foreground">Scoring prerequisite graphs, selecting verified resources, and calibrating timelines.</p>
@@ -386,63 +386,63 @@ export const LearningRecommender = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/60 pb-6">
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <span className="px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 text-xs font-bold border border-purple-500/20">
+                    <span className="px-3 py-1 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 text-xs font-bold border border-orange-500/20">
                       Target Career: {plan.target_career}
                     </span>
                     <span className="text-xs font-medium text-muted-foreground">
                       Calibrated at {plan.weekly_hours || profile.weekly_hours} hrs/week
                     </span>
                   </div>
-                  <h2 className="text-2xl font-black text-foreground tracking-tight">{plan.title}</h2>
+                  <h2 className="text-2xl font-black text-foreground tracking-tight font-serif italic">{plan.title}</h2>
                   <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">{plan.summary}</p>
                 </div>
 
                 <button
                   onClick={handleAdoptRoadmap}
                   disabled={adopting}
-                  className="px-5 py-3 rounded-2xl bg-foreground text-background font-bold text-xs hover:opacity-90 disabled:opacity-50 transition-all flex items-center gap-2 shadow-lg shrink-0"
+                  className="px-5 py-3 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs disabled:opacity-50 transition-all flex items-center gap-2 shadow-xs shrink-0"
                 >
-                  {adopting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                  {adopting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4 text-white" />}
                   <span>{adopting ? 'Adopting to Workspace...' : 'Adopt to My Skills & Tasks'}</span>
                 </button>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-2xl bg-accent/30 border border-border/60">
+                <div className="p-4 rounded-2xl bg-secondary/40 border border-border">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase">Relevance Match</span>
                   <div className="text-2xl font-black text-foreground mt-0.5">{plan.match_score || 88}%</div>
                   <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Optimal alignment</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-accent/30 border border-border/60">
+                <div className="p-4 rounded-2xl bg-secondary/40 border border-border">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase">Readiness Level</span>
                   <div className="text-2xl font-black text-foreground mt-0.5">{plan.readiness_score || 65}%</div>
                   <span className="text-[10px] text-muted-foreground">Baseline score</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-accent/30 border border-border/60">
+                <div className="p-4 rounded-2xl bg-secondary/40 border border-border">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase">Total Study Hours</span>
                   <div className="text-2xl font-black text-foreground mt-0.5">{plan.total_estimated_hours || 64}h</div>
                   <span className="text-[10px] text-muted-foreground">Estimated effort</span>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-accent/30 border border-border/60">
+                <div className="p-4 rounded-2xl bg-secondary/40 border border-border">
                   <span className="text-[11px] font-semibold text-muted-foreground uppercase">Time to Readiness</span>
-                  <div className="text-2xl font-black text-purple-600 dark:text-purple-400 mt-0.5">{plan.weeks_to_readiness || 6} wks</div>
+                  <div className="text-2xl font-black text-orange-600 dark:text-orange-400 mt-0.5">{plan.weeks_to_readiness || 6} wks</div>
                   <span className="text-[10px] text-muted-foreground">At {plan.weekly_hours || profile.weekly_hours}h / week</span>
                 </div>
               </div>
 
               {plan.explainability && (
-                <div className="p-4 rounded-2xl bg-purple-500/5 border border-purple-500/20 text-xs space-y-2">
+                <div className="p-4 rounded-2xl bg-orange-500/5 border border-orange-500/20 text-xs space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-foreground flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-purple-500" />
+                      <Sparkles className="w-3.5 h-3.5 text-orange-500" />
                       AI Strategic Rationale:
                     </span>
                     <button
                       onClick={() => handleExplain({ title: plan.title, name: plan.title }, 'roadmap')}
-                      className="text-purple-600 dark:text-purple-400 font-semibold hover:underline flex items-center gap-1"
+                      className="text-orange-600 dark:text-orange-400 font-semibold hover:underline flex items-center gap-1"
                     >
                       <span>Deep Explainability Rationale</span>
                       <ArrowUpRight className="w-3 h-3" />
@@ -455,8 +455,8 @@ export const LearningRecommender = () => {
 
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
-                  <Layers className="w-5 h-5 text-purple-500" />
+                <h3 className="text-lg font-bold text-foreground flex items-center gap-2 font-serif italic">
+                  <Layers className="w-5 h-5 text-orange-500" />
                   Structured Milestone Roadmap
                 </h3>
                 <span className="text-xs text-muted-foreground font-medium">
@@ -478,7 +478,7 @@ export const LearningRecommender = () => {
                         className="w-full p-5 flex items-center justify-between gap-4 text-left hover:bg-accent/30 transition-colors border-b border-border/40"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 font-black text-xs flex items-center justify-center border border-purple-500/20">
+                          <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-600 dark:text-orange-400 font-black text-xs flex items-center justify-center border border-orange-500/20">
                             {phase.phase_number || (pIdx + 1)}
                           </div>
                           <div>
@@ -522,7 +522,7 @@ export const LearningRecommender = () => {
                               {phase.milestones?.map((milestone, mIdx) => (
                                 <div
                                   key={milestone.id || mIdx}
-                                  className="p-5 rounded-2xl bg-accent/20 border border-border/70 space-y-4 hover:border-purple-500/40 transition-colors"
+                                  className="p-5 rounded-2xl bg-secondary/30 border border-border space-y-4 hover:border-orange-500/40 transition-colors"
                                 >
                                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                                     <div className="space-y-1">
@@ -543,7 +543,7 @@ export const LearningRecommender = () => {
                                         className="px-2.5 py-1.5 rounded-xl bg-card hover:bg-accent border border-border text-[11px] font-semibold text-foreground flex items-center gap-1.5 transition-colors"
                                         title="Explain why AI recommended this milestone"
                                       >
-                                        <Sparkles className="w-3.5 h-3.5 text-purple-500" />
+                                        <Sparkles className="w-3.5 h-3.5 text-orange-500" />
                                         <span>Why This?</span>
                                       </button>
 
@@ -588,7 +588,7 @@ export const LearningRecommender = () => {
                                           >
                                             <div className="space-y-1">
                                               <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-                                                <span className="font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">
+                                                <span className="font-semibold uppercase tracking-wider text-orange-600 dark:text-orange-400">
                                                   {res.type || 'Course'} - {res.provider || 'Verified Lab'}
                                                 </span>
                                                 <span className="flex items-center gap-1">
@@ -606,7 +606,7 @@ export const LearningRecommender = () => {
                                                 href={res.url}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="text-[11px] font-semibold text-foreground hover:text-purple-600 flex items-center gap-1"
+                                                className="text-[11px] font-semibold text-foreground hover:text-orange-600 dark:hover:text-orange-400 flex items-center gap-1"
                                               >
                                                 <span>Open Resource</span>
                                                 <ExternalLink className="w-3 h-3" />
@@ -616,7 +616,7 @@ export const LearningRecommender = () => {
                                                 onClick={() => handleExplain(res, res.type || 'resource')}
                                                 className="text-[10px] text-muted-foreground hover:text-foreground flex items-center gap-1"
                                               >
-                                                <Sparkles className="w-2.5 h-2.5 text-purple-500" />
+                                                <Sparkles className="w-2.5 h-2.5 text-orange-500" />
                                                 <span>Why chosen?</span>
                                               </button>
                                             </div>

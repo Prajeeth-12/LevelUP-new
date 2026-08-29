@@ -128,7 +128,7 @@ export const AIProjectGeneratorModal = ({ isOpen, onClose, milestone, domain }) 
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                      <Terminal className="w-3.5 h-3.5 text-purple-500" />
+                      <Terminal className="w-3.5 h-3.5 text-orange-500" />
                       Starter Boilerplate Template
                     </h4>
                     <button

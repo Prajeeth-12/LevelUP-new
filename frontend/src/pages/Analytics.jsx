@@ -20,8 +20,8 @@ const STATUS_CONFIG = {
 const MiniBar = ({ label, value, max, color }) => (
   <div className="space-y-1">
     <div className="flex justify-between text-xs">
-      <span className="text-gray-600 dark:text-gray-400 truncate max-w-[140px]">{label}</span>
-      <span className="font-bold text-gray-900 dark:text-foreground ml-2">{value}%</span>
+      <span className="text-muted-foreground dark:text-muted-foreground truncate max-w-[140px]">{label}</span>
+      <span className="font-bold text-foreground dark:text-foreground ml-2">{value}%</span>
     </div>
     <div className="progress-track">
       <div
@@ -63,10 +63,10 @@ const DonutChart = ({ segments, size = 120, thickness = 20 }) => {
 // ─── Stat Widget ──────────────────────────────────────────────────────────────
 const StatWidget = ({ icon: Icon, label, value, color = 'indigo' }) => {
   const colors = {
-    indigo:  'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400',
+    indigo:  'bg-orange-500/10 dark:bg-indigo-950/40 text-orange-600 dark:text-orange-400',
     emerald: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400',
     amber:   'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400',
-    violet:  'bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400',
+    violet:  'bg-orange-500/10 dark:bg-violet-950/40 text-orange-600 dark:text-orange-400',
   }
   return (
     <div className="card-surface p-5 flex flex-col gap-3">
@@ -74,8 +74,8 @@ const StatWidget = ({ icon: Icon, label, value, color = 'indigo' }) => {
         <Icon className="w-5 h-5" />
       </div>
       <div>
-        <div className="text-2xl font-bold text-gray-900 dark:text-foreground">{value}</div>
-        <div className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-muted-foreground mt-0.5">{label}</div>
+        <div className="text-2xl font-bold text-foreground dark:text-foreground">{value}</div>
+        <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground dark:text-muted-foreground mt-0.5">{label}</div>
       </div>
     </div>
   )
@@ -134,19 +134,45 @@ const Analytics = () => {
 
   return (
     <AppShell>
-      <div className="page-container animate-fade-slide-in">
+      <div className="page-container space-y-8 animate-fade-slide-in">
         <PageHeader 
-          title="Analytics" 
-          subtitle="Track your learning velocity and find patterns in your progress." 
+          title="Engineering Analytics" 
+          subtitle="Track your learning velocity, task completion efficiency, and competency breakdowns." 
         />
-      <div className="space-y-6">
 
-        {/* ── Stat row ─────────────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatWidget icon={CalendarDays}  label="Total Tasks"      value={tasks.length}              color="indigo"  />
-          <StatWidget icon={CheckCircle2}  label="Completed Tasks"  value={metrics.completedTasks}    color="emerald" />
-          <StatWidget icon={BarChart3}     label="Skills Progressed" value={metrics.inProgressSkills} color="violet"  />
-          <StatWidget icon={TrendingUp}    label="Task Efficiency"  value={`${metrics.efficiency}%`}  color="amber"   />
+        {/* ── Layrs Stats Bar (.pk-cycle) ─────────────────────────────────── */}
+        <div className="pk-cycle">
+          <div className="pk-stat pr-4 sm:pr-6 sm:border-r border-border">
+            <span className="pk-stat-label">TOTAL TASKS</span>
+            <div className="pk-stat-val">
+              <span>{tasks.length}</span>
+              <span className="pk-stat-unit">logged</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">COMPLETED</span>
+            <div className="pk-stat-val text-emerald-600 dark:text-emerald-400">
+              <span>{metrics.completedTasks}</span>
+              <span className="pk-stat-unit">tasks</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">IN PROGRESS</span>
+            <div className="pk-stat-val text-blue-600 dark:text-blue-400">
+              <span>{metrics.inProgressSkills}</span>
+              <span className="pk-stat-unit">skills</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">TASK EFFICIENCY</span>
+            <div className="pk-stat-val text-orange-600 dark:text-orange-400">
+              <span>{metrics.efficiency}%</span>
+              <span className="pk-stat-unit">rate</span>
+            </div>
+          </div>
         </div>
 
         {/* ── Charts row ───────────────────────────────────────────────── */}
@@ -157,8 +183,8 @@ const Analytics = () => {
             <h2 className="section-title mb-4">Top Skills by Progress</h2>
             {topSkills.length === 0 ? (
               <div className="empty-state py-8">
-                <div className="empty-state-icon"><BarChart3 className="w-6 h-6 text-gray-400" /></div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">No skill progress yet</p>
+                <div className="empty-state-icon"><BarChart3 className="w-6 h-6 text-muted-foreground" /></div>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">No skill progress yet</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -184,16 +210,16 @@ const Analytics = () => {
             <h2 className="section-title mb-4">Skills by Status</h2>
             {skills.length === 0 ? (
               <div className="empty-state py-8">
-                <div className="empty-state-icon"><Target className="w-6 h-6 text-gray-400" /></div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Add skills to see breakdown</p>
+                <div className="empty-state-icon"><Target className="w-6 h-6 text-muted-foreground" /></div>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">Add skills to see breakdown</p>
               </div>
             ) : (
               <div className="flex items-center gap-6">
                 <div className="relative shrink-0">
                   <DonutChart segments={donutSegments} size={120} thickness={20} />
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-xl font-bold text-gray-900 dark:text-foreground">{skills.length}</span>
-                    <span className="text-[10px] text-gray-400">total</span>
+                    <span className="text-xl font-bold text-foreground dark:text-foreground">{skills.length}</span>
+                    <span className="text-[10px] text-muted-foreground">total</span>
                   </div>
                 </div>
                 <div className="space-y-3 flex-1">
@@ -201,15 +227,15 @@ const Analytics = () => {
                     <div key={seg.label} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full" style={{ background: seg.color }} />
-                        <span className="text-xs text-gray-600 dark:text-gray-400">{seg.label}</span>
+                        <span className="text-xs text-muted-foreground dark:text-muted-foreground">{seg.label}</span>
                       </div>
-                      <span className="text-sm font-bold text-gray-900 dark:text-foreground">{seg.value}</span>
+                      <span className="text-sm font-bold text-foreground dark:text-foreground">{seg.value}</span>
                     </div>
                   ))}
-                  <div className="pt-2 border-t border-gray-200 dark:border-border">
+                  <div className="pt-2 border-t border-border dark:border-border">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-500">Avg Progress</span>
-                      <span className="font-bold text-indigo-600 dark:text-indigo-400">{metrics.avgProgress}%</span>
+                      <span className="text-muted-foreground">Avg Progress</span>
+                      <span className="font-bold text-orange-600 dark:text-orange-400">{metrics.avgProgress}%</span>
                     </div>
                   </div>
                 </div>
@@ -223,15 +249,15 @@ const Analytics = () => {
             <div className="space-y-3">
               {Object.entries(metrics.buckets).map(([range, count]) => (
                 <div key={range} className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 font-mono">{range}</span>
+                  <span className="text-xs text-muted-foreground dark:text-muted-foreground font-mono">{range}</span>
                   <div className="flex items-center gap-2">
-                    <div className="w-24 h-2 rounded-full bg-gray-100 dark:bg-accent overflow-hidden">
+                    <div className="w-24 h-2 rounded-full bg-secondary dark:bg-accent overflow-hidden">
                       <div
                         className="h-full rounded-full bg-indigo-500 transition-all duration-700"
                         style={{ width: skills.length ? `${(count/skills.length)*100}%` : '0%' }}
                       />
                     </div>
-                    <span className="text-xs font-bold text-gray-900 dark:text-foreground w-4 text-right">{count}</span>
+                    <span className="text-xs font-bold text-foreground dark:text-foreground w-4 text-right">{count}</span>
                   </div>
                 </div>
               ))}
@@ -248,14 +274,14 @@ const Analytics = () => {
           ].map(item => (
             <div key={item.label} className="card-surface p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">{item.label}</span>
-                <span className="text-xl font-bold text-gray-900 dark:text-foreground">{item.value}</span>
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground dark:text-muted-foreground">{item.label}</span>
+                <span className="text-xl font-bold text-foreground dark:text-foreground">{item.value}</span>
               </div>
               <div className="progress-track">
                 <div className="h-full rounded-full transition-all duration-700"
                   style={{ width: item.total ? `${(item.value/item.total)*100}%` : '0%', background: item.color }} />
               </div>
-              <p className="text-xs text-gray-400 mt-1.5">
+              <p className="text-xs text-muted-foreground mt-1.5">
                 {item.total ? `${Math.round((item.value/item.total)*100)}%` : '0%'} of all tasks
               </p>
             </div>
@@ -266,7 +292,7 @@ const Analytics = () => {
         <div className="card-surface p-5">
           <div className="flex items-center justify-between mb-3">
             <h2 className="section-title flex items-center gap-2">
-              <Sparkles className="text-violet-500" style={{width:18,height:18}} />
+              <Sparkles className="text-orange-500" style={{width:18,height:18}} />
               AI Weekly Review
             </h2>
             <button
@@ -284,26 +310,24 @@ const Analytics = () => {
           </div>
 
           {result ? (
-            <div className="bg-gray-50 dark:bg-accent rounded-xl p-4">
-              <div className={`text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap ${!expanded ? 'line-clamp-6' : ''}`}>
+            <div className="bg-secondary/40 dark:bg-accent rounded-xl p-4">
+              <div className={`text-sm text-foreground/90 dark:text-gray-300 leading-relaxed whitespace-pre-wrap ${!expanded ? 'line-clamp-6' : ''}`}>
                 {result}
               </div>
               <button
                 onClick={() => setExpanded(e => !e)}
-                className="flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400 font-medium mt-2"
+                className="flex items-center gap-1 text-xs text-orange-600 dark:text-orange-400 font-medium mt-2"
               >
                 {expanded ? 'Show less' : 'Show more'}
                 <ChevronDown className={`w-3 h-3 transition-transform ${expanded ? 'rotate-180' : ''}`} />
               </button>
             </div>
           ) : (
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">
               Click "Generate Report" to get an AI-powered summary of your week, what you completed, what you missed, and where to improve.
             </p>
           )}
         </div>
-
-      </div>
       </div>
     </AppShell>
   )

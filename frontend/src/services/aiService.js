@@ -8,12 +8,19 @@ const client = axios.create({
 })
 
 const withAuth = async () => {
-  const token = await auth.currentUser?.getIdToken()
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  try {
+    const token = await auth.currentUser?.getIdToken()
+    if (token) {
+      return {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    }
+  } catch (e) {
+    console.warn('Could not fetch token:', e)
   }
+  return { headers: {} }
 }
 
 const post = async (path, payload) => {
@@ -31,3 +38,4 @@ export const pathOptimize = (payload) => post('/ai/path-optimize', payload)
 export const timeEstimate = (payload) => post('/ai/time-estimate', payload)
 export const weeklyReport = (payload) => post('/ai/weekly-report', payload)
 export const sendChatMessage = (payload) => post('/ai/chat', payload)
+export const autoOrganizeTasks = (payload) => post('/ai/auto-organize-tasks', payload)

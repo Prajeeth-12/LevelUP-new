@@ -8,10 +8,25 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['Newsreader', 'Instrument Serif', 'Playfair Display', 'Georgia', 'serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'Menlo', 'monospace'],
       },
       colors: {
+        layrs: {
+          bg: '#fbf7f4',
+          obsidian: '#0b0c11',
+          surface: '#12141a',
+          surface2: '#161922',
+          borderLight: '#ede6df',
+          borderDark: '#222634',
+          cyan: '#06b6d4',
+          violet: '#8b5cf6',
+          blue: '#3b82f6',
+          ok: '#10b981',
+          warn: '#f59e0b',
+          orange: '#f97316',
+        },
         brand: {
           50:  'hsl(var(--brand-50))',
           100: 'hsl(var(--brand-100))',
@@ -59,8 +74,8 @@ module.exports = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         'gradient-start': 'hsl(var(--primary))',
-        'gradient-mid':   '#a855f7',
-        'gradient-end':   '#ec4899',
+        'gradient-mid':   '#8b5cf6',
+        'gradient-end':   '#f97316',
       },
       spacing: {
         '4.5': '1.125rem',
@@ -74,6 +89,8 @@ module.exports = {
         '4xl': '2rem',
       },
       boxShadow: {
+        'xs':          '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        '2xs':         '0 1px 1px 0 rgba(0, 0, 0, 0.03)',
         'glow':        '0 0 20px rgba(99, 102, 241, 0.25)',
         'glow-strong': '0 0 40px rgba(99, 102, 241, 0.4)',
         'card':        '0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)',

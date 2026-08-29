@@ -125,7 +125,7 @@ const SkillDetail = () => {
       <AppShell>
         <div className="page-container animate-fade-slide-in">
           <PageHeader title="Skill Detail" subtitle="Loading skill controls." />
-          <div className="card-surface p-6 text-sm text-gray-500">Loading...</div>
+          <div className="card-surface p-6 text-sm text-muted-foreground">Loading...</div>
         </div>
       </AppShell>
     )
@@ -137,7 +137,7 @@ const SkillDetail = () => {
         <div className="page-container animate-fade-slide-in">
           <PageHeader title="Skill Detail" subtitle="This skill could not be found." />
           <div className="card-surface p-6">
-            <p className="text-sm text-gray-500">Skill not found.</p>
+            <p className="text-sm text-muted-foreground">Skill not found.</p>
             <Button variant="outline" className="rounded-lg mt-4" onClick={() => navigate('/skills')}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to skills
@@ -167,11 +167,11 @@ const SkillDetail = () => {
 
         <div className="grid gap-5 xl:grid-cols-[1.3fr_0.9fr]">
           <div className="space-y-5">
-            <Card className="border-gray-200 bg-white shadow-sm">
+            <Card className="border-border bg-white shadow-sm">
               <CardHeader className="flex flex-row items-start justify-between gap-4">
                 <div>
                   <CardTitle className="text-lg">{skill.name}</CardTitle>
-                  <p className="mt-2 text-sm text-gray-600">{skill.description || 'No description yet.'}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">{skill.description || 'No description yet.'}</p>
                 </div>
                 <Button variant="destructive" className="rounded-lg" onClick={() => setConfirmDelete(true)}>
                   <Trash2 className="w-4 h-4 mr-2" />
@@ -180,7 +180,7 @@ const SkillDetail = () => {
               </CardHeader>
               <CardContent className="space-y-5">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-sm text-gray-600">
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>Progress</span>
                     <span>{progress}%</span>
                   </div>
@@ -197,28 +197,28 @@ const SkillDetail = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="text-sm font-semibold text-gray-900">Subskills / Modules</div>
+                  <div className="text-sm font-semibold text-foreground">Subskills / Modules</div>
                   <div className="space-y-2">
                     {subskillItems.length > 0 ? subskillItems.map((item, index) => (
-                      <div key={item.id || `${item.title}-${index}`} className="flex items-center gap-3 rounded-lg border border-gray-200 p-3">
+                      <div key={item.id || `${item.title}-${index}`} className="flex items-center gap-3 rounded-lg border border-border p-3">
                         <input
                           type="checkbox"
                           checked={Boolean(item.done)}
                           onChange={() => toggleSubskill(index)}
-                          className="h-4 w-4 rounded border-gray-300"
+                          className="h-4 w-4 rounded border-border"
                         />
                         <input
                           value={item.title}
                           onChange={(e) => setSubskillItems((prev) => prev.map((current, itemIndex) => (
                             itemIndex === index ? { ...current, title: e.target.value } : current
                           )))}
-                          className="flex-1 bg-transparent text-sm text-gray-900 outline-none"
+                          className="flex-1 bg-transparent text-sm text-foreground outline-none"
                         />
-                        <button type="button" onClick={() => removeSubskill(index)} className="btn-icon h-8 w-8 text-gray-400 hover:text-red-500" aria-label="Remove subskill">
+                        <button type="button" onClick={() => removeSubskill(index)} className="btn-icon h-8 w-8 text-muted-foreground hover:text-red-500" aria-label="Remove subskill">
                           <MinusCircle className="h-4 w-4" />
                         </button>
                       </div>
-                    )) : <p className="text-sm text-gray-500">No subskills yet.</p>}
+                    )) : <p className="text-sm text-muted-foreground">No subskills yet.</p>}
                   </div>
                   <Textarea
                     rows={5}
@@ -246,7 +246,7 @@ const SkillDetail = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-gray-200 bg-white shadow-sm">
+            <Card className="border-border bg-white shadow-sm">
               <CardHeader>
                 <CardTitle className="text-base">Notes</CardTitle>
               </CardHeader>
@@ -263,17 +263,17 @@ const SkillDetail = () => {
           </div>
 
           <div className="space-y-5">
-            <Card className="border-gray-200 bg-white shadow-sm">
+            <Card className="border-border bg-white shadow-sm">
               <CardHeader>
                 <CardTitle className="text-base">Linked Tasks</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {linkedTasks.length === 0 ? (
-                  <p className="text-sm text-gray-500">No tasks linked to this skill yet.</p>
+                  <p className="text-sm text-muted-foreground">No tasks linked to this skill yet.</p>
                 ) : linkedTasks.map((task) => (
-                  <div key={task.id} className="rounded-lg border border-gray-200 p-3">
-                    <p className="font-semibold text-gray-900 text-sm">{task.title}</p>
-                    <p className="text-xs text-gray-500 mt-1">{task.priority} - {task.status}</p>
+                  <div key={task.id} className="rounded-lg border border-border p-3">
+                    <p className="font-semibold text-foreground text-sm">{task.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{task.priority} - {task.status}</p>
                   </div>
                 ))}
               </CardContent>

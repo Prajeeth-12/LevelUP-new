@@ -27,15 +27,15 @@ const MilestoneCard = ({ milestone, phaseIndex, milestoneIndex, onComplete, isCo
     const getResourceColor = (type) => {
         switch (type) {
             case 'course':
-                return 'text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-500/20';
+                return 'text-orange-600 dark:text-orange-400 bg-orange-500/10 border border-orange-500/20';
             case 'documentation':
                 return 'text-blue-600 dark:text-blue-400 bg-blue-100 dark:bg-blue-500/20';
             case 'project':
-                return 'text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-500/20';
+                return 'text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-500/20';
             case 'video':
                 return 'text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-500/20';
             default:
-                return 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-500/20';
+                return 'text-muted-foreground bg-secondary';
         }
     };
 
@@ -44,9 +44,9 @@ const MilestoneCard = ({ milestone, phaseIndex, milestoneIndex, onComplete, isCo
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: milestoneIndex * 0.1 }}
-            className={`p-5 rounded-xl border-2 transition-all duration-300 ${isCompleted
-                    ? 'bg-green-50 dark:bg-green-500/10 border-green-300 dark:border-green-600'
-                    : 'bg-white dark:bg-accent border-gray-200 dark:border-border hover:border-indigo-300 dark:hover:border-indigo-600'
+            className={`p-5 rounded-2xl border transition-all duration-300 ${isCompleted
+                    ? 'bg-emerald-500/10 border-emerald-500/30'
+                    : 'card-surface hover:border-orange-500/40'
                 }`}
         >
             {/* Header */}

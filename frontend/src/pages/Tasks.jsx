@@ -12,6 +12,7 @@ import { useSkills } from '../contexts/SkillContext'
 import { useTasks } from '../contexts/TaskContext'
 import TaskColumnBoard from '../components/tasks/TaskColumnBoard'
 import TaskCard, { PRIORITY_CONFIG, formatDeadline } from '../components/tasks/TaskCard'
+import { AutoScheduleModal } from '../components/tasks/AutoScheduleModal'
 
 const STATUS_CONFIG = {
   NOT_STARTED: { label: 'To Do', cls: 'badge-not-started' },
@@ -300,6 +301,16 @@ export const Tasks = () => {
   const [editingId, setEditingId] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showAutoSchedule, setShowAutoSchedule] = useState(false)
+
+  const handleApplySchedule = async (approvedMoves) => {
+    for (const m of approvedMoves) {
+      if (m.taskId) {
+        if (m.targetStatus) await moveToStatus(m.taskId, m.targetStatus)
+        if (m.priority) await setTaskPriority(m.taskId, m.priority)
+      }
+    }
+  }
 
   // Auto-open modal if requested via navigation state
   useEffect(() => {
@@ -394,24 +405,77 @@ export const Tasks = () => {
 
   return (
     <AppShell>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6 animate-fade-slide-in">
-        {/* Page Header */}
-        <PageHeader
-          title="Task Management Board"
-          subtitle="Organize all your learning objectives, coding tasks, and general milestones across To Do, Current, and Past workflows."
-          action={
+      <div className="page-container space-y-6 animate-fade-slide-in">
+        {/* ── Layrs Plans Header (.pk-cycle) ────────────────────────────── */}
+        <div className="pk-cycle">
+          <div className="pk-stat pr-4 sm:pr-6 sm:border-r border-border min-w-[200px]">
+            <div className="flex items-center gap-2">
+              <span className="pk-stat-label">YOUR PLANS & TASKS</span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                <Flame className="w-3 h-3 text-orange-500" />
+                WIP
+              </span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground font-serif italic mt-0.5">
+              Where you <em>left off</em>.
+            </h2>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">IN PROGRESS</span>
+            <div className="pk-stat-val">
+              <span>{tasks.filter((t) => t.status === 'IN_PROGRESS').length}</span>
+              <span className="pk-stat-unit">tasks</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">TO DO</span>
+            <div className="pk-stat-val text-blue-600 dark:text-blue-400">
+              <span>{tasks.filter((t) => t.status === 'NOT_STARTED').length}</span>
+              <span className="pk-stat-unit">pending</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">COMPLETED</span>
+            <div className="pk-stat-val text-emerald-600 dark:text-emerald-400">
+              <span>{tasks.filter((t) => t.status === 'COMPLETED').length}</span>
+              <span className="pk-stat-unit">done</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">HIGH PRIORITY</span>
+            <div className="pk-stat-val text-orange-600 dark:text-orange-400">
+              <span>{tasks.filter((t) => t.priority === 'HIGH' && t.status !== 'COMPLETED').length}</span>
+              <span className="pk-stat-unit">urgent</span>
+            </div>
+          </div>
+
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => setShowAutoSchedule(true)}
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl font-bold text-xs bg-secondary hover:bg-secondary/80 text-foreground border border-border transition-all shadow-2xs"
+              title="Auto-organize your board into a balanced sprint"
+            >
+              <Sparkles className="w-4 h-4 text-orange-500" />
+              <span className="hidden sm:inline">AI Auto-Schedule</span>
+              <span className="sm:hidden">Auto-Schedule</span>
+            </button>
+
             <button
               onClick={() => handleOpenNewTask('NOT_STARTED')}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-xs"
             >
               <Plus className="w-4 h-4" />
               <span>New Task</span>
             </button>
-          }
-        />
+          </div>
+        </div>
 
         {/* Filter & Search Bar */}
-        <div className="bg-white dark:bg-card border border-gray-200 dark:border-border rounded-2xl p-4 shadow-sm space-y-3">
+        <div className="bg-card border border-border rounded-3xl p-4 shadow-2xs space-y-3">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             {/* Search Input */}
             <div className="relative flex-1 w-full">
@@ -584,6 +648,18 @@ export const Tasks = () => {
               onSubmit={handleSubmit}
               onClose={handleClose}
               isSubmitting={isSubmitting}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* AI Auto-Schedule Modal with Human Approval */}
+        <AnimatePresence>
+          {showAutoSchedule && (
+            <AutoScheduleModal
+              isOpen={showAutoSchedule}
+              onClose={() => setShowAutoSchedule(false)}
+              tasks={tasks}
+              onApplySchedule={handleApplySchedule}
             />
           )}
         </AnimatePresence>

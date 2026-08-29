@@ -11,20 +11,20 @@ import {
 export const PRIORITY_CONFIG = {
   HIGH: {
     label: 'High',
-    badgeCls: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800/40',
-    dotCls: 'bg-rose-500',
+    badgeCls: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20',
+    dotCls: 'bg-orange-500',
     icon: Flame
   },
   MEDIUM: {
     label: 'Medium',
-    badgeCls: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800/40',
+    badgeCls: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
     dotCls: 'bg-amber-500',
     icon: AlertCircle
   },
   LOW: {
     label: 'Low',
-    badgeCls: 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-900/40 dark:text-slate-300 dark:border-slate-800/40',
-    dotCls: 'bg-slate-400',
+    badgeCls: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    dotCls: 'bg-blue-500',
     icon: Circle
   },
 }
@@ -106,16 +106,16 @@ export const TaskCard = ({
 
   return (
     <div
-      className={`group relative rounded-2xl border p-4 bg-white dark:bg-card shadow-sm transition-all duration-200 ${
+      className={`group relative rounded-2xl border p-4 bg-card shadow-2xs transition-all duration-200 ${
         isOverlay
-          ? 'shadow-2xl ring-2 ring-violet-500/50 border-violet-400 dark:border-violet-600 bg-white dark:bg-zinc-900 cursor-grabbing select-none'
+          ? 'shadow-2xl ring-2 ring-orange-500/50 border-orange-500 bg-card cursor-grabbing select-none'
           : isDragging
-          ? 'opacity-30 border-dashed border-gray-300 dark:border-zinc-700 bg-gray-50/40 dark:bg-zinc-900/40'
+          ? 'opacity-30 border-dashed border-border bg-accent/20'
           : isDone
-          ? 'border-gray-200 dark:border-border/60 opacity-80 bg-gray-50/50 dark:bg-card/40 hover:shadow-md'
+          ? 'border-border/60 opacity-80 bg-accent/20 hover:shadow-xs'
           : isCurrent
-          ? 'border-violet-200/80 dark:border-violet-800/40 ring-1 ring-violet-500/10 hover:shadow-md hover:border-violet-300'
-          : 'border-gray-200 dark:border-border hover:border-gray-300 dark:hover:border-zinc-700 hover:shadow-md'
+          ? 'border-orange-500/40 ring-1 ring-orange-500/20 hover:shadow-xs hover:border-orange-500/60'
+          : 'border-border hover:border-orange-500/30 hover:shadow-xs'
       }`}
     >
       {/* Top Header: Drag Handle + Priority Badge + 3-Dots Settings */}

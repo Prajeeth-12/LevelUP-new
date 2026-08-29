@@ -294,9 +294,9 @@ const Profile = () => {
 
       <div className="w-full max-w-3xl">
 
-        <Card className="shadow-sm border border-gray-200 bg-white transition-colors">
+        <Card className="shadow-sm border border-border bg-white transition-colors">
           <CardHeader className="p-4 sm:p-5 md:p-6 border-b border-gray-100">
-            <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
+            <CardTitle className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
               Personal Information
             </CardTitle>
           </CardHeader>
@@ -307,27 +307,27 @@ const Profile = () => {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-3 sm:space-y-4"
             >
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b border-gray-200">Basic Information</h3>
+              <h3 className="text-base sm:text-lg font-bold text-foreground pb-2 border-b border-border">Basic Information</h3>
               <div>
-                <Label htmlFor="name" className="text-sm sm:text-base font-bold text-gray-900">Full Name</Label>
+                <Label htmlFor="name" className="text-sm sm:text-base font-bold text-foreground">Full Name</Label>
                 <Input
                   id="name"
                   placeholder="Enter your name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="mt-1.5 bg-white border-gray-200 focus:border-black focus:ring-black text-gray-900 placeholder:text-gray-400"
+                  className="mt-1.5 bg-white border-border focus:border-black focus:ring-black text-foreground placeholder:text-muted-foreground"
                 />
               </div>
 
               <div>
-                <Label htmlFor="education" className="text-sm sm:text-base font-bold text-gray-900">Education Level</Label>
+                <Label htmlFor="education" className="text-sm sm:text-base font-bold text-foreground">Education Level</Label>
                 <Select value={formData.education} onValueChange={(value) => setFormData({ ...formData, education: value })}>
-                  <SelectTrigger className="mt-1.5 bg-white border-gray-200 focus:border-black focus:ring-black text-gray-900">
+                  <SelectTrigger className="mt-1.5 bg-white border-border focus:border-black focus:ring-black text-foreground">
                     <SelectValue placeholder="Select your education level" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-gray-200">
+                  <SelectContent className="bg-white border-border">
                     {EDUCATION_LEVELS.map((level) => (
-                      <SelectItem key={level} value={level} className="text-gray-900 focus:bg-gray-100">
+                      <SelectItem key={level} value={level} className="text-foreground focus:bg-secondary">
                         {level}
                       </SelectItem>
                     ))}
@@ -342,11 +342,11 @@ const Profile = () => {
               transition={{ delay: 0.1 }}
               className="space-y-4 sm:space-y-5"
             >
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 pb-2 border-b border-gray-200">Skills</h3>
+              <h3 className="text-base sm:text-lg font-bold text-foreground pb-2 border-b border-border">Skills</h3>
 
               {Object.entries(skillsByCategory).map(([category, skills]) => (
                 <div key={category}>
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide">{category}</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-foreground mb-2 uppercase tracking-wide">{category}</h4>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {skills.map((skill) => (
                       <button
@@ -355,7 +355,7 @@ const Profile = () => {
                         onClick={() => toggleSkill(skill)}
                         className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 border ${formData.skills.includes(skill)
                           ? 'bg-black text-white shadow-md border-transparent'
-                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-black border-gray-200'
+                          : 'bg-secondary/40 text-foreground/90 hover:bg-secondary hover:text-black border-border'
                           }`}
                       >
                         {skill}
@@ -366,22 +366,22 @@ const Profile = () => {
               ))}
 
               <div className="pt-2 border-t border-gray-100">
-                <Label className="text-sm sm:text-base font-bold text-gray-900">Add Custom Skill</Label>
+                <Label className="text-sm sm:text-base font-bold text-foreground">Add Custom Skill</Label>
                 <div className="flex gap-2 mt-1.5">
                   <Input
                     placeholder="Type a skill..."
                     value={customSkill}
                     onChange={(e) => setCustomSkill(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && addCustomSkill()}
-                    className="bg-white border-gray-200 focus:border-black text-gray-900 placeholder:text-gray-400"
+                    className="bg-white border-border focus:border-black text-foreground placeholder:text-muted-foreground"
                   />
                   <Button onClick={addCustomSkill} type="button" className="bg-black hover:bg-gray-800 text-white">Add</Button>
                 </div>
               </div>
 
               {formData.skills.length > 0 && (
-                <div className="pt-3 border-t border-gray-100 bg-gray-50 rounded-xl p-3">
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 mb-2">Selected Skills ({formData.skills.length})</p>
+                <div className="pt-3 border-t border-gray-100 bg-secondary/40 rounded-xl p-3">
+                  <p className="text-xs sm:text-sm font-bold text-foreground mb-2">Selected Skills ({formData.skills.length})</p>
                   <div className="flex flex-wrap gap-1.5">
                     {formData.skills.map((skill) => (
                       <span
@@ -402,11 +402,11 @@ const Profile = () => {
               transition={{ delay: 0.2 }}
               className="space-y-4 sm:space-y-5"
             >
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-foreground pb-2 border-b border-gray-200 dark:border-border">Career Interests</h3>
+              <h3 className="text-base sm:text-lg font-bold text-foreground dark:text-foreground pb-2 border-b border-border dark:border-border">Career Interests</h3>
               <div>
                 <div className="flex items-center gap-2 mb-2.5">
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-black dark:text-foreground" />
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-gray-300 uppercase tracking-wide">Trending Domains</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-foreground dark:text-gray-300 uppercase tracking-wide">Trending Domains</h4>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5">
                   {DOMAIN_OPTIONS.filter(d => d.trending).map((domain) => {
@@ -418,12 +418,12 @@ const Profile = () => {
                         type="button"
                         onClick={() => toggleInterest(domain.name)}
                         className={`p-2.5 sm:p-3.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 border-2 ${isSelected
-                          ? 'border-black dark:border-white bg-gray-50 dark:bg-accent shadow-md transform scale-[1.02]'
-                          : 'border-gray-200 dark:border-border hover:border-gray-400 dark:hover:border-zinc-500 bg-white dark:bg-accent/20 hover:shadow-sm'
+                          ? 'border-black dark:border-white bg-secondary/40 dark:bg-accent shadow-md transform scale-[1.02]'
+                          : 'border-border dark:border-border hover:border-gray-400 dark:hover:border-zinc-500 bg-white dark:bg-accent/20 hover:shadow-sm'
                           }`}
                       >
-                        <IconComponent className={`w-6 h-6 sm:w-7 sm:h-7 mb-1 mx-auto ${isSelected ? 'text-black dark:text-foreground' : 'text-gray-600 dark:text-gray-500'}`} />
-                        <div className={`text-center leading-tight ${isSelected ? 'text-black dark:text-foreground' : 'text-gray-700 dark:text-gray-400'}`}>{domain.name}</div>
+                        <IconComponent className={`w-6 h-6 sm:w-7 sm:h-7 mb-1 mx-auto ${isSelected ? 'text-black dark:text-foreground' : 'text-muted-foreground dark:text-muted-foreground'}`} />
+                        <div className={`text-center leading-tight ${isSelected ? 'text-black dark:text-foreground' : 'text-foreground/90 dark:text-muted-foreground'}`}>{domain.name}</div>
                       </button>
                     );
                   })}
@@ -431,7 +431,7 @@ const Profile = () => {
               </div>
 
               <div>
-                <h4 className="text-xs sm:text-sm font-bold text-gray-900 dark:text-gray-300 mb-2.5 uppercase tracking-wide">Other Domains</h4>
+                <h4 className="text-xs sm:text-sm font-bold text-foreground dark:text-gray-300 mb-2.5 uppercase tracking-wide">Other Domains</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5">
                   {DOMAIN_OPTIONS.filter(d => !d.trending).map((domain) => {
                     const IconComponent = domain.icon;
@@ -442,12 +442,12 @@ const Profile = () => {
                         type="button"
                         onClick={() => toggleInterest(domain.name)}
                         className={`p-2.5 sm:p-3.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 border-2 ${isSelected
-                          ? 'border-black dark:border-white bg-gray-50 dark:bg-accent shadow-md transform scale-[1.02]'
-                          : 'border-gray-200 dark:border-border hover:border-gray-400 dark:hover:border-zinc-500 bg-white dark:bg-accent/20 hover:shadow-sm'
+                          ? 'border-black dark:border-white bg-secondary/40 dark:bg-accent shadow-md transform scale-[1.02]'
+                          : 'border-border dark:border-border hover:border-gray-400 dark:hover:border-zinc-500 bg-white dark:bg-accent/20 hover:shadow-sm'
                           }`}
                       >
-                        <IconComponent className={`w-6 h-6 sm:w-7 sm:h-7 mb-1 mx-auto ${isSelected ? 'text-black dark:text-foreground' : 'text-gray-600 dark:text-gray-500'}`} />
-                        <div className={`text-center leading-tight ${isSelected ? 'text-black dark:text-foreground' : 'text-gray-700 dark:text-gray-400'}`}>{domain.name}</div>
+                        <IconComponent className={`w-6 h-6 sm:w-7 sm:h-7 mb-1 mx-auto ${isSelected ? 'text-black dark:text-foreground' : 'text-muted-foreground dark:text-muted-foreground'}`} />
+                        <div className={`text-center leading-tight ${isSelected ? 'text-black dark:text-foreground' : 'text-foreground/90 dark:text-muted-foreground'}`}>{domain.name}</div>
                       </button>
                     );
                   })}
@@ -455,22 +455,22 @@ const Profile = () => {
               </div>
 
               <div className="pt-2 border-t border-gray-100 dark:border-border">
-                <Label className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-200">Add Custom Interest</Label>
+                <Label className="text-sm sm:text-base font-bold text-foreground dark:text-gray-200">Add Custom Interest</Label>
                 <div className="flex gap-2 mt-1.5">
                   <Input
                     placeholder="Type an interest..."
                     value={customInterest}
                     onChange={(e) => setCustomInterest(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && addCustomInterest()}
-                    className="bg-white dark:bg-accent border-gray-200 dark:border-border focus:border-black dark:focus:border-white text-gray-900 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                    className="bg-white dark:bg-accent border-border dark:border-border focus:border-black dark:focus:border-white text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground"
                   />
                   <Button onClick={addCustomInterest} type="button" className="bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black">Add</Button>
                 </div>
               </div>
 
               {formData.interests.length > 0 && (
-                <div className="pt-3 border-t border-gray-100 dark:border-border bg-gray-50 dark:bg-accent/50 rounded-xl p-3">
-                  <p className="text-xs sm:text-sm font-bold text-gray-900 dark:text-foreground mb-2">Selected Interests ({formData.interests.length})</p>
+                <div className="pt-3 border-t border-gray-100 dark:border-border bg-secondary/40 dark:bg-accent/50 rounded-xl p-3">
+                  <p className="text-xs sm:text-sm font-bold text-foreground dark:text-foreground mb-2">Selected Interests ({formData.interests.length})</p>
                   <div className="flex flex-wrap gap-1.5">
                     {formData.interests.map((interest) => (
                       <span
@@ -491,26 +491,26 @@ const Profile = () => {
               transition={{ delay: 0.3 }}
               className="space-y-3 sm:space-y-4"
             >
-              <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-foreground pb-2 border-b border-gray-200 dark:border-border">Goals & Experience</h3>
+              <h3 className="text-base sm:text-lg font-bold text-foreground dark:text-foreground pb-2 border-b border-border dark:border-border">Goals & Experience</h3>
               <div>
-                <Label htmlFor="goals" className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-200">Career Goals</Label>
+                <Label htmlFor="goals" className="text-sm sm:text-base font-bold text-foreground dark:text-gray-200">Career Goals</Label>
                 <Textarea
                   id="goals"
                   placeholder="What are your career goals? Where do you want to be in 2-3 years?"
                   value={formData.goals}
                   onChange={(e) => setFormData({ ...formData, goals: e.target.value })}
-                  className="mt-1.5 min-h-[100px] sm:min-h-[120px] bg-white dark:bg-accent border-gray-200 dark:border-border focus:border-black dark:focus:border-white focus:ring-black dark:focus:ring-white/20 text-gray-900 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  className="mt-1.5 min-h-[100px] sm:min-h-[120px] bg-white dark:bg-accent border-border dark:border-border focus:border-black dark:focus:border-white focus:ring-black dark:focus:ring-white/20 text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground"
                 />
               </div>
 
               <div>
-                <Label htmlFor="experience" className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-200">Experience (Optional)</Label>
+                <Label htmlFor="experience" className="text-sm sm:text-base font-bold text-foreground dark:text-gray-200">Experience (Optional)</Label>
                 <Textarea
                   id="experience"
                   placeholder="Tell us about your relevant experience, projects, or achievements..."
                   value={formData.experience}
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-                  className="mt-1.5 min-h-[100px] sm:min-h-[120px] bg-white dark:bg-accent border-gray-200 dark:border-border focus:border-black dark:focus:border-white focus:ring-black dark:focus:ring-white/20 text-gray-900 dark:text-foreground placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  className="mt-1.5 min-h-[100px] sm:min-h-[120px] bg-white dark:bg-accent border-border dark:border-border focus:border-black dark:focus:border-white focus:ring-black dark:focus:ring-white/20 text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground"
                 />
               </div>
             </motion.div>
@@ -520,7 +520,7 @@ const Profile = () => {
                 variant="outline"
                 onClick={() => navigate('/dashboard')}
                 type="button"
-                className="text-xs sm:text-sm px-4 border-gray-300 dark:border-zinc-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-800 dark:hover:text-white"
+                className="text-xs sm:text-sm px-4 border-border dark:border-zinc-600 dark:text-gray-300 hover:bg-secondary/40 dark:hover:bg-zinc-800 dark:hover:text-white"
               >
                 Cancel
               </Button>

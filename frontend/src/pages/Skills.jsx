@@ -21,14 +21,14 @@ const SlideOver = ({ title, isOpen, onClose, onSubmit, children, actions }) => {
     <>
       <div className="slideover-backdrop" onClick={onClose} />
       <div className="slideover-panel" role="dialog" aria-modal="true" aria-labelledby="skills-slideover-title">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">
-          <h2 id="skills-slideover-title" className="text-base font-bold text-gray-900">{title}</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+          <h2 id="skills-slideover-title" className="text-base font-bold text-foreground">{title}</h2>
           <button onClick={onClose} className="btn-icon" aria-label="Close panel"><X className="w-4 h-4" /></button>
         </div>
         <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
           {children}
         </div>
-        <div className="px-6 py-4 border-t border-gray-200 flex gap-3 shrink-0">
+        <div className="px-6 py-4 border-t border-border flex gap-3 shrink-0">
           <button onClick={onClose} className="btn-outline flex-1">Cancel</button>
           {actions}
         </div>
@@ -121,13 +121,13 @@ const Skills = () => {
             <>
               <button 
                 onClick={() => { setEditingCategoryId(null); setCategoryForm(emptyCategory); setShowCategoryForm(true) }}
-                className="btn-outline text-xs"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-semibold bg-secondary hover:bg-secondary/80 text-foreground border border-border transition-all"
               >
-                <Layers3 className="w-4 h-4" /> New Category
+                + New Category
               </button>
               <button 
                 onClick={() => { setEditingSkillId(null); setSkillForm(emptySkill); setSubskillText(''); setShowSkillForm(true) }}
-                className="btn-primary text-xs"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-bold bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-xs"
               >
                 <Plus className="w-4 h-4" /> Add Skill
               </button>
@@ -137,18 +137,18 @@ const Skills = () => {
       
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-black" />
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-border border-t-orange-600" />
         </div>
       ) : categories.length === 0 ? (
         <div className="empty-state py-16">
-          <div className="empty-state-icon bg-gray-100 text-gray-600">
-            <Zap className="w-6 h-6" />
+          <div className="empty-state-icon bg-secondary text-foreground">
+            <Zap className="w-6 h-6 text-orange-500" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900 mt-4">Start your learning map</h3>
-          <p className="text-sm text-gray-600 mt-2 max-w-sm mb-6">
-            Create categories like "Frontend", "Backend", or "Soft Skills" to organize what you want to learn.
+          <h3 className="text-lg font-bold text-foreground mt-4">Start your learning map</h3>
+          <p className="text-sm text-muted-foreground mt-2 max-w-sm mb-6">
+            Create categories like "Frontend", "Backend", or "System Design" to organize what you want to master.
           </p>
-          <button onClick={() => setShowCategoryForm(true)} className="btn-primary">
+          <button onClick={() => setShowCategoryForm(true)} className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs font-bold bg-orange-600 hover:bg-orange-700 text-white transition-all">
             Create First Category
           </button>
         </div>
@@ -159,13 +159,13 @@ const Skills = () => {
               {/* Category Header */}
               <div className="flex items-center justify-between mb-5 group">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                     {cat.name}
-                    <span className="text-xs font-semibold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-semibold bg-secondary border border-border text-foreground px-2.5 py-0.5 rounded-full">
                       {cat.items.length}
                     </span>
                   </h2>
-                  {cat.description && <p className="text-sm text-gray-600 mt-1">{cat.description}</p>}
+                  {cat.description && <p className="text-sm text-muted-foreground mt-1">{cat.description}</p>}
                 </div>
                 <button 
                   onClick={() => handleEditCategory(cat)}
@@ -177,11 +177,11 @@ const Skills = () => {
 
               {/* Grid of skills */}
               {cat.items.length === 0 ? (
-                <div className="rounded-xl border-2 border-dashed border-gray-200 p-8 text-center bg-gray-50">
-                  <p className="text-sm text-gray-500">No skills in this category yet.</p>
+                <div className="rounded-xl border-2 border-dashed border-border p-8 text-center bg-secondary/40">
+                  <p className="text-sm text-muted-foreground">No skills in this category yet.</p>
                   <button 
                     onClick={() => { setEditingSkillId(null); setSkillForm({ ...emptySkill, categoryId: cat.id }); setSubskillText(''); setShowSkillForm(true) }}
-                    className="mt-3 text-sm font-semibold text-black hover:text-gray-700"
+                    className="mt-3 text-sm font-semibold text-black hover:text-foreground/90"
                   >
                     + Add a skill
                   </button>
@@ -296,7 +296,7 @@ const Skills = () => {
           <div>
             <label className="label-base">Key Topics / Modules</label>
             <textarea className="input-base resize-none" rows={3} value={subskillText} onChange={e => setSubskillText(e.target.value)} placeholder="Hooks&#10;Context API&#10;Redux" />
-            <p className="text-[10px] text-gray-500 mt-1">One item per line</p>
+            <p className="text-[10px] text-muted-foreground mt-1">One item per line</p>
           </div>
         </SlideOver>
       </AnimatePresence>

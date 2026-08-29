@@ -200,77 +200,175 @@ const Dashboard = () => {
 
   return (
     <AppShell>
-      <div className="page-container animate-fade-slide-in">
-        <PageHeader 
-          title={<>{greeting}, <span className="capitalize">{userName}</span></>}
-          subtitle={metrics.inProgressSkills > 0
-            ? `You've mastered ${metrics.completedSkills} skills. Keep going!`
-            : 'Ready to level up your career? Start by adding a skill.'}
-          actions={
-            <>
-              {overdueTasks.length > 0 && (
-                <button
-                  onClick={() => navigate('/tasks')}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-[18px] text-xs font-medium
-                    bg-white text-black border border-gray-300 hover:bg-gray-50 transition-colors"
-                >
-                  <AlertCircle className="w-3.5 h-3.5" />
-                  {overdueTasks.length} overdue
-                </button>
-              )}
-              <button
-                onClick={() => navigate('/learning-path')}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[18px] text-xs font-semibold
-                  bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 transition-colors shadow-sm"
-              >
-                <Compass className="w-3.5 h-3.5" />
-                AI Learning Path
-              </button>
-              <button onClick={() => navigate('/skill-gap')} className="btn-primary gap-1.5">
-                <Zap className="w-4 h-4" />
-                Analyze Skill Gap
-              </button>
-            </>
-          }
-        />
+      <div className="page-container animate-fade-slide-in space-y-8">
+        {/* ── Layrs Signature Hero Section ─────────────────────────────── */}
+        <section className="space-y-4 max-w-4xl pt-2 sm:pt-4">
+          <div className="layrs-hero-eyebrow">
+            <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+            <span>{greeting.toUpperCase()}</span>
+          </div>
 
-        {/* ── Stat Grid ──────────────────────────────────────────────────── */}
-        {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-32" />)}
+          <h1 className="layrs-hero-title">
+            What do you want to <em>learn</em> today?
+          </h1>
+
+          {/* Layrs Interactive Command Prompt Box (.pcx) */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              if (newTaskTitle.trim()) {
+                navigate('/learning-path')
+              }
+            }}
+            className="pcx-card mt-5"
+          >
+            <textarea
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+              placeholder="Ask anything — system design, distributed databases, low-level design, or add a task..."
+              className="pcx-textarea"
+              rows={2}
+            />
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border/60">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => navigate('/learning-path')}
+                  className="pcx-pill active"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>Auto</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/skills')}
+                  className="pcx-pill"
+                >
+                  <Layers3 className="w-3.5 h-3.5" />
+                  <span>Skills</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/learning-path')}
+                  className="pcx-pill"
+                >
+                  <Compass className="w-3.5 h-3.5" />
+                  <span>Roadmap</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/tasks')}
+                  className="pcx-pill"
+                >
+                  <ListTodo className="w-3.5 h-3.5" />
+                  <span>Tasks</span>
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => navigate('/learning-path')}
+                  className="p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  title="Voice input"
+                >
+                  <Sparkles className="w-4 h-4 text-orange-500" />
+                </button>
+                <button
+                  type="submit"
+                  disabled={!newTaskTitle.trim()}
+                  className="p-2.5 rounded-2xl bg-orange-600 hover:bg-orange-700 disabled:opacity-40 text-white transition-all shadow-xs"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </form>
+
+          {/* Layrs Suggestion Chips with Colored Dots */}
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            <button
+              onClick={() => setNewTaskTitle('Design Twitter / X at scale with timeline caching')}
+              className="home-chip"
+            >
+              <span className="dot" style={{ backgroundColor: 'var(--cyan, #06b6d4)' }} />
+              <span>Design Twitter at scale</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground ml-1" />
+            </button>
+            <button
+              onClick={() => setNewTaskTitle('How does Google Spanner maintain external consistency with TrueTime?')}
+              className="home-chip"
+            >
+              <span className="dot" style={{ backgroundColor: 'var(--violet, #8b5cf6)' }} />
+              <span>How does Spanner stay consistent?</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground ml-1" />
+            </button>
+            <button
+              onClick={() => setNewTaskTitle('Low Level Design: implement a token bucket rate limiter')}
+              className="home-chip"
+            >
+              <span className="dot" style={{ backgroundColor: 'var(--blue, #3b82f6)' }} />
+              <span>LLD: design a rate limiter</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground ml-1" />
+            </button>
+            <button
+              onClick={() => setNewTaskTitle('Walk me through Raft distributed consensus protocol')}
+              className="home-chip"
+            >
+              <span className="dot" style={{ backgroundColor: 'var(--ok, #10b981)' }} />
+              <span>Walk me through Raft</span>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground ml-1" />
+            </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard
-              icon={Layers3}
-              label="Total Skills"
-              value={skills.length}
-              sub={`${metrics.completedSkills} completed`}
-              onClick={() => navigate('/skills')}
-            />
-            <StatCard
-              icon={Target}
-              label="Overall Progress"
-              value={`${metrics.overallProgress}%`}
-              sub={`${metrics.inProgressSkills} in progress`}
-              onClick={() => navigate('/skills')}
-            />
-            <StatCard
-              icon={ListTodo}
-              label="Tasks Today"
-              value={metrics.todayTasks.length}
-              sub={`${metrics.completedTasks} done total`}
-              onClick={() => navigate('/tasks')}
-            />
-            <StatCard
-              icon={Flame}
-              label="Active Streak"
-              value="N/A"
-              sub="Daily streak coming soon"
-              onClick={() => navigate('/analytics')}
-            />
+        </section>
+
+        {/* ── Layrs Cycle Stats Bar (.pk-cycle) ─────────────────────────── */}
+        <div className="pk-cycle">
+          <div className="pk-stat pr-4 sm:pr-6 sm:border-r border-border">
+            <div className="flex items-center gap-2">
+              <span className="pk-stat-label">YOUR CAREER ROADMAP</span>
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400">
+                ACTIVE
+              </span>
+            </div>
+            <h3 className="text-sm sm:text-base font-bold text-foreground font-serif italic mt-0.5">
+              {roadmap?.title || 'Full Stack & AI Engineer'}
+            </h3>
           </div>
-        )}
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">IN PROGRESS</span>
+            <div className="pk-stat-val">
+              <span>{metrics.inProgressSkills}</span>
+              <span className="pk-stat-unit">skills</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">TODAY'S TASKS</span>
+            <div className="pk-stat-val">
+              <span>{metrics.todayTasks.length}</span>
+              <span className="pk-stat-unit">active</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">MASTERED</span>
+            <div className="pk-stat-val text-emerald-600 dark:text-emerald-400">
+              <span>{metrics.completedSkills}</span>
+              <span className="pk-stat-unit">skills</span>
+            </div>
+          </div>
+
+          <div className="pk-stat">
+            <span className="pk-stat-label">READINESS</span>
+            <div className="pk-stat-val text-orange-600 dark:text-orange-400">
+              <span>{metrics.overallProgress}%</span>
+              <span className="pk-stat-unit">score</span>
+            </div>
+          </div>
+        </div>
 
         {/* ── Main Grid ──────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

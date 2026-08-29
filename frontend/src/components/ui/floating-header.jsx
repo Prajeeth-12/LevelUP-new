@@ -34,16 +34,16 @@ export function FloatingHeader({ onLogout, userName }) {
 				<div className="flex items-center gap-2">
 					<button
 						onClick={() => navigate('/skill-gap')}
-						className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-400 hover:bg-violet-200 dark:hover:bg-violet-900/50 transition-colors"
+						className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 hover:bg-orange-500/20 transition-colors"
 					>
-						<Zap className="w-3 h-3" />
+						<Zap className="w-3 h-3 fill-current" />
 						Skill Gap
 					</button>
-					{userName && <span className="text-xs font-semibold text-gray-900 dark:text-foreground hidden sm:inline-block mr-2">{userName}</span>}
+					{userName && <span className="text-xs font-semibold text-foreground hidden sm:inline-block mr-2">{userName}</span>}
 
 					{/* Profile Circle Avatar */}
 					<div
-						className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs cursor-pointer hover:opacity-90 transition-opacity"
+						className="h-8 w-8 rounded-full bg-orange-600 flex items-center justify-center text-white font-bold text-xs cursor-pointer hover:opacity-90 transition-opacity shadow-xs"
 						onClick={() => navigate('/profile')}
 					>
 						{userInitial}

@@ -12,13 +12,16 @@ except Exception:  # pragma: no cover - optional dependency path
 
 def _client():
     # 1. MiniMax / OpenAI-compatible configuration
-    openai_api_key = os.getenv('OPENAI_API_KEY') or os.getenv('MINIMAX_API_KEY')
-    base_url = os.getenv('OPENAI_BASE_URL') or os.getenv('MINIMAX_BASE_URL') or 'https://api.gmi-serving.com/v1'
-    model = os.getenv('OPENAI_MODEL') or os.getenv('MINIMAX_MODEL') or 'MiniMaxAI/MiniMax-M3'
+    api_key = os.getenv('MINIMAX_API_KEY') or os.getenv('OPENAI_API_KEY')
+    if api_key in ('your-api-key-here', 'mock-openai-key', ''):
+        api_key = os.getenv('MINIMAX_API_KEY')
 
-    if openai_api_key and AsyncOpenAI is not None:
+    base_url = os.getenv('MINIMAX_BASE_URL') or os.getenv('OPENAI_BASE_URL') or 'https://api.gmi-serving.com/v1'
+    model = os.getenv('MINIMAX_MODEL') or os.getenv('OPENAI_MODEL') or 'MiniMaxAI/MiniMax-M3'
+
+    if api_key and AsyncOpenAI is not None:
         return {
-            'client': AsyncOpenAI(api_key=openai_api_key, base_url=base_url),
+            'client': AsyncOpenAI(api_key=api_key, base_url=base_url),
             'model': model,
         }
 

@@ -51,18 +51,18 @@ const DecisionInsightsModal = ({ isOpen, onClose, careerDecision }) => {
                         <div className="sticky top-0 z-10 bg-white/95 dark:bg-card/95 backdrop-blur-lg border-b border-gray-200 dark:border-border p-6">
                             <div className="flex items-start justify-between">
                                 <div>
-                                    <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-serif italic">
                                         Career Decision Insights
                                     </h2>
-                                    <p className="text-gray-600 dark:text-gray-400 mt-2">
-                                        Understanding why <span className="font-semibold text-gray-900 dark:text-foreground">{career}</span> is recommended for you
+                                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                                        Understanding why <span className="font-semibold text-foreground">{career}</span> is recommended for you
                                     </p>
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+                                    className="p-2 hover:bg-secondary rounded-xl transition-colors"
                                 >
-                                    <X className="w-6 h-6 text-gray-500" />
+                                    <X className="w-5 h-5 text-muted-foreground" />
                                 </button>
                             </div>
                         </div>
@@ -70,17 +70,17 @@ const DecisionInsightsModal = ({ isOpen, onClose, careerDecision }) => {
                         {/* Content */}
                         <div className="p-6 space-y-6">
                             {/* AI Reasoning */}
-                            <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/10 dark:to-purple-500/10 rounded-xl border border-indigo-100 dark:border-border">
+                            <div className="p-6 bg-orange-500/5 dark:bg-orange-500/10 rounded-2xl border border-orange-500/20">
                                 <div className="flex items-start gap-3 mb-3">
-                                    <div className="p-2 bg-indigo-100 dark:bg-indigo-500/20 rounded-lg">
-                                        <Lightbulb className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                                    <div className="p-2 bg-orange-500/20 rounded-xl">
+                                        <Lightbulb className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-lg text-gray-900 dark:text-foreground">AI Analysis</h3>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Confidence: {confidence}%</p>
+                                        <h3 className="font-bold text-base text-foreground font-serif italic">AI Analysis</h3>
+                                        <p className="text-xs text-muted-foreground font-mono">Confidence: {confidence}%</p>
                                     </div>
                                 </div>
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed">
                                     {reasoning}
                                 </p>
                             </div>
@@ -176,14 +176,14 @@ const DecisionInsightsModal = ({ isOpen, onClose, careerDecision }) => {
                             )}
 
                             {/* Next Steps CTA */}
-                            <div className="p-6 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl text-white">
-                                <h3 className="font-bold text-lg mb-2">Ready to Start Your Journey?</h3>
-                                <p className="text-indigo-100 mb-4">
+                            <div className="p-6 bg-secondary/50 border border-border rounded-2xl">
+                                <h3 className="font-bold text-base text-foreground mb-1 font-serif italic">Ready to Start Your Journey?</h3>
+                                <p className="text-xs text-muted-foreground mb-4">
                                     Your personalized learning roadmap is designed to help you achieve your career goals efficiently.
                                 </p>
                                 <button
                                     onClick={onClose}
-                                    className="px-6 py-2 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-colors"
+                                    className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-2xl shadow-xs transition-all"
                                 >
                                     View My Roadmap
                                 </button>

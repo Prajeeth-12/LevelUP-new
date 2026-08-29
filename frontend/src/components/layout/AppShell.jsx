@@ -14,13 +14,14 @@ import { AIChatDrawer } from '../chat/AIChatDrawer'
 
 // ─── Navigation config ──────────────────────────────────────────────────────
 const NAV_MAIN = [
-  { to: '/dashboard',     label: 'Dashboard',        icon: LayoutDashboard },
-  { to: '/learning-path', label: 'AI Learning Path', icon: Compass },
-  { to: '/skills',        label: 'Skills',           icon: Layers3 },
-  { to: '/portfolio',     label: 'Portfolio',        icon: Award },
-  { to: '/tasks',         label: 'Tasks',            icon: ListTodo },
-  { to: '/goals',         label: 'Goals',            icon: Lightbulb },
-  { to: '/analytics',     label: 'Analytics',        icon: BarChart3 },
+  { to: '/dashboard',     label: 'Home',               icon: LayoutDashboard },
+  { to: '/skill-gap',     label: 'Skill Gap Analyzer', icon: Zap },
+  { to: '/learning-path', label: 'AI Learning Path',   icon: Compass },
+  { to: '/tasks',         label: 'Tasks',              icon: ListTodo },
+  { to: '/skills',        label: 'Skills',             icon: Layers3 },
+  { to: '/goals',         label: 'Goals',              icon: Lightbulb },
+  { to: '/portfolio',     label: 'Portfolio',          icon: Award },
+  { to: '/analytics',     label: 'Analytics',          icon: BarChart3 },
 ]
 
 const NAV_BOTTOM = [
@@ -31,10 +32,10 @@ const NAV_BOTTOM = [
 // ─── Mobile Bottom Bar (shown on <768px) ────────────────────────────────────
 const MOBILE_TABS = [
   { to: '/dashboard', label: 'Home',      icon: LayoutDashboard },
+  { to: '/skill-gap', label: 'Skill Gap', icon: Zap },
+  { to: '/tasks',     label: 'Tasks',     icon: ListTodo },
   { to: '/skills',    label: 'Skills',    icon: Layers3 },
   { to: '/portfolio', label: 'Portfolio', icon: Award },
-  { to: '/tasks',     label: 'Tasks',     icon: ListTodo },
-  { to: '/goals',     label: 'Goals',     icon: Lightbulb },
 ]
 
 // ─── Sidebar NavItem ─────────────────────────────────────────────────────────
@@ -45,11 +46,15 @@ const SideNavItem = ({ item, collapsed }) => {
       to={item.to}
       title={collapsed ? item.label : undefined}
       className={({ isActive }) =>
-        `nav-item ${isActive ? 'active' : ''} ${collapsed ? 'justify-center px-0' : ''}`
+        `flex items-center gap-3 px-3 py-2 rounded-2xl font-medium text-xs sm:text-sm transition-all ${
+          isActive
+            ? 'bg-card text-foreground font-semibold border border-border shadow-2xs'
+            : 'text-muted-foreground hover:text-foreground hover:bg-secondary/70'
+        } ${collapsed ? 'justify-center px-0 py-2.5' : ''}`
       }
     >
-      <Icon className="shrink-0" style={{ width: 18, height: 18 }} />
-      {!collapsed && <span>{item.label}</span>}
+      <Icon className="shrink-0" style={{ width: 17, height: 17 }} />
+      {!collapsed && <span className="tracking-tight">{item.label}</span>}
     </NavLink>
   )
 }
@@ -79,7 +84,7 @@ export const AppShell = ({ children }) => {
   }, [])
 
   const userEmail = firebaseAuth.currentUser?.email || ''
-  const userName  = firebaseAuth.currentUser?.displayName || userEmail.split('@')[0] || 'User'
+  const userName  = firebaseAuth.currentUser?.displayName || userEmail.split('@')[0] || 'Engineer'
   const userInit  = userName.charAt(0).toUpperCase()
 
   // Close mobile drawer on route change
@@ -97,66 +102,70 @@ export const AppShell = ({ children }) => {
     navigate('/login')
   }
 
-  const pageTitle = (() => {
+  const pagePathName = (() => {
     const map = {
-      '/dashboard': 'Dashboard',
-      '/skills':    'Skills',
-      '/portfolio': 'Portfolio',
-      '/tasks':     'Tasks',
-      '/goals':     'Goals',
-      '/analytics': 'Analytics',
-      '/settings':  'Settings',
-      '/profile':   'Profile',
-      '/skill-gap':     'Skill Gap Analyzer',
-      '/learning-path': 'AI Learning Path Recommender',
+      '/dashboard': 'home',
+      '/skills':    'skills',
+      '/portfolio': 'portfolio',
+      '/tasks':     'tasks',
+      '/goals':     'goals',
+      '/analytics': 'analytics',
+      '/settings':  'settings',
+      '/profile':   'profile',
+      '/skill-gap':     'skill-gap',
+      '/learning-path': 'learning-path',
     }
-    return map[location.pathname] || 'LevelUP'
+    return map[location.pathname] || location.pathname.replace('/', '') || 'home'
   })()
 
   return (
-    <div className="app-shell bg-background">
+    <div className="app-shell bg-background min-h-screen">
 
       {/* ── Mobile Overlay ──────────────────────────────────────────────── */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-30 bg-black/30 backdrop-blur-xs md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* ── Sidebar ─────────────────────────────────────────────────────── */}
+      {/* ── LevelUP Rail Sidebar ────────────────────────────────────────── */}
       <aside
         className={`app-sidebar
           ${collapsed ? 'collapsed' : ''}
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          transition-all duration-300 ease-in-out
         `}
       >
-        {/* Sidebar header */}
-        <div className={`flex items-center gap-3 px-4 border-b border-border/5 shrink-0
-          ${collapsed ? 'justify-center py-4' : 'justify-between py-4'}`}
+
+        {/* Rail Header */}
+        <div className={`flex items-center px-4 border-b border-border/80 shrink-0
+          ${collapsed ? 'justify-center py-3' : 'justify-between py-3'}`}
           style={{ height: 'var(--topbar-h)' }}
         >
           {!collapsed && (
             <button
               onClick={() => navigate('/dashboard')}
-              className="flex items-center gap-2.5 hover:opacity-80 transition-opacity"
+              className="flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
-              <div className="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center shadow-lg border border-black">
-                <Zap className="w-5 h-5 fill-white stroke-white" />
-              </div>
+              <img src="/logo.png" alt="LevelUP" className="h-6 w-auto object-contain dark:hidden" />
+              <img src="/logo-white.png" alt="LevelUP" className="h-6 w-auto object-contain hidden dark:block" />
             </button>
           )}
+
           {collapsed && (
-            <div className="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center cursor-pointer border border-black shadow-lg"
-              onClick={() => navigate('/dashboard')}>
-              <Zap className="w-5 h-5 fill-white stroke-white" />
+            <div
+              className="h-8 w-8 rounded-xl flex items-center justify-center cursor-pointer shadow-xs p-1 hover:bg-secondary transition-colors"
+              onClick={() => navigate('/dashboard')}
+              title="LevelUP"
+            >
+              <img src="/favicon.svg" alt="LevelUP" className="h-full w-full object-contain" />
             </div>
           )}
+
           {!collapsed && (
             <button
               onClick={() => setCollapsed(true)}
-              className="btn-icon hidden lg:flex"
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors hidden lg:flex"
               title="Collapse sidebar"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -164,30 +173,39 @@ export const AppShell = ({ children }) => {
           )}
         </div>
 
-        {/* Sidebar nav */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-          {/* Skill Gap shortcut */}
-          <NavLink
-            to="/skill-gap"
-            title={collapsed ? 'Skill Gap Analyzer' : undefined}
-            className={({ isActive }) =>
-              `nav-item mb-3 ${isActive ? 'active' : ''}
-               ${collapsed ? 'justify-center px-0' : ''}`
-            }
-          >
-            <Zap className="shrink-0" style={{ width: 16, height: 16 }} />
-            {!collapsed && <span className="font-medium text-xs">AI Skill Gap</span>}
-          </NavLink>
+        {/* Action Button: New Session / New Task */}
+        {!collapsed && (
+          <div className="px-3 pt-3">
+            <button
+              onClick={() => navigate('/tasks')}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl bg-secondary/80 hover:bg-secondary text-foreground text-xs font-bold border border-border transition-all shadow-2xs"
+            >
+              <span className="w-4 h-4 rounded-full bg-orange-500/20 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-xs">+</span>
+              <span>New Task / Plan</span>
+            </button>
+          </div>
+        )}
 
-          <div className="h-px bg-border mb-3" />
-
+        {/* Rail Navigation Links */}
+        <nav className="flex-1 overflow-y-auto py-3 px-3 space-y-1">
           {NAV_MAIN.map((item) => (
             <SideNavItem key={item.to} item={item} collapsed={collapsed} />
           ))}
         </nav>
 
-        {/* Sidebar footer */}
-        <div className="px-3 pb-4 pt-2 border-t border-border space-y-1">
+        {/* Rail Footer */}
+        <div className="px-3 pb-3 pt-2 border-t border-border/80 space-y-1.5">
+          {/* Ask AI prompt chip in sidebar */}
+          {!collapsed && (
+            <button
+              onClick={() => setChatOpen(true)}
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-2xl text-xs font-semibold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 hover:bg-orange-500/20 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Ask AI Tutor</span>
+            </button>
+          )}
+
           {NAV_BOTTOM.map((item) => (
             <SideNavItem key={item.to} item={item} collapsed={collapsed} />
           ))}
@@ -195,26 +213,33 @@ export const AppShell = ({ children }) => {
           <button
             onClick={handleLogout}
             title={collapsed ? 'Sign out' : undefined}
-            className={`nav-item w-full text-left text-destructive
-              hover:bg-destructive/10 hover:text-destructive
-              ${collapsed ? 'justify-center px-0' : ''}`}
+            className={`flex items-center gap-3 px-3 py-2 rounded-2xl text-xs font-medium text-destructive hover:bg-destructive/10 w-full text-left transition-colors ${
+              collapsed ? 'justify-center px-0' : ''
+            }`}
           >
-            <LogOut style={{ width: 18, height: 18 }} className="shrink-0" />
+            <LogOut style={{ width: 16, height: 16 }} className="shrink-0" />
             {!collapsed && <span>Sign out</span>}
           </button>
         </div>
       </aside>
 
-      {/* ── Main content ─────────────────────────────────────────────────── */}
-      <div className={`flex flex-col flex-1 min-h-screen transition-all duration-300
-        ${collapsed ? 'md:ml-16' : 'md:ml-60'}`}
+      {/* ── Main Layout Column ───────────────────────────────────────────── */}
+      <div
+        className="flex flex-col flex-1 min-h-screen"
+        style={{
+          marginLeft: collapsed
+            ? 'var(--sidebar-collapsed-w)'
+            : 'var(--sidebar-w)',
+          transition: 'margin-left 0.2s ease',
+        }}
       >
-        {/* Top bar */}
-        <header className={`app-topbar ${scrolled ? 'shadow-sm' : ''}`}>
+
+        {/* Topbar with Layrs Breadcrumb */}
+        <header className={`sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 h-[3.75rem] bg-background/90 backdrop-blur-md border-b border-border ${scrolled ? 'shadow-2xs' : ''}`}>
           {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(true)}
-            className="btn-icon md:hidden"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground md:hidden"
             aria-label="Open navigation"
           >
             <Menu className="w-5 h-5" />
@@ -223,80 +248,64 @@ export const AppShell = ({ children }) => {
           {/* Expand sidebar (desktop, when collapsed) */}
           {collapsed && (
             <button
-            onClick={() => setCollapsed(false)}
-            className="btn-icon hidden md:flex"
-            title="Expand sidebar"
-            aria-label="Expand sidebar"
-          >
-              <Menu className="w-5 h-5" />
+              onClick={() => setCollapsed(false)}
+              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary hidden md:flex"
+              title="Expand sidebar"
+            >
+              <Menu className="w-4 h-4" />
             </button>
           )}
 
-          {/* Page title breadcrumb */}
-          <div className="flex-1 min-w-0">
-            <h1 className="text-sm font-medium text-foreground truncate tracking-[-0.01em]">
-              {pageTitle}
-            </h1>
+          {/* Layrs Breadcrumbs */}
+          <div className="flex-1 min-w-0 flex items-center gap-2 text-xs sm:text-sm font-medium">
+            <span className="text-muted-foreground/60 cursor-pointer hover:text-foreground" onClick={() => navigate('/dashboard')}>
+              home
+            </span>
+            {pagePathName !== 'home' && (
+              <>
+                <span className="text-muted-foreground/40 font-mono">/</span>
+                <span className="font-bold text-foreground tracking-tight">
+                  {pagePathName}
+                </span>
+              </>
+            )}
           </div>
 
-          {/* Right controls */}
+          {/* Right Controls */}
           <div className="flex items-center gap-2">
             {/* Ask AI Assistant quick button */}
             <button
               onClick={() => setChatOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-sm transition-all border border-violet-400/30"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-orange-600 hover:bg-orange-700 text-white shadow-2xs transition-all"
               title="Open AI Assistant (Ctrl + /)"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Ask AI</span>
             </button>
 
-            {/* AI Learning Path quick button */}
-            <button
-              onClick={() => navigate('/learning-path')}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[16px]
-                text-xs font-semibold bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 transition-colors"
-            >
-              <Compass className="w-3.5 h-3.5" />
-              <span>AI Learning Path</span>
-            </button>
-
-            {/* Skill Gap quick button */}
-            <button
-              onClick={() => navigate('/skill-gap')}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[16px]
-                text-xs font-medium bg-card text-foreground border border-border hover:bg-accent transition-colors"
-            >
-              <Zap className="w-3 h-3" />
-              Skill Gap
-            </button>
-
+            {/* Theme Toggle (Layrs Light / Dark) */}
             <button
               onClick={toggleTheme}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[16px] text-xs font-medium text-muted-foreground bg-accent/50 border border-border hover:bg-accent transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-muted-foreground bg-secondary/80 border border-border hover:text-foreground hover:bg-secondary transition-colors"
               title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             >
-              <SunMoon className="w-3 h-3" />
-              {theme === 'light' ? 'Light mode' : 'Blue mode'}
+              <SunMoon className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{theme === 'light' ? 'Light' : 'Dark'}</span>
             </button>
 
             {/* Avatar */}
             <button
               onClick={() => navigate('/profile')}
-              className="w-8 h-8 rounded-full bg-card text-foreground border border-border
-                flex items-center justify-center font-semibold text-xs
-                hover:bg-accent transition-colors shrink-0"
+              className="w-8 h-8 rounded-full bg-secondary border border-border text-foreground font-bold text-xs flex items-center justify-center hover:border-orange-500/50 transition-colors"
               title={userName}
-              aria-label="Open profile"
             >
               {userInit}
             </button>
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 pb-20 md:pb-6">
+        {/* Page Content Container */}
+        <main className="flex-1 pb-20 md:pb-8">
           {children}
         </main>
       </div>

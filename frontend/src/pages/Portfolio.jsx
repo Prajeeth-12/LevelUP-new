@@ -145,109 +145,73 @@ const Portfolio = () => {
 
   return (
     <AppShell>
-      <div className="page-container animate-fade-slide-in">
-        <div className="flex items-center justify-between mb-8">
+      <div className="page-container space-y-8 animate-fade-slide-in">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <PageHeader
-              title="Portfolio"
-              subtitle="Showcase your skills, track certifications, and monitor your professional growth."
+              title="Career Portfolio"
+              subtitle="Showcase your verified skills, track certifications, and monitor your engineering readiness."
             />
           </div>
           <div className="flex gap-2">
             <div className="relative group">
-              <button className="btn-primary text-xs flex items-center gap-2">
+              <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-bold text-xs bg-orange-600 hover:bg-orange-700 text-white transition-all shadow-xs">
                 <Download className="w-4 h-4" />
-                Export
+                <span>Export Portfolio</span>
               </button>
-              <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
+              <div className="absolute right-0 mt-2 w-44 bg-card border border-border rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20 p-1.5 space-y-1">
                 <button
                   onClick={handleExportJSON}
-                  className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2 border-b border-gray-200"
+                  className="w-full text-left px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary rounded-xl flex items-center gap-2"
                 >
-                  <FileJson className="w-4 h-4" />
+                  <FileJson className="w-4 h-4 text-orange-500" />
                   Export as JSON
                 </button>
                 <button
                   onClick={handleExportPDF}
-                  className="w-full text-left px-4 py-2 text-xs text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary rounded-xl flex items-center gap-2"
                 >
-                  <FileText className="w-4 h-4" />
-                  Export as PDF
+                  <FileText className="w-4 h-4 text-amber-500" />
+                  Export as HTML/PDF
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Portfolio Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">Total Skills</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.totalSkills}</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Zap className="w-6 h-6 text-gray-600" />
-              </div>
+        {/* Portfolio Stats Bar (.pk-cycle) */}
+        <div className="pk-cycle">
+          <div className="pk-stat pr-4 sm:pr-6 sm:border-r border-border">
+            <span className="pk-stat-label">TOTAL SKILLS</span>
+            <div className="pk-stat-val">
+              <span>{stats.totalSkills}</span>
+              <span className="pk-stat-unit">tracked</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">Completed</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.completedSkills}</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Award className="w-6 h-6 text-gray-600" />
-              </div>
+          <div className="pk-stat">
+            <span className="pk-stat-label">COMPLETED</span>
+            <div className="pk-stat-val text-emerald-600 dark:text-emerald-400">
+              <span>{stats.completedSkills}</span>
+              <span className="pk-stat-unit">mastered</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">In Progress</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.inProgressSkills}</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-gray-600" />
-              </div>
+          <div className="pk-stat">
+            <span className="pk-stat-label">IN PROGRESS</span>
+            <div className="pk-stat-val text-blue-600 dark:text-blue-400">
+              <span>{stats.inProgressSkills}</span>
+              <span className="pk-stat-unit">active</span>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="stat-card"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium text-gray-500">Avg Progress</p>
-                <p className="text-2xl font-bold text-black mt-1">{stats.avgProgress}%</p>
-              </div>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-gray-600" />
-              </div>
+          <div className="pk-stat">
+            <span className="pk-stat-label">AVERAGE MASTERY</span>
+            <div className="pk-stat-val text-orange-600 dark:text-orange-400">
+              <span>{stats.avgProgress}%</span>
+              <span className="pk-stat-unit">score</span>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Category Filter */}
@@ -257,7 +221,7 @@ const Portfolio = () => {
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
               filterCategory === 'all'
                 ? 'bg-black text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-secondary text-foreground/90 hover:bg-gray-200'
             }`}
           >
             All Skills
@@ -269,7 +233,7 @@ const Portfolio = () => {
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 filterCategory === cat.id
                   ? 'bg-black text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-secondary text-foreground/90 hover:bg-gray-200'
               }`}
             >
               {cat.name}
@@ -281,11 +245,11 @@ const Portfolio = () => {
         <div className="space-y-8">
           {filteredData.length === 0 ? (
             <div className="empty-state py-16">
-              <div className="empty-state-icon bg-gray-100 text-gray-400">
+              <div className="empty-state-icon bg-secondary text-muted-foreground">
                 <Award className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mt-4">No skills yet</h3>
-              <p className="text-sm text-gray-500 mt-2 max-w-sm mb-6">
+              <h3 className="text-lg font-bold text-foreground mt-4">No skills yet</h3>
+              <p className="text-sm text-muted-foreground mt-2 max-w-sm mb-6">
                 Start building your portfolio by adding skills in the Skills tab or through the AI Skill Gap Analyzer.
               </p>
             </div>
@@ -300,7 +264,7 @@ const Portfolio = () => {
                 <div className="mb-6">
                   <h2 className="text-lg font-bold text-black mb-2">{group.category.name}</h2>
                   {group.category.description && (
-                    <p className="text-sm text-gray-600 mb-4">{group.category.description}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{group.category.description}</p>
                   )}
 
                   {/* Skills in this category */}
@@ -308,7 +272,7 @@ const Portfolio = () => {
                     {group.skills.map((skill, skillIdx) => (
                       <motion.div
                         key={skill.id}
-                        className="bg-white border border-gray-200 rounded-[16px] p-4 hover:shadow-md transition-shadow"
+                        className="bg-white border border-border rounded-[16px] p-4 hover:shadow-md transition-shadow"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: skillIdx * 0.05 }}
@@ -316,7 +280,7 @@ const Portfolio = () => {
                         <div className="flex items-start justify-between mb-3">
                           <div>
                             <h3 className="font-bold text-black text-sm">{skill.name}</h3>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-muted-foreground mt-1">
                               {skill.status.replace('_', ' ')}
                             </p>
                           </div>
@@ -332,7 +296,7 @@ const Portfolio = () => {
                         </div>
 
                         {skill.description && (
-                          <p className="text-xs text-gray-600 mb-3 line-clamp-2">
+                          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
                             {skill.description}
                           </p>
                         )}
@@ -340,7 +304,7 @@ const Portfolio = () => {
                         {/* Progress bar */}
                         <div className="mb-3">
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-medium text-gray-600">Progress</span>
+                            <span className="text-xs font-medium text-muted-foreground">Progress</span>
                             <span className="text-xs font-bold text-black">{skill.progress || 0}%</span>
                           </div>
                           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -353,7 +317,7 @@ const Portfolio = () => {
 
                         {/* Subskills count */}
                         {skill.subskills && skill.subskills.length > 0 && (
-                          <div className="text-xs text-gray-500">
+                          <div className="text-xs text-muted-foreground">
                             {skill.subskills.filter(s => s.done).length} / {skill.subskills.length} subskills completed
                           </div>
                         )}
