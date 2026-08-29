@@ -1,7 +1,10 @@
 ﻿\documentclass[11pt,a4paper]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=0.9in,top=0.9in,bottom=0.9in]{geometry}
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{hyperref}
@@ -13,13 +16,17 @@
 \usepackage{titlesec}
 \usepackage{float}
 \usepackage{amssymb}
+\usepackage{listings}
 
-% Color Definitions (LevelUP Theme)
+% ─── COLOR PALETTE (LevelUP Theme) ──────────────────────────────────────────
 \definecolor{primaryOrange}{HTML}{EA580C}
-\definecolor{darkObsidian}{HTML}{0B0C11}
-\definecolor{lightCream}{HTML}{FBF7F4}
-\definecolor{borderGray}{HTML}{E2D9CF}
+\definecolor{darkObsidian}{HTML}{0F172A}
+\definecolor{cardDark}{HTML}{1E293B}
+\definecolor{lightCream}{HTML}{FAF6F0}
+\definecolor{borderGray}{HTML}{E2E8F0}
 \definecolor{accentEmerald}{HTML}{10B981}
+\definecolor{accentBlue}{HTML}{3B82F6}
+\definecolor{mutedText}{HTML}{64748B}
 
 \hypersetup{
     colorlinks=true,
@@ -28,289 +35,397 @@
     citecolor=primaryOrange
 }
 
-% Header and Footer Setup
-\setlength{\headheight}{15pt}
+% ─── HEADER & FOOTER SETUP ──────────────────────────────────────────────────
+\setlength{\headheight}{16pt}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\textbf{\textcolor{primaryOrange}{LevelUP}} \textbar\ Project Solution Report}
+\fancyhead[L]{\textbf{\textcolor{primaryOrange}{LevelUP}} \textbar\ Comprehensive Solution Report}
 \fancyhead[R]{\thepage}
-\fancyfoot[C]{\footnotesize LevelUP Engineering Platform \textbar\ Competition Submission}
-\renewcommand{\headrulewidth}{0.4pt}
-\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[C]{\footnotesize LevelUP Engineering Platform \textbar\ Competition Submission Report}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
 
-% Section Titles Styling
-\titleformat{\section}{\Large\bfseries\color{primaryOrange}}{\thesection}{1em}{}[\titlerule]
-\titleformat{\subsection}{\large\bfseries\color{darkObsidian}}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}{\normalsize\bfseries\color{primaryOrange}}{\thesubsubsection}{1em}{}
+% ─── SECTION STYLING ────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\Large\bfseries\color{primaryOrange}}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\large\bfseries\color{darkObsidian}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{primaryOrange}}{\thesubsubsection}{1em}{}
 
-\tcbset{colback=lightCream,colframe=primaryOrange,fonttitle=\bfseries,coltitle=white,arc=3mm,boxrule=1pt}
+% ─── TCOLORBOX THEMES ───────────────────────────────────────────────────────
+\tcbuselibrary{skins,breakable}
+\tcbset{
+  colback=lightCream,
+  colframe=primaryOrange,
+  fonttitle=\bfseries,
+  coltitle=white,
+  arc=2.5mm,
+  boxrule=0.8pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt
+}
+
+\newtcolorbox{screenshotbox}[1]{
+  colback=white,
+  colframe=borderGray,
+  boxrule=0.6pt,
+  arc=2mm,
+  left=2pt,right=2pt,top=2pt,bottom=2pt,
+  title=\textcolor{darkObsidian}{\small #1},
+  colbacktitle=lightCream,
+  fonttitle=\bfseries
+}
 
 \begin{document}
 
-% ─── TITLE PAGE ─────────────────────────────────────────────────────────────
+% ═════════════════════════════════════════════════════════════════════════════
+% TITLE PAGE
+% ═════════════════════════════════════════════════════════════════════════════
 \begin{titlepage}
     \centering
-    \vspace*{0.5cm}
+    \vspace*{0.6cm}
     
-    \includegraphics[width=0.45\textwidth]{figures/brand_logo.png}\\[1.2cm]
+    \includegraphics[width=0.48\textwidth]{figures/logo_background_removed.png}\\[1.0cm]
     
-    {\Huge \textbf{\textcolor{darkObsidian}{LevelUP: AI-Powered Career Operating System}}}\\[0.4cm]
-    {\Large \textbf{\textcolor{primaryOrange}{Autonomous Multimodal Agent for Engineering Skill Mastery \& Task Scheduling}}}\\[1.0cm]
+    {\Huge \textbf{\textcolor{darkObsidian}{LevelUP: AI-Powered Career Operating System}}}\\[0.35cm]
+    {\Large \textbf{\textcolor{primaryOrange}{Autonomous Multimodal Agent for Engineering Skill Mastery \& Task Scheduling}}}\\[0.9cm]
     
-    \begin{tcolorbox}[colback=primaryOrange!5,colframe=primaryOrange,title=\textbf{Competition Submission Project Report}]
+    \begin{tcolorbox}[colback=primaryOrange!6,colframe=primaryOrange,title=\textbf{Official Solution Documentation \& Engineering Report}]
     \centering
-    \textbf{Comprehensive Technical Architecture, Product Features \& Implementation Details}\\
-    \textit{Powered by MiniMax-M3 LLM, Voice-First Tutoring, Vision Inspector, and 1-Click Kanban Auto-Scheduling}
+    \textbf{A Complete Multimodal Platform for Proactive Skill Gap Analysis, Voice-First Tutoring, and 1-Click Kanban Auto-Scheduling}\\
+    \vspace{0.2cm}
+    \textit{Powered by MiniMax-M3 LLM \textbar\ FastAPI \textbar\ React 18 \textbar\ Firebase Firestore \textbar\ Web Speech API}
     \end{tcolorbox}
     
-    \vspace{1.2cm}
+    \vspace{1.0cm}
     
     \begin{minipage}{0.48\textwidth}
         \textbf{Primary GitHub Repository:}\\
-        \href{https://github.com/Prajeeth-12/LevelUP-new}{github.com/Prajeeth-12/LevelUP-new}\\[0.3cm]
+        \href{https://github.com/Prajeeth-12/LevelUP-new}{github.com/Prajeeth-12/LevelUP-new}\\[0.25cm]
         \textbf{Secondary Remote:}\\
-        \href{https://github.com/Prajeeth-12/LevelUP_HCL}{github.com/Prajeeth-12/LevelUP\_HCL}\\[0.3cm]
-        \textbf{Branch:}\\
+        \href{https://github.com/Prajeeth-12/LevelUP_HCL}{github.com/Prajeeth-12/LevelUP\_HCL}\\[0.25cm]
+        \textbf{Active Branch:}\\
         \texttt{new-theme-layrs}
     \end{minipage}
     \hfill
     \begin{minipage}{0.48\textwidth}
-        \textbf{Live Application URL:}\\
-        \href{https://level-up-new.vercel.app}{level-up-new.vercel.app}\\[0.3cm]
-        \textbf{Deployed Backend URL:}\\
-        \href{https://levelup-new-backend.onrender.com}{levelup-new-backend.onrender.com}\\[0.3cm]
+        \textbf{Live Application (Vercel):}\\
+        \href{https://level-up-new.vercel.app}{level-up-new.vercel.app}\\[0.25cm]
+        \textbf{Backend Service (Render):}\\
+        \href{https://levelup-new-backend.onrender.com}{levelup-new-backend.onrender.com}\\[0.25cm]
         \textbf{Submission Date:}\\
         August 29, 2026
     \end{minipage}
     
     \vfill
-    {\small \textbf{Tech Stack:} FastAPI \textbar\ React 18 \textbar\ Tailwind CSS \textbar\ MiniMax-M3 LLM \textbar\ Firebase Firestore \textbar\ Web Speech API}
+    \begin{tcolorbox}[colback=darkObsidian,colframe=darkObsidian,arc=1mm]
+    \centering
+    \textcolor{white}{\small \textbf{Key Highlights:} MiniMax-M3 Live LLM \textbar\ Bidirectional Voice Tutor \textbar\ 1-Click Kanban Auto-Scheduler \textbar\ Vision \& GitHub Inspector \textbar\ Human-in-the-Loop Safety}
+    \end{tcolorbox}
 \end{titlepage}
 
 \tableofcontents
 \newpage
 
-% ─── SECTION 1: EXECUTIVE SUMMARY ──────────────────────────────────────────
-\section{Executive Summary \& Value Proposition}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 1: EXECUTIVE SUMMARY
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Executive Summary \& Problem Statement}
 
-\textbf{LevelUP} is an AI-powered personal career operating system and autonomous learning assistant built to solve the modern software engineering skill gap. Instead of overwhelming learners with static course catalogs or rigid checklists, LevelUP pairs each user with a proactive, multimodal AI mentor that dynamically benchmarks their skills against real-world job descriptions, schedules balanced Kanban sprints, and engages in voice-first 1-on-1 tutoring.
+\textbf{LevelUP} is an AI-powered personal career operating system and autonomous learning companion engineered to bridge the modern software developer skill gap. Instead of overwhelming learners with static course catalogs or rigid checklists, LevelUP pairs each engineer with an active, multimodal AI mentor that dynamically benchmarks their skills against industry job descriptions, balances weekly study bandwidth, schedules Kanban sprints, and provides turn-by-turn conversational tutoring.
 
-\subsection{The Problem: The Developer Learning Dilemma}
-Modern software engineers face three critical bottlenecks:
-\begin{enumerate}
-    \item \textbf{Skill Overwhelm \& Fragmentation:} Roadmaps, tasks, interview prep, and code repositories live in disconnected silos.
-    \item \textbf{Burnout \& Unrealistic Sprints:} Backlogs accumulate hundreds of tasks without consideration of realistic weekly cognitive bandwidth.
-    \item \textbf{Passive Learning vs. Active Feedback:} Reading articles or watching videos produces an illusion of competence without hands-on architecture verification or conversational quizzing.
+\subsection{The Three Core Engineering Challenges}
+\begin{enumerate}[leftmargin=1.5em]
+    \item \textbf{Skill Overwhelm \& Fragmentation:} Learners juggle scattered resources---tutorials, GitHub repositories, Kanban boards, and interview questions---without a centralized intelligence layer connecting them.
+    \item \textbf{Cognitive Fatigue \& Backlog Clutter:} Traditional task boards accumulate hundreds of unprioritized items, leading to burnout rather than focused execution.
+    \item \textbf{Passive vs. Active Mastery:} Reading documentation without hands-on architecture verification or spoken interview practice creates an illusion of competence.
 \end{enumerate}
 
-\subsection{The LevelUP Solution}
-LevelUP unifies career trajectory planning, daily execution, and active AI mentorship into a single cohesive operating system:
+\subsection{The LevelUP Architecture Solution}
+LevelUP unifies career roadmap synthesis, daily task execution, and real-time AI mentorship into a synchronized full-stack architecture:
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{1-Click Kanban Smart Auto-Scheduler:} Analyzes tasks across 3 boards and optimizes daily focus according to user-defined study hours (e.g., 12h/week).
-    \item \textbf{Voice-First 1-on-1 AI Tutor:} Spoken conversational technical coaching, mock interview practice, and system design drills.
-    \item \textbf{Multimodal Vision \& GitHub Inspector:} Deep analysis of architecture whiteboard drawings, system schemas, and live GitHub repositories.
-    \item \textbf{Human-in-the-Loop Safety:} The AI proposes structured modifications as interactive \textit{Action Cards} requiring explicit human approval before touching database state.
+    \item \textbf{MiniMax-M3 High-Context Intelligence:} Deep reasoning model capable of processing complex architectural prompts, user skills, and active roadmaps.
+    \item \textbf{1-Click Kanban Smart Auto-Scheduler:} Dynamically organizes tasks into daily focus sprints based on user study bandwidth (e.g., 12h/week).
+    \item \textbf{Voice-First 1-on-1 AI Tutor:} Spoken technical mock interviews and conceptual deep dives via Web Speech APIs.
+    \item \textbf{Multimodal Vision \& GitHub Inspector:} Inspects whiteboard diagrams, system schemas, and live GitHub repositories.
+    \item \textbf{Human-in-the-Loop Safety Guardrails:} All AI-suggested task additions or skill updates require explicit user approval.
 \end{itemize}
 
 \newpage
 
-% ─── SECTION 2: AUTHENTICATION & ONBOARDING ────────────────────────────────
-\section{Authentication \& Onboarding Experience}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 2: AUTHENTICATION & ONBOARDING
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Authentication \& User Onboarding}
 
-LevelUP provides seamless, enterprise-grade authentication powered by Firebase Authentication with Google OAuth and Email/Password flows.
+LevelUP provides enterprise-grade authentication powered by Firebase Authentication with Google OAuth and Email/Password flows. The UI is built with a warm minimalist editorial aesthetic.
 
 \begin{figure}[H]
     \centering
-    \begin{minipage}{0.48\textwidth}
+    \begin{screenshotbox}{Figure 1: LevelUP Authentication Suite (Sign In with Google OAuth \& Password Flow)}
         \centering
-        \includegraphics[width=\textwidth]{screenshots/01_signin.png}
-        \caption{Sign In Page}
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{screenshots/02_signup.png}
-        \caption{Sign Up / Create Account Page}
-    \end{minipage}
+        \includegraphics[width=0.85\textwidth]{screenshots/Screenshot_29-8-2026_8535_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{LevelUP Sign In Experience with Warm Layrs Aesthetic, Google One-Tap, and Inline Password Recovery.}
 \end{figure}
 
-\subsection{Design Highlights}
+\subsection{Security \& User Experience Architecture}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Warm Minimalist Layrs Theme:} Warm cream background with high-contrast typography, rounded-2xl cards, and orange accents.
-    \item \textbf{Google One-Tap Authentication:} Instant onboarding with automatic profile initialization and token synchronization.
-    \item \textbf{Inline Password Reset Flow:} Reset workflows embedded directly within the card context without disruptive page redirects.
+    \item \textbf{Google OAuth One-Tap:} Immediate onboarding with automatic Firestore profile initialization.
+    \item \textbf{JWT Bearer Token Flow:} Client requests automatically retrieve fresh Firebase ID tokens and pass them to the FastAPI backend.
+    \item \textbf{Guest Mode Fallback:} Allows exploration of roadmaps and features prior to authenticated state persistence.
 \end{itemize}
 
 \newpage
 
-% ─── SECTION 3: CORE DASHBOARD & HOME BASE ─────────────────────────────────
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 3: CORE DASHBOARD & MISSION CONTROL
+% ═════════════════════════════════════════════════════════════════════════════
 \section{Core Dashboard \& Navigation Hub}
 
-The LevelUP dashboard serves as the central mission control for the learner, integrating daily goals, active roadmaps, and cycle metrics in real time.
+The LevelUP dashboard serves as the central command center, aggregating active career roadmaps, daily prompts, cycle stats, and task queues in real time.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\textwidth]{screenshots/03_dashboard.png}
-    \caption{LevelUP Core Dashboard with Daily Question Prompt, Cycle Stats, and Sidebar Navigation.}
+    \begin{screenshotbox}{Figure 2: LevelUP Main Mission Control Dashboard}
+        \centering
+        \includegraphics[width=0.95\textwidth]{screenshots/Screenshot_29-8-2026_8633_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{Mission Control Dashboard with Daily Question Prompt, Active AI Roadmaps, Cycle Stats, and Today's Tasks.}
 \end{figure}
 
-\subsection{Key Dashboard Modules}
+\subsection{Dashboard Core Modules}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Daily Knowledge Prompt:} Interactive conversational input that connects directly to the AI Tutor.
-    \item \textbf{Cycle Stats Bar:} Real-time counts of \textit{In Progress Skills}, \textit{Today's Tasks}, \textit{Mastered Skills}, and the aggregate \textit{Career Readiness Score}.
-    \item \textbf{Active Roadmap Panel:} Quick overview of the current learning path (e.g., Full Stack \& AI Engineer) with quick action buttons.
-    \item \textbf{Slim Rail Sidebar:} Collapsible navigation with static margin alignment that ensures page content never jumps or shifts during collapse.
+    \item \textbf{Daily Knowledge Prompt:} Conversational input allowing learners to trigger technical deep dives (e.g., \textit{"Design Twitter at scale"}, \textit{"Walk me through Raft"}).
+    \item \textbf{Cycle Stats Bar:} Live metrics displaying \textit{In Progress Skills}, \textit{Today's Tasks}, \textit{Mastered Skills}, and the aggregate \textit{Career Readiness Score}.
+    \item \textbf{Active Roadmap Selector:} Multi-roadmap manager allowing instantaneous switching between personalized learning paths.
+    \item \textbf{Static-Margin Rail Sidebar:} Fixed-position navigation that transitions smoothly without shifting main page content.
 \end{itemize}
 
 \newpage
 
-% ─── SECTION 4: SKILLS INVENTORY & MASTERY ─────────────────────────────────
-\section{Skills Inventory \& Mastery Matrix}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 4: MULTIMODAL AI ASSISTANT & VOICE TUTOR
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Multimodal AI Assistant \& Voice Tutor}
 
-The Skills module organizes developer competencies into hierarchical domains with progress percentages, target levels, and subskill breakdowns.
+The LevelUP AI Drawer is an embedded, context-aware AI tutor powered by MiniMax-M3 LLM via an OpenAI-compatible API gateway.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\textwidth]{screenshots/04_skills.png}
-    \caption{Skills Board with Category Cards, Mastery Progress Indicators, and Priority Badges.}
+    \begin{screenshotbox}{Figure 3: LevelUP Multimodal AI Assistant Drawer with Voice Input \& Context Awareness}
+        \centering
+        \includegraphics[width=0.95\textwidth]{screenshots/Screenshot_29-8-2026_8854_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{Interactive AI Chat Drawer featuring Voice Tutoring, File/Image Attachments, and Starter Prompts.}
 \end{figure}
 
-\subsection{Core Capabilities}
+\subsection{Key AI Superpowers}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Hierarchical Domain Categorization:} Skills organized by Frontend, Backend, Cloud/DevOps, System Design, and AI/ML.
-    \item \textbf{Granular Subskill Breakdowns:} AI-generated subskills with completion checkboxes that automatically calculate parent skill mastery.
-    \item \textbf{Readiness Score Impact:} Every progress increment dynamically updates the global career readiness algorithm on the home dashboard.
+    \item \textbf{Voice-First 1-on-1 Tutoring:} Real-time Speech-to-Text input with animated waveform indicators and spoken Text-to-Speech audio playback.
+    \item \textbf{Multimodal Vision Inspector:} Drag-and-drop support for system architecture diagrams, database schemas, and whiteboard photos.
+    \item \textbf{GitHub Repository Scraping:} Inspects public GitHub repositories and diagnoses architectural gaps directly within the prompt context.
+    \item \textbf{Human-in-the-Loop Action Cards:} AI suggestions are formatted as interactive cards with \texttt{[+ Approve \& Save]} buttons.
 \end{itemize}
 
 \newpage
 
-% ─── SECTION 5: KANBAN BOARD & AUTO-SCHEDULER ──────────────────────────────
-\section{3-Column Kanban Board \& 1-Click AI Auto-Scheduler}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 5: 3-COLUMN KANBAN BOARD & AUTO-SCHEDULER
+% ═════════════════════════════════════════════════════════════════════════════
+\section{3-Column Kanban Board \& 1-Click Auto-Scheduler}
 
-The Tasks board implements a focused 3-column Kanban workflow: \textbf{To Do}, \textbf{Current (In Progress)}, and \textbf{Past (Completed)}.
+The task management engine organizes execution into three columns: \textbf{To Do} (Backlog \& Planned), \textbf{Current} (Active Focus \& Today), and \textbf{Past} (Completed \& History).
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\textwidth]{screenshots/05_tasks.png}
-    \caption{Tasks Board with 3-Column Kanban Layout and the AI Auto-Schedule System.}
+    \begin{screenshotbox}{Figure 4: Tasks Kanban Board in Light Theme}
+        \centering
+        \includegraphics[width=0.92\textwidth]{screenshots/Screenshot_29-8-2026_8745_localhost.jpeg}
+    \end{screenshotbox}
+    \vspace{0.2cm}
+    \begin{screenshotbox}{Figure 5: Tasks Kanban Board in Dark Theme}
+        \centering
+        \includegraphics[width=0.92\textwidth]{screenshots/Screenshot_29-8-2026_8926_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{3-Column Kanban Board in Light (top) and Dark (bottom) Themes with the AI Auto-Schedule System.}
 \end{figure}
 
-\subsection{The 1-Click AI Auto-Schedule Engine}
-When the learner clicks \textbf{"AI Auto-Schedule"}, the system:
+\subsection{1-Click Kanban Smart Auto-Scheduler Algorithm}
 \begin{enumerate}[leftmargin=1.5em]
-    \item Reads all active tasks and checks the user's weekly study budget (e.g., 12 hours/week).
-    \item Analyzes deadlines, priorities, and cognitive complexity.
-    \item Selects 2--4 high-leverage tasks for today's active sprint (~2--4 hours).
-    \item Generates a pedagogical rationale explaining why this schedule maximizes learning velocity while preventing burnout.
-    \item Renders an interactive modal allowing the user to review and selectively approve the proposed moves.
+    \item Evaluates open tasks against user-defined study bandwidth (e.g., 12 hours/week).
+    \item Identifies 2--4 high-leverage tasks for today's active sprint (~2--4 hours).
+    \item Balances deadlines, cognitive difficulty, and skill dependencies.
+    \item Proposes structured sprint moves with pedagogical explanations before committing changes.
 \end{enumerate}
 
 \newpage
 
-% ─── SECTION 6: SKILL GAP ANALYZER ─────────────────────────────────────────
-\section{Skill Gap Analyzer \& AI Path Generator}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 6: SKILL GAP ANALYZER & JOB MATCHER
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Skill Gap Analyzer \& Job Description Matcher}
 
-The Skill Gap Analyzer benchmarks a learner's existing skills against target engineering job descriptions.
+The Skill Gap Analyzer benchmarks the learner's current competencies against target role requirements or pasted Job Descriptions.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.92\textwidth]{screenshots/06_skillgap.png}
-    \caption{Skill Gap Analyzer with Role Presets, Custom Job Description Input, and Phase Roadmap.}
+    \begin{screenshotbox}{Figure 6: Skill Gap Analyzer Intake \& Matching Interface}
+        \centering
+        \includegraphics[width=0.95\textwidth]{screenshots/Screenshot_29-8-2026_8657_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{Skill Gap Analyzer with Resume Upload, Study Bandwidth Slider, and Custom JD Parser.}
 \end{figure}
 
-\subsection{Workflow \& Intelligence}
+\subsection{Analyzer Capabilities}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Target Role Presets:} Pre-configured industry benchmarks for Full Stack, Backend, Frontend, DevOps, and AI Engineer roles.
-    \item \textbf{Custom JD Extraction:} Pasting any job posting triggers MiniMax LLM extraction of required competencies vs. missing gaps.
-    \item \textbf{Actionable Roadmap Generation:} Creates a chronological, phased learning roadmap with curated resources and estimated completion hours.
+    \item \textbf{Dual-Mode Intake:} Choose from pre-configured engineering presets (Full Stack, Backend, DevOps, AI) or paste custom Job Descriptions.
+    \item \textbf{Bandwidth Calibration:} Adjust weekly study bandwidth from 4h (casual) to 40h (bootcamp).
+    \item \textbf{Automated Gap Synthesis:} Identifies missing core technologies, prerequisite gaps, and suggested learning sequences.
 \end{itemize}
 
 \newpage
 
-% ─── SECTION 7: LEARNING ANALYTICS & GOALS ─────────────────────────────────
-\section{Learning Analytics, Metrics \& Goal Tracking}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 7: AI LEARNING PATH RECOMMENDER
+% ═════════════════════════════════════════════════════════════════════════════
+\section{AI Learning Path Recommender}
 
-LevelUP provides deep visibility into study habits, task velocity, and skill acquisition over time.
+The Learning Path Recommender generates multi-phase, milestone-driven technical roadmaps tailored to specific career milestones.
+
+\begin{figure}[H]
+    \centering
+    \begin{screenshotbox}{Figure 7: Conversational AI Learning Path Recommender}
+        \centering
+        \includegraphics[width=0.95\textwidth]{screenshots/Screenshot_29-8-2026_8728_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{AI-Powered Personalized Learning Path Recommender with Conversational Goal Intake.}
+\end{figure}
+
+\subsection{Roadmap Structure}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Conversational Goal Intake:} Describe objectives in plain natural language (e.g., \textit{"Become an AI Agent Engineer in 8 weeks"}).
+    \item \textbf{Phased Milestones:} Generates structured learning phases with estimated durations, required subskills, and curated project assignments.
+    \item \textbf{1-Click Adoption:} Instantly saves synthesized paths to Firestore and activates them across the main dashboard.
+\end{itemize}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 8: CAREER PORTFOLIO & READINESS VERIFICATION
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Career Portfolio \& Readiness Verification}
+
+The Career Portfolio module provides verified evidence of engineering skills and aggregate career readiness.
+
+\begin{figure}[H]
+    \centering
+    \begin{screenshotbox}{Figure 8: Career Portfolio Showcase}
+        \centering
+        \includegraphics[width=0.95\textwidth]{screenshots/Screenshot_29-8-2026_880_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{Career Portfolio Dashboard with Verified Skills, Completion Stats, and Export Portfolio Action.}
+\end{figure}
+
+\subsection{Portfolio Features}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Mastery Metrics:} Real-time calculation of completed skills, active skills, and average mastery percentages.
+    \item \textbf{Exportable Portfolio:} One-click portfolio export for resume inclusion and hiring manager review.
+\end{itemize}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 9: ENGINEERING ANALYTICS & INSIGHTS
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Engineering Analytics \& Study Insights}
+
+The Analytics engine aggregates task velocity, study consistency, and competency distribution metrics.
+
+\begin{figure}[H]
+    \centering
+    \begin{screenshotbox}{Figure 9: Engineering Analytics Dashboard}
+        \centering
+        \includegraphics[width=0.95\textwidth]{screenshots/Screenshot_29-8-2026_888_localhost.jpeg}
+    \end{screenshotbox}
+    \caption{Engineering Analytics Dashboard with Task Efficiency, Progress Buckets, and Status Breakdowns.}
+\end{figure}
+
+\subsection{Metrics Tracked}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Task Efficiency Rate:} Ratio of completed sprint tasks to total scheduled backlog.
+    \item \textbf{Progress Buckets:} Distribution of skills across 0\%, 1--33\%, 34--66\%, 67--99\%, and 100\% mastery tiers.
+    \item \textbf{Status Progress Bars:} Real-time visualization of Not Started vs. In Progress vs. Completed tasks.
+\end{itemize}
+
+\newpage
+
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 10: USER PROFILE, SETTINGS & DATA PORTABILITY
+% ═════════════════════════════════════════════════════════════════════════════
+\section{User Profile, Settings \& Data Portability}
+
+LevelUP provides full user autonomy over account information, technical preferences, and portable data backups.
 
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{screenshots/07_analytics.png}
-        \caption{Analytics \& Progress Insights}
+        \begin{screenshotbox}{Figure 10: Edit Profile Screen}
+            \centering
+            \includegraphics[width=\textwidth]{screenshots/Screenshot_29-8-2026_8832_localhost.jpeg}
+        \end{screenshotbox}
     \end{minipage}
     \hfill
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{screenshots/09_goals.png}
-        \caption{Goals \& Milestones Tracker}
+        \begin{screenshotbox}{Figure 11: Settings \& Data Export}
+            \centering
+            \includegraphics[width=\textwidth]{screenshots/Screenshot_29-8-2026_8819_localhost.jpeg}
+        \end{screenshotbox}
     \end{minipage}
+    \caption{Left: User Profile editor with language and skill tags. Right: Settings with Portable JSON Data Export.}
 \end{figure}
 
-\subsection{Analytics \& Insights Features}
+\subsection{Data Autonomy \& Portability}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Mastery Distribution Charts:} Visual breakdown of skill progress across core domains.
-    \item \textbf{Study Cadence Heatmaps:} Track daily task completion and identify consistency streaks.
-    \item \textbf{Milestone Tracking:} Target completion dates aligned with career roadmaps and readiness targets.
+    \item \textbf{Profile Tagging:} Multi-language and framework competency tags for personalized AI recommendations.
+    \item \textbf{1-Click JSON Export:} Complete export of categories, skills, tasks, deadlines, and notes for zero vendor lock-in.
 \end{itemize}
 
 \newpage
 
-% ─── SECTION 8: AI MULTIMODAL CAPABILITIES ─────────────────────────────────
-\section{AI Multimodal Capabilities \& Superpowers}
-
-\subsection{1. MiniMax-M3 LLM Integration}
-The platform utilizes the high-context MiniMax-M3 LLM (via OpenAI-compatible API) for deep engineering reasoning:
-\begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Live Context Injection:} System prompt automatically includes the user's active skills, tasks, and roadmaps.
-    \item \textbf{Structured JSON Output:} Responses return structured Markdown plus optional action payloads for automated workspace updates.
-\end{itemize}
-
-\subsection{2. Voice-First 1-on-1 AI Tutor}
-\begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Speech-to-Text:} Web Speech API integration with animated mic waveform in the chat drawer.
-    \item \textbf{Text-to-Speech:} Natural voice audio playback of technical answers with instant stop control.
-    \item \textbf{Lifecycle Safety:} Speech and recognition sessions automatically terminate when closing the drawer or unmounting.
-\end{itemize}
-
-\subsection{3. Multimodal Vision \& GitHub Inspector}
-\begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Diagram Analysis:} Drag-and-drop architecture sketches or database ERDs directly into chat.
-    \item \textbf{GitHub Repository Inspection:} Paste repository URLs to automatically analyze project structure, languages, and patterns.
-\end{itemize}
-
-\subsection{4. Human-in-the-Loop Workspace Actions}
-All AI-suggested changes (adding tasks, creating skills, updating progress) render as interactive \textit{Action Cards} with \texttt{[+ Approve \& Save]} buttons, guaranteeing human oversight.
-
-\newpage
-
-% ─── SECTION 9: TECHNICAL ARCHITECTURE & API REFERENCE ─────────────────────
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 11: TECHNICAL ARCHITECTURE & API REFERENCE
+% ═════════════════════════════════════════════════════════════════════════════
 \section{Technical Architecture \& API Reference}
 
-\subsection{System Architecture Matrix}
+\subsection{Full-Stack Architecture Matrix}
 
 \begin{table}[H]
 \centering
 \small
-\begin{tabularx}{\textwidth}{l p{3.8cm} X}
+\begin{tabularx}{\textwidth}{l p{4.0cm} X}
 \toprule
-\textbf{Component} & \textbf{Technology} & \textbf{Description} \\
+\textbf{Layer} & \textbf{Technology} & \textbf{Core Responsibilities} \\
 \midrule
-\textbf{Frontend} & React 18, Vite, Tailwind CSS & Single-page application with responsive Layrs theme, adaptive sidebar, and rich Markdown rendering. \\
+\textbf{Frontend} & React 18, Vite, Tailwind CSS, Framer Motion & Responsive Layrs theme, Kanban drag-and-drop, rich Markdown rendering with code copying, audio visualizers. \\
 \addlinespace
-\textbf{Backend} & FastAPI, Python 3.10+, Uvicorn & Asynchronous REST API, CORS middleware, and LLM prompt orchestration. \\
+\textbf{Backend} & FastAPI (Python 3.10+), Uvicorn & Asynchronous REST API, CORS middleware, JWT token decoding, and LLM prompt orchestration. \\
 \addlinespace
-\textbf{AI Engine} & MiniMax-M3 LLM & Advanced reasoning engine for roadmap synthesis, task scheduling, and vision analysis. \\
+\textbf{AI Engine} & MiniMax-M3 LLM & High-context reasoning, multimodal vision analysis, and JSON action extraction. \\
+\addlinespace
+\textbf{Voice Layer} & Web Speech Recognition \& Synthesis & In-browser speech-to-text recording and turn-by-turn spoken audio playback. \\
 \addlinespace
 \textbf{Database} & Google Cloud Firestore & Real-time NoSQL document store with reactive client snapshot listeners. \\
 \addlinespace
-\textbf{Auth} & Firebase Authentication & JWT token verification, Google OAuth, and secure guest access. \\
+\textbf{Auth} & Firebase Authentication & JWT verification, Google OAuth, and secure guest access. \\
 \bottomrule
 \end{tabularx}
 \caption{LevelUP Full-Stack Architecture Matrix}
 \end{table}
 
-\subsection{Core API Endpoints}
+\subsection{Core Backend API Route Summary}
 
 \begin{table}[H]
 \centering
@@ -334,8 +449,10 @@ All AI-suggested changes (adding tasks, creating skills, updating progress) rend
 
 \newpage
 
-% ─── SECTION 10: LOCAL SETUP & DEPLOYMENT GUIDE ────────────────────────────
-\section{Local Setup \& Execution Guide}
+% ═════════════════════════════════════════════════════════════════════════════
+% SECTION 12: LOCAL SETUP & DEPLOYMENT GUIDE
+% ═════════════════════════════════════════════════════════════════════════════
+\section{Local Setup, Execution \& Deployment Guide}
 
 \subsection{Step 1: Backend Setup (FastAPI)}
 \begin{enumerate}[leftmargin=1.5em]
@@ -363,11 +480,12 @@ All AI-suggested changes (adding tasks, creating skills, updating progress) rend
     \item Open in browser: \href{http://localhost:3000}{http://localhost:3000}
 \end{enumerate}
 
-\subsection{Step 3: Production Deployment Verification}
+\subsection{Step 3: Verified Production Deployments}
 \begin{itemize}[leftmargin=1.5em]
-    \item \textbf{Frontend (Vercel):} \href{https://level-up-new.vercel.app}{https://level-up-new.vercel.app}
-    \item \textbf{Backend (Render):} \href{https://levelup-new-backend.onrender.com}{https://levelup-new-backend.onrender.com}
+    \item \textbf{Frontend Application (Vercel):} \href{https://level-up-new.vercel.app}{https://level-up-new.vercel.app}
+    \item \textbf{Backend Web Service (Render):} \href{https://levelup-new-backend.onrender.com}{https://levelup-new-backend.onrender.com}
     \item \textbf{GitHub Repository:} \href{https://github.com/Prajeeth-12/LevelUP-new}{https://github.com/Prajeeth-12/LevelUP-new} (Branch: \texttt{new-theme-layrs})
 \end{itemize}
 
 \end{document}
+
