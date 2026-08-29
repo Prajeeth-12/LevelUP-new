@@ -82,10 +82,12 @@ def _fetch_github_repo_summary(url: str) -> Optional[str]:
     if not match:
         return None
     owner, repo = match.group(1), match.group(2).replace(".git", "")
+    # Validate: only allow github.com API calls (prevent SSRF)
     api_url = f"https://api.github.com/repos/{owner}/{repo}"
     try:
         req = urllib.request.Request(api_url, headers={"User-Agent": "LevelUP-Agent"})
-        with urllib.request.urlopen(req, timeout=3) as resp:
+        with urllib.request.urlopen(req, timeout=3) as resp:  # noqa: S310
+            data = json.load(resp)  # FIX: decode response before reading fields
             full_name = data.get('full_name', f"{owner}/{repo}")
             desc = data.get('description', 'No description')
             lang = data.get('language', 'N/A')
@@ -94,6 +96,7 @@ def _fetch_github_repo_summary(url: str) -> Optional[str]:
             return f"GitHub Repo: {full_name}\nDescription: {desc}\nLanguage: {lang}\nTopics: {topics}\nStars: {stars}"
     except Exception:
         return f"GitHub Repository: {owner}/{repo}"
+
 
 
 def _smart_fallback_response(query: str, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -163,14 +166,17 @@ async def process_chat_message(
 
     for m in reversed(messages):
         if m.get('role') == 'user':
-            last_user_query = m.get('content', '')
+            # Normalize to str — content may be None/non-string (Fix: prevent TypeError)
+            raw = m.get('content', '')
+            last_user_query = raw if isinstance(raw, str) else ''
             last_image = m.get('image')
             break
 
-    # Check for GitHub URLs in user query
+    # Check for GitHub URLs in user query — run in thread to avoid blocking event loop
     github_info = None
     if "github.com/" in last_user_query:
-        github_info = _fetch_github_repo_summary(last_user_query)
+        import asyncio
+        github_info = await asyncio.to_thread(_fetch_github_repo_summary, last_user_query)
         if github_info:
             context['githubInspection'] = github_info
 
@@ -293,38 +299,40 @@ You MUST reply with a valid JSON object matching this schema:
         except Exception as e:
             print(f"Auto-schedule LLM error: {e}")
 
-    # Smart Fallback logic
+    # Smart Fallback — respect hours_budget when scheduling focus tasks
     moves = []
-    current_count = 0
+    budgeted_hours = 0
     for idx, t in enumerate(tasks):
         t_id = t.get('id') or f"t_{idx}"
         status = t.get('status', 'NOT_STARTED')
         if status == 'COMPLETED':
             continue
-        # Move first 2 tasks to IN_PROGRESS
-        if current_count < 2:
+        task_hours = 2  # estimated per task
+        # Only promote to IN_PROGRESS while there is remaining budget
+        if budgeted_hours + task_hours <= max(hours_budget, 0):
             moves.append({
                 "taskId": t_id,
                 "taskTitle": t.get('title', 'Task'),
                 "targetStatus": "IN_PROGRESS",
                 "priority": "HIGH",
-                "estimatedHours": 2,
+                "estimatedHours": task_hours,
                 "reason": "Top priority focus for today's learning sprint"
             })
-            current_count += 1
+            budgeted_hours += task_hours
         else:
             moves.append({
                 "taskId": t_id,
                 "taskTitle": t.get('title', 'Task'),
                 "targetStatus": "NOT_STARTED",
                 "priority": "MEDIUM",
-                "estimatedHours": 2,
+                "estimatedHours": task_hours,
                 "reason": "Queued in backlog for upcoming sessions"
             })
 
     return {
-        "rationale": f"Re-balanced your Kanban board based on your {hours_budget}h weekly budget. Selected {min(2, len(tasks))} focus tasks for today's active sprint.",
+        "rationale": f"Re-balanced your Kanban board based on your {hours_budget}h weekly budget. Scheduled {budgeted_hours}h of focus tasks for today's active sprint.",
         "moves": moves,
-        "todaySprintHours": current_count * 2,
+        "todaySprintHours": budgeted_hours,
         "suggestedNewTasks": []
     }
+

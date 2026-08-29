@@ -93,6 +93,21 @@ export const AIChatDrawer = ({ isOpen, onClose }) => {
     }
   }
 
+  // Stop audio + recognition when drawer closes (backdrop dismiss, header X, etc.)
+  useEffect(() => {
+    if (!isOpen) {
+      stopSpeaking()
+      recognitionRef.current?.stop()
+      setIsRecording(false)
+    }
+  }, [isOpen])
+
+  // Cleanup on unmount — prevent audio/mic leaking after component is destroyed
+  useEffect(() => () => {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel()
+    recognitionRef.current?.stop()
+  }, [])
+
   // Speech Recognition (Voice Input)
   const toggleRecording = () => {
     if (isRecording) {
