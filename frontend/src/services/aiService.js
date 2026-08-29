@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { auth } from '../firebase'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
 
 const client = axios.create({
   baseURL: API_URL,

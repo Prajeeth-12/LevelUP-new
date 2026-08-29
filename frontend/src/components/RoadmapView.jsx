@@ -18,7 +18,7 @@ const RESOURCE_META = {
 const RoadmapView = ({ roadmap, onGenerate, onRefresh, loading }) => {
   const [updating, setUpdating] = useState(false)
   const [expandedMilestones, setExpandedMilestones] = useState({})
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+  const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
   const toast = useToast()
 
   const toggleMilestones = (index) =>

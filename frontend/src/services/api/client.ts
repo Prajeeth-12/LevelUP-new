@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosError } from 'axios'
 import { auth } from '@/firebase'
 import type { ApiError } from '@/types'
 
-const API_URL = (import.meta as any).env.VITE_API_URL || 'http://localhost:8000'
+const API_URL = (import.meta as any).env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
 
 export const createApiClient = (): AxiosInstance => {
   const client = axios.create({

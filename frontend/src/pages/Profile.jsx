@@ -130,7 +130,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const toast = useToast();
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+  const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com';
 
   useEffect(() => {
     loadProfile();

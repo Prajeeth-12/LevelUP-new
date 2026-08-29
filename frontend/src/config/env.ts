@@ -29,7 +29,7 @@ const parseEnv = (env: EnvInput): EnvConfig => {
   }
 
   return {
-    apiUrl: result.data.VITE_API_URL || 'http://localhost:8000',
+    apiUrl: result.data.VITE_API_URL || 'https://levelup-new-backend.onrender.com',
     firebaseApiKey: result.data.VITE_FIREBASE_API_KEY,
     firebaseAuthDomain: result.data.VITE_FIREBASE_AUTH_DOMAIN,
     firebaseProjectId: result.data.VITE_FIREBASE_PROJECT_ID,

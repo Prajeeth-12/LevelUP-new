@@ -429,7 +429,7 @@ export const getActiveRoadmap = async (userId) => {
   // 2. Fallback to Backend Admin API
   try {
     const token = await auth.currentUser?.getIdToken?.()
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
     const res = await axios.get(`${API_URL}/api/career/roadmap?uid=${uid}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
@@ -463,7 +463,7 @@ export const listRoadmaps = async (userId) => {
   // 2. Fallback to Backend API
   try {
     const token = await auth.currentUser?.getIdToken?.()
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
     const res = await axios.get(`${API_URL}/api/career/roadmaps?uid=${uid}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
     })
@@ -484,7 +484,7 @@ export const switchActiveRoadmap = async (roadmapId, userId) => {
   if (!uid || !roadmapId) return null
 
   try {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
     const token = await auth.currentUser?.getIdToken?.()
     const res = await axios.post(`${API_URL}/api/career/roadmaps/switch/${roadmapId}?uid=${uid}`, {}, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
@@ -517,7 +517,7 @@ export const deleteRoadmap = async (roadmapId, userId) => {
   if (!uid || !roadmapId) return false
 
   try {
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+    const API_URL = import.meta.env.VITE_API_URL || 'https://levelup-new-backend.onrender.com'
     const token = await auth.currentUser?.getIdToken?.()
     await axios.delete(`${API_URL}/api/career/roadmaps/${roadmapId}?uid=${uid}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {}
